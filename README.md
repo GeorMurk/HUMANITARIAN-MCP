@@ -146,6 +146,87 @@ Example:
 }
 ```
 
+## Monty Integration
+
+This repo also includes a Monty MCP server for querying the Montandon STAC API.
+
+Install dependencies:
+
+```bash
+cd /[YOUR PATH]/MCPs/monty-mcp
+npm install
+```
+
+Add the Monty API URL to the parent `.env` file:
+
+```bash
+MONTY_API_URL=https://montandon-eoapi-stage.ifrc.org/stac
+```
+
+The Monty server uses the same `IFRC_API_TOKEN` from `.env` and sends it as a Bearer token.
+
+Run locally:
+
+```bash
+npm start
+```
+
+Claude Desktop configuration:
+
+```json
+{
+  "mcpServers": {
+    "Monty MCP": {
+      "command": "node",
+      "args": ["/[YOUR PATH]/MCPs/monty-mcp/index.js"]
+    }
+  }
+}
+```
+
+Available Monty tools:
+
+### `get_stac_root`
+
+Gets the Monty STAC API root document.
+
+### `list_collections`
+
+Lists Monty STAC collections.
+
+Example:
+
+```json
+{
+  "limit": 10
+}
+```
+
+### `get_collection`
+
+Gets details for a Monty STAC collection.
+
+Example:
+
+```json
+{
+  "collection_id": "collection-id"
+}
+```
+
+### `search_items`
+
+Searches Monty STAC items.
+
+Example:
+
+```json
+{
+  "datetime": "2024-01-01/2024-12-31",
+  "limit": 10
+}
+```
+
 ## Troubleshooting
 
 If you get `FATAL: Cannot start server. Missing IFRC_API_TOKEN`, check that `.env` exists and contains `IFRC_API_TOKEN`.
