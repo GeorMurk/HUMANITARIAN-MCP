@@ -1,6 +1,6 @@
-# IFRC GO & Monty MCP Servers
+# IFRC GO, Monty & HDX HAPI MCP Servers
 
-This repository contains two **MCP servers** that let you query humanitarian data directly from Claude (or any other MCP-compatible AI assistant).
+This repository contains three **MCP servers** that let you query humanitarian data directly from Claude (or any other MCP-compatible AI assistant).
 
 ---
 
@@ -16,10 +16,13 @@ This repository contains two **MCP servers** that let you query humanitarian dat
 |---|---|---|
 | **IFRC GO MCP** | `ifrc-mcp/` | Query the IFRC Global Operations platform — appeals, emergencies, field reports, deployed personnel, country profiles, and more |
 | **Monty MCP** | `monty-mcp/` | Query the Montandon STAC API — geospatial disaster event catalogs and datasets |
+| **HDX HAPI MCP** | `hdx-mcp/` | Query the OCHA Humanitarian Data Exchange API — population, displacement, food security, conflict, funding, and climate data |
 
 **IFRC** stands for the *International Federation of Red Cross and Red Crescent Societies*. Their **GO** (Global Operations) platform is a public database tracking humanitarian operations, disaster appeals, field reports, and response activities worldwide.
 
 **Monty** (short for Montandon) is a geospatial data API built on the **STAC** standard (*SpatioTemporal Asset Catalog*) — a common format for cataloguing earth observation and disaster-related datasets.
+
+**HDX HAPI** is the [Humanitarian Data Exchange](https://data.humdata.org) API run by OCHA (UN Office for the Coordination of Humanitarian Affairs). It provides structured, cross-country access to humanitarian indicators: displacement figures, food security phases, conflict events, funding coverage, population statistics, and more.
 
 ---
 
@@ -31,6 +34,7 @@ Before you start, make sure you have:
 - **npm** — comes bundled with Node.js
 - **Claude Desktop** — the Mac/Windows app from [claude.ai](https://claude.ai)
 - **An IFRC GO API token** — create a free account at [go.ifrc.org](https://go.ifrc.org) and generate a token from your profile settings
+- **An HDX app identifier** — register your app at [hapi.humdata.org](https://hapi.humdata.org/docs#/Util/get_encoded_identifier_api_v1_encode_identifier_get) to get a free base64-encoded identifier
 
 ---
 
@@ -45,25 +49,29 @@ cd MCPs
 
 ### 2. Create a `.env` file
 
-Create a file named `.env` in the root `MCPs/` folder (both servers will find it automatically):
+Create a file named `.env` in the root `MCPs/` folder (all servers will find it automatically):
 
 ```bash
-# Required by both servers
-IFRC_API_TOKEN=your_token_here
+# Required by IFRC GO and Monty servers
+IFRC_API_TOKEN=your_ifrc_token_here
 
 # Optional — only needed for Monty if you want a non-default URL
 MONTY_API_URL=https://montandon-eoapi-stage.ifrc.org/stac
+
+# Required by HDX HAPI server
+HDX_API_TOKEN=your_base64_encoded_hdx_identifier_here
 ```
 
-Replace `your_token_here` with your actual IFRC GO API token.
+Replace the placeholder values with your actual tokens.
 
-> **Tip:** You can also place the `.env` file inside `ifrc-mcp/` or `monty-mcp/` instead. The servers search in multiple locations.
+> **Tip:** You can also place the `.env` file inside an individual server folder (e.g., `hdx-mcp/`). Each server searches in multiple locations.
 
 ### 3. Install dependencies for each server
 
 ```bash
 cd ifrc-mcp && npm install && cd ..
 cd monty-mcp && npm install && cd ..
+cd hdx-mcp && npm install && cd ..
 ```
 
 ---
@@ -85,7 +93,7 @@ Find your Claude Desktop configuration file:
 - **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
 
-Open it (create it if it doesn't exist) and add the `ifrc-go` entry under `mcpServers`. Replace `/YOUR/PATH/TO` with the actual path to this repository:
+Open it (create it if it doesn't exist) and add the following entries under `mcpServers`. Replace `/YOUR/PATH/TO` with the actual path to this repository:
 
 ```json
 {
@@ -93,12 +101,20 @@ Open it (create it if it doesn't exist) and add the `ifrc-go` entry under `mcpSe
     "ifrc-go": {
       "command": "node",
       "args": ["/YOUR/PATH/TO/MCPs/ifrc-mcp/server.js"]
+    },
+    "monty": {
+      "command": "node",
+      "args": ["/YOUR/PATH/TO/MCPs/monty-mcp/index.js"]
+    },
+    "hdx-hapi": {
+      "command": "node",
+      "args": ["/YOUR/PATH/TO/MCPs/hdx-mcp/server.js"]
     }
   }
 }
 ```
 
-After saving, **restart Claude Desktop**. You should see the IFRC GO tools available in the tools panel.
+After saving, **restart Claude Desktop**. You should see all three servers' tools available in the tools panel.
 
 ### Available Tools
 
@@ -299,27 +315,6 @@ Example questions you can ask Claude:
 - *"Search for flood events in East Africa in 2024."*
 - *"What items are in the DesInventar collection?"*
 
-### Configure Claude Desktop
-
-Add the Monty server to your `claude_desktop_config.json` alongside the IFRC GO entry:
-
-```json
-{
-  "mcpServers": {
-    "ifrc-go": {
-      "command": "node",
-      "args": ["/YOUR/PATH/TO/MCPs/ifrc-mcp/server.js"]
-    },
-    "monty": {
-      "command": "node",
-      "args": ["/YOUR/PATH/TO/MCPs/monty-mcp/index.js"]
-    }
-  }
-}
-```
-
-After saving, restart Claude Desktop.
-
 ### Available Tools
 
 ---
@@ -393,7 +388,107 @@ The `search_items` tool supports:
 
 ---
 
+## HDX HAPI MCP Server
+
+### About
+
+This server connects Claude to the **OCHA Humanitarian Data Exchange API** ([HDX HAPI](https://hapi.humdata.org)) — a structured, cross-country dataset covering the key indicators humanitarian responders rely on. Data is sourced from UNHCR, WFP, ACLED, IPC, and other authoritative providers.
+
+Example questions you can ask Claude:
+- *"How many IDPs are there in South Sudan, broken down by province?"*
+- *"What is the food security situation in Somalia right now?"*
+- *"Show me conflict events in Sudan in 2024."*
+- *"Which organisations are operating in the health sector in Afghanistan?"*
+- *"What is the humanitarian funding coverage for Yemen's HRP?"*
+- *"Get rainfall anomaly data for the Sahel for the last 3 months."*
+
+### Getting an HDX App Identifier
+
+The HDX HAPI requires a free **app identifier** (a base64-encoded string) instead of a traditional API key:
+
+1. Go to the [HDX HAPI identifier encoder](https://hapi.humdata.org/docs#/Util/get_encoded_identifier_api_v1_encode_identifier_get)
+2. Enter your name, organisation, and email address
+3. Copy the resulting base64 string
+4. Add it to your `.env` file as `HDX_API_TOKEN=<your_string>`
+
+### Available Tools
+
+The tools are grouped by data category.
+
+---
+
+#### Metadata
+
+| Tool | Description |
+|---|---|
+| `get_locations` | Get country and country-like location metadata with ISO3 codes and p-codes |
+| `get_admin1` | Get first-level administrative divisions (provinces, states, regions) |
+| `get_admin2` | Get second-level administrative divisions (districts, counties) |
+| `get_datasets` | Get HDX dataset metadata including titles, providers, and source links |
+| `get_resources` | Get HDX resource metadata including format, update dates, and HXL compliance |
+| `get_data_availability` | Check which data categories are available by country and administrative level |
+| `get_sectors` | Get humanitarian sector codes (Health, Education, Food Security, Shelter, WASH, etc.) |
+| `get_organizations` | Get humanitarian organisations with acronyms and OCHA type classifications |
+| `get_org_types` | Get organisation type classification codes (OCHA standards) |
+| `get_currencies` | Get ISO-4217 currency codes used in WFP food price data |
+| `get_wfp_commodities` | Get WFP food commodity codes, names, and categories |
+| `get_wfp_markets` | Get WFP market locations with GPS coordinates and administrative hierarchy |
+
+---
+
+#### Coordination & Context
+
+| Tool | Description |
+|---|---|
+| `get_operational_presence` | Get 3W/4W/5W data — which organisations are working where and in which sectors |
+| `get_funding` | Get humanitarian appeal funding data: requirements, received amounts, and coverage % |
+| `get_conflict_events` | Get ACLED conflict event data by country, event type (`political_violence`, `civilian_targeting`, `demonstration`), and date range |
+| `get_national_risk` | Get INFORM Risk Index scores and classifications (1=Very Low to 5=Very High) |
+
+---
+
+#### Affected People
+
+| Tool | Description |
+|---|---|
+| `get_idps` | Get IDP (Internally Displaced Persons) population data by country and administrative level |
+| `get_refugees` | Get UNHCR refugee and persons-of-concern data by origin/asylum country, gender, and age |
+| `get_returnees` | Get UNHCR returnee data (people who returned to their place of origin) |
+| `get_humanitarian_needs` | Get HNO data: people affected, in-need, targeted, and reached by sector and location |
+
+The `get_humanitarian_needs` tool uses population status codes: `AFF`=Affected, `INN`=In-Need, `TGT`=Targeted, `REA`=Reached.
+
+---
+
+#### Food Security, Nutrition & Poverty
+
+| Tool | Description |
+|---|---|
+| `get_food_security` | Get IPC/CH food security phase data (1=Minimal through 5=Famine/Catastrophe) |
+| `get_food_prices` | Get WFP VAM food price market monitor data by country, market, and commodity |
+| `get_poverty_rate` | Get multidimensional poverty rate (MPI) data by country and admin1 division |
+
+---
+
+#### Population
+
+| Tool | Description |
+|---|---|
+| `get_population` | Get population data disaggregated by country, administrative level, gender, and age group |
+
+---
+
+#### Climate
+
+| Tool | Description |
+|---|---|
+| `get_rainfall` | Get satellite-derived rainfall data with long-term averages and anomaly percentages, aggregated by dekad (10-day), 1-month, or 3-month periods |
+
+---
+
 ## Troubleshooting
+
+### IFRC GO Server
 
 **`FATAL: Cannot start server. Missing IFRC_API_TOKEN`**
 Your `.env` file is missing or doesn't contain `IFRC_API_TOKEN`. Check that the file exists in the root `MCPs/` folder (or inside `ifrc-mcp/`) and contains a line like `IFRC_API_TOKEN=abc123...`.
@@ -404,10 +499,23 @@ Your token is invalid or has expired. Log in to [go.ifrc.org](https://go.ifrc.or
 **`API Error 404`**
 The server is configured to use `https://goadmin.ifrc.org`. If you're hitting 404 errors, make sure you have not edited the base URL in `server.js` to point to the old `https://go-api.ifrc.org` host.
 
+**`Failed to install dependencies`** (IFRC server only)
+The IFRC server tries to auto-install its dependencies if they're missing. If this fails, run `npm install` manually from the `ifrc-mcp/` folder.
+
+### HDX HAPI Server
+
+**`FATAL: Cannot start. HDX_API_TOKEN not found`**
+Your `.env` file is missing or doesn't contain `HDX_API_TOKEN`. Get your free app identifier at [hapi.humdata.org](https://hapi.humdata.org/docs#/Util/get_encoded_identifier_api_v1_encode_identifier_get).
+
+**`API Error 401` or `403`**
+Your app identifier is invalid or malformed. Make sure you copied the full base64 string from the HDX identifier encoder without any extra spaces or line breaks.
+
+**`API Error 422`**
+A parameter value is invalid — check the allowed values for filters like `ipc_phase`, `population_group`, or `event_type` in the tool descriptions above.
+
+### All Servers
+
 **Tools don't appear in Claude Desktop**
 - Make sure you saved the config file and fully restarted Claude Desktop (quit, don't just close the window).
 - Check that the file paths in the config exactly match where you cloned this repository.
 - On macOS you can verify paths by running `ls /YOUR/PATH/TO/MCPs/ifrc-mcp/server.js` in Terminal.
-
-**`Failed to install dependencies`** (IFRC server only)
-The IFRC server tries to auto-install its dependencies if they're missing. If this fails, run `npm install` manually from the `ifrc-mcp/` folder.
