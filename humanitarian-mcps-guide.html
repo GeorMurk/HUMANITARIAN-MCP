@@ -124,6 +124,24 @@
     cursor: default;
   }
   .mcp-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.1); }
+  a.mcp-card { text-decoration: none; color: inherit; display: block; }
+  .card-links { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+  .card-link {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1.5px solid;
+    text-decoration: none;
+    transition: opacity .15s;
+  }
+  .card-link:hover { opacity: .7; }
+  .ifrc  .card-link { color: #dc2626; border-color: #fca5a5; }
+  .hdx   .card-link { color: #2563eb; border-color: #93c5fd; }
+  .unhcr .card-link { color: #16a34a; border-color: #6ee7b7; }
+  .rsq   .card-link { color: #7c3aed; border-color: #c4b5fd; }
+  .fews  .card-link { color: #b45309; border-color: #fcd34d; }
+  .ipc   .card-link { color: #0d9488; border-color: #5eead4; }
 
   .mcp-card.ifrc  { border-color: #fca5a5; background: linear-gradient(145deg, #fff5f5, white); }
   .mcp-card.hdx   { border-color: #93c5fd; background: linear-gradient(145deg, #eff6ff, white); }
@@ -478,38 +496,47 @@
       <div class="mcp-card ifrc">
         <div class="card-icon"><img src="https://go.ifrc.org/7.26.0/asset-go-logo-2020-D07sIPWn.svg" alt="IFRC GO"></div>
         <p class="tagline">IFRC GO</p>
-        <h3>International Red Cross & Red Crescent</h3>
+        <h3>International Red Cross &amp; Red Crescent</h3>
         <p>Real-time disaster alerts, emergency operations, deployed teams, and field reports from the world's largest humanitarian network.</p>
+        <div class="card-links"><a class="card-link" href="https://go.ifrc.org/" target="_blank" rel="noopener">IFRC GO ↗</a></div>
       </div>
       <div class="mcp-card hdx">
         <div class="card-icon"><img src="https://avatars.githubusercontent.com/u/5087346?s=120&v=4" alt="HDX" style="border-radius:50%"></div>
         <p class="tagline">HDX</p>
         <h3>Humanitarian Data Exchange</h3>
         <p>Open data on food prices, food security, population counts, funding, conflict events, and more — across dozens of countries.</p>
+        <div class="card-links"><a class="card-link" href="https://data.humdata.org/" target="_blank" rel="noopener">HDX ↗</a></div>
       </div>
       <div class="mcp-card unhcr">
         <div class="card-icon"><img src="https://www.unhcr.org/themes/custom/project/logo.svg" alt="UNHCR"></div>
         <p class="tagline">UNHCR Refugee Statistics</p>
         <h3>UN Refugee Agency — Population Data</h3>
         <p>Official global statistics on refugees, asylum seekers, internally displaced people, and stateless persons by country and year.</p>
+        <div class="card-links"><a class="card-link" href="https://www.unhcr.org/refugee-statistics" target="_blank" rel="noopener">Refugee Statistics ↗</a></div>
       </div>
       <div class="mcp-card rsq">
         <div class="card-icon"><img src="https://www.unhcr.org/themes/custom/project/logo.svg" alt="UNHCR RSQ"></div>
         <p class="tagline">UNHCR Resettlement</p>
         <h3>UN Resettlement Data (RSQ)</h3>
         <p>Submissions, departures, demographics, and destination country data for refugees going through formal resettlement programmes.</p>
+        <div class="card-links"><a class="card-link" href="https://www.unhcr.org/what-we-do/build-better-futures/solutions/resettlement" target="_blank" rel="noopener">Resettlement ↗</a></div>
       </div>
       <div class="mcp-card fews">
         <div class="card-icon"><img src="https://fews.net/themes/custom/outline_frontend/dist/assets/svg/logos/fewsnet-logo.svg" alt="FEWS NET"></div>
         <p class="tagline">FEWS NET</p>
         <h3>Famine Early Warning Systems Network</h3>
         <p>Early warning intelligence on food insecurity — market prices, crop yields, trade flows, rainfall, labour data, IPC classifications, and scenario forecasts for crisis-prone countries.</p>
+        <div class="card-links"><a class="card-link" href="https://fews.net/" target="_blank" rel="noopener">FEWS NET ↗</a></div>
       </div>
       <div class="mcp-card ipc">
         <div class="card-icon"><img src="https://www.ipcinfo.org/fileadmin/templates/ipcinfo-assets/SVG_120218/IPC_Interim_Logo_Blu_EN.png" alt="IPC-CH"></div>
         <p class="tagline">IPC-CH</p>
         <h3>Integrated Food Security Phase Classification</h3>
         <p>The global standard for measuring acute food insecurity and acute malnutrition severity. Provides IPC/CH phase maps, population counts by phase, and tracking data across countries and time periods.</p>
+        <div class="card-links">
+          <a class="card-link" href="https://www.ipcinfo.org/ipcinfo-website/ipc-dashboard/" target="_blank" rel="noopener">IPC-CH ↗</a>
+          <a class="card-link" href="https://www.ipcinfo.org/" target="_blank" rel="noopener">IPC ↗</a>
+        </div>
       </div>
     </div>
   </div>
