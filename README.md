@@ -1,6 +1,14 @@
-# IFRC GO, Monty & HDX HAPI MCP Servers
+# Humanitarian Data MCP Servers
 
-This repository contains three **MCP servers** that let you query humanitarian data directly from Claude (or any other MCP-compatible AI assistant).
+<p align="center">
+  <a href="https://www.ifrc.org"><img src="https://github.com/IFRCGo.png?size=120" alt="IFRC" height="80"/></a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://www.unhcr.org"><img src="https://github.com/unhcr-dataviz.png?size=120" alt="UNHCR" height="80"/></a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://data.humdata.org"><img src="https://github.com/OCHA-DAP.png?size=120" alt="HDX / OCHA" height="80"/></a>
+</p>
+
+This repository contains five **MCP servers** that let you query humanitarian data directly from Claude (or any other MCP-compatible AI assistant).
 
 ---
 
@@ -17,12 +25,16 @@ This repository contains three **MCP servers** that let you query humanitarian d
 | **IFRC GO MCP** | `ifrc-mcp/` | Query the IFRC Global Operations platform — appeals, emergencies, field reports, deployed personnel, country profiles, and more |
 | **Monty MCP** | `monty-mcp/` | Query the Montandon STAC API — geospatial disaster event catalogs and datasets |
 | **HDX HAPI MCP** | `hdx-mcp/` | Query the OCHA Humanitarian Data Exchange API — population, displacement, food security, conflict, funding, and climate data |
+| **UNHCR Refugee Statistics MCP** | `unhcr-refugees-mcp/` | Query the UNHCR Population Statistics API — refugee and displaced population figures, asylum applications/decisions, durable solutions, and demographics |
+| **UNHCR Resettlement Data MCP** | `unhcr-resettlement-data/` | Query the UNHCR Resettlement Statistics (RSQ) API — submissions, departures, and demographic breakdowns for resettlement programmes |
 
 **IFRC** stands for the *International Federation of Red Cross and Red Crescent Societies*. Their **GO** (Global Operations) platform is a public database tracking humanitarian operations, disaster appeals, field reports, and response activities worldwide.
 
 **Monty** (short for Montandon) is a geospatial data API built on the **STAC** standard (*SpatioTemporal Asset Catalog*) — a common format for cataloguing earth observation and disaster-related datasets.
 
 **HDX HAPI** is the [Humanitarian Data Exchange](https://data.humdata.org) API run by OCHA (UN Office for the Coordination of Humanitarian Affairs). It provides structured, cross-country access to humanitarian indicators: displacement figures, food security phases, conflict events, funding coverage, population statistics, and more.
+
+**UNHCR** is the *UN Refugee Agency*. Their **Population Statistics API** exposes the global refugee database — figures on refugees, asylum seekers, IDPs, stateless persons, and durable solutions going back decades. Their **Resettlement (RSQ) API** covers submissions and departures for formal resettlement programmes worldwide. Both APIs are fully public and require no authentication.
 
 ---
 
@@ -35,6 +47,8 @@ Before you start, make sure you have:
 - **Claude Desktop** — the Mac/Windows app from [claude.ai](https://claude.ai)
 - **An IFRC GO API token** — create a free account at [go.ifrc.org](https://go.ifrc.org) and generate a token from your profile settings
 - **An HDX app identifier** — register your app at [hapi.humdata.org](https://hapi.humdata.org/docs#/Util/get_encoded_identifier_api_v1_encode_identifier_get) to get a free base64-encoded identifier
+
+> **Note:** The two UNHCR servers require no API token — they use a fully public API.
 
 ---
 
@@ -62,7 +76,7 @@ MONTY_API_URL=https://montandon-eoapi-stage.ifrc.org/stac
 HDX_API_TOKEN=your_base64_encoded_hdx_identifier_here
 ```
 
-Replace the placeholder values with your actual tokens.
+Replace the placeholder values with your actual tokens. The UNHCR servers need no entries in this file.
 
 > **Tip:** You can also place the `.env` file inside an individual server folder (e.g., `hdx-mcp/`). Each server searches in multiple locations.
 
@@ -72,22 +86,13 @@ Replace the placeholder values with your actual tokens.
 cd ifrc-mcp && npm install && cd ..
 cd monty-mcp && npm install && cd ..
 cd hdx-mcp && npm install && cd ..
+cd unhcr-refugees-mcp && npm install && cd ..
+cd unhcr-resettlement-data && npm install && cd ..
 ```
 
 ---
 
-## IFRC GO MCP Server
-
-### About
-
-This server connects Claude to the [IFRC GO API](https://goadmin.ifrc.org) — a comprehensive database of humanitarian operations run by the Red Cross and Red Crescent network. You can ask Claude questions like:
-
-- *"What emergency appeals are active in Sudan right now?"*
-- *"Show me the disaster history for Kenya in 2023."*
-- *"List all surge personnel currently deployed to Turkey."*
-- *"What DREFs are active in the Asia Pacific region?"*
-
-### Configure Claude Desktop
+## Configure Claude Desktop
 
 Find your Claude Desktop configuration file:
 - **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
@@ -109,12 +114,33 @@ Open it (create it if it doesn't exist) and add the following entries under `mcp
     "hdx-hapi": {
       "command": "node",
       "args": ["/YOUR/PATH/TO/MCPs/hdx-mcp/server.js"]
+    },
+    "unhcr-refugees": {
+      "command": "node",
+      "args": ["/YOUR/PATH/TO/MCPs/unhcr-refugees-mcp/server.js"]
+    },
+    "unhcr-resettlement": {
+      "command": "node",
+      "args": ["/YOUR/PATH/TO/MCPs/unhcr-resettlement-data/server.js"]
     }
   }
 }
 ```
 
-After saving, **restart Claude Desktop**. You should see all three servers' tools available in the tools panel.
+After saving, **restart Claude Desktop**. You should see all five servers' tools available in the tools panel.
+
+---
+
+## IFRC GO MCP Server
+
+### About
+
+This server connects Claude to the [IFRC GO API](https://goadmin.ifrc.org) — a comprehensive database of humanitarian operations run by the Red Cross and Red Crescent network. You can ask Claude questions like:
+
+- *"What emergency appeals are active in Sudan right now?"*
+- *"Show me the disaster history for Kenya in 2023."*
+- *"List all surge personnel currently deployed to Turkey."*
+- *"What DREFs are active in the Asia Pacific region?"*
 
 ### Available Tools
 
@@ -486,6 +512,142 @@ The `get_humanitarian_needs` tool uses population status codes: `AFF`=Affected, 
 
 ---
 
+## UNHCR Refugee Statistics MCP Server
+
+### About
+
+This server connects Claude to the [UNHCR Population Statistics API](https://api.unhcr.org/population/v1) — the authoritative global dataset on refugees, asylum seekers, internally displaced persons, stateless persons, and persons of concern. The API is fully public and requires no authentication.
+
+Example questions you can ask Claude:
+- *"How many refugees from Syria are currently in Turkey?"*
+- *"Show me asylum application trends in Germany over the last five years."*
+- *"What durable solutions were recorded for Afghan refugees in 2023?"*
+- *"Get the demographic breakdown of IDPs in South Sudan by age and sex."*
+- *"What are the latest UNHCR nowcasting estimates for Somalia?"*
+
+### Available Tools
+
+---
+
+#### Population & Displacement
+
+| Tool | Description |
+|---|---|
+| `get_population` | Get refugee and displaced population figures (refugees, asylum seekers, IDPs, stateless persons, etc.) by year and country of origin/asylum. Supports filtering by `columns` to select specific population types |
+| `get_demographics` | Get sub-national and demographic population data disaggregated by age, sex, and population type |
+| `get_idmc` | Get IDMC (Internal Displacement Monitoring Centre) data on internally displaced persons by country and year |
+| `get_unrwa` | Get UNRWA registered Palestine refugee population figures by year and territory |
+| `get_nowcasting` | Get UNHCR nowcasting/predictive refugee population estimates for the current period |
+
+---
+
+#### Asylum
+
+| Tool | Description |
+|---|---|
+| `get_asylum_applications` | Get asylum claims submitted by year and countries of asylum/origin |
+| `get_asylum_decisions` | Get decisions taken on asylum claims — recognized, rejected, complementary protection, etc. — by year and country |
+
+---
+
+#### Durable Solutions
+
+| Tool | Description |
+|---|---|
+| `get_solutions` | Get durable solutions data: voluntary repatriation, resettlement, and naturalization figures by year and country |
+
+---
+
+#### Reference Data
+
+| Tool | Description |
+|---|---|
+| `list_countries` | List all countries with their UNHCR codes, ISO codes, names, and regional groupings — use this to look up country codes for other queries |
+| `list_regions` | List all UNHCR regional bureaux/geographic regions with their IDs and names |
+| `list_years` | List all years for which refugee statistics data is available |
+| `get_footnotes` | Get methodology notes and data caveats explaining definitions and data sources for specific country-year combinations |
+
+---
+
+**Common filter parameters** available across most data tools:
+
+| Parameter | Description |
+|---|---|
+| `coo` | Country of origin — 3-char UNHCR code(s), comma-separated (e.g. `AFG,SYR`) |
+| `coa` | Country of asylum — 3-char UNHCR code(s), comma-separated |
+| `yearFrom` / `yearTo` | Year range (inclusive) |
+| `year` | Specific year(s), comma-separated (e.g. `2020,2021`) |
+| `cfType` | Set to `ISO` to use ISO3 country codes instead of UNHCR codes |
+| `limit` / `page` | Pagination controls |
+
+---
+
+## UNHCR Resettlement Data MCP Server
+
+### About
+
+This server connects Claude to the [UNHCR Resettlement Statistics (RSQ) API](https://api.unhcr.org/rsq/v1) — a dedicated dataset tracking formal resettlement programmes: UNHCR submissions to resettlement countries and actual departures. The API is fully public and requires no authentication.
+
+**Resettlement** is one of UNHCR's three durable solutions. It involves transferring refugees from a country of asylum to a third country that has agreed to admit them. The RSQ API tracks both *submissions* (UNHCR referrals to a resettlement state) and *departures* (persons who have actually left for the resettlement country).
+
+Example questions you can ask Claude:
+- *"How many refugees were submitted for resettlement to Canada in 2023?"*
+- *"Show me resettlement departure trends from Kenya to the US over the last decade."*
+- *"What is the age and gender breakdown of resettlement submissions from Afghanistan?"*
+- *"Which countries received the most resettlement departures in 2022?"*
+
+### Available Tools
+
+---
+
+#### Lookup — Reference Data
+
+| Tool | Description |
+|---|---|
+| `get_resettlement_categories` | Get all UNHCR resettlement submission category codes and names (e.g. NEED, SML, WOM) |
+| `get_rsq_regions` | Get UNHCR regional groupings used to categorise countries of asylum |
+| `get_rsq_years` | Get available years for which resettlement submissions and departures data exist |
+| `get_rsq_years_demographics` | Get available years for which resettlement demographics data exists |
+| `get_countries_of_asylum` | Get all available countries of asylum in the resettlement dataset |
+| `get_origin_countries_submissions` | Get countries of origin that have resettlement submissions data |
+| `get_origin_countries_departures` | Get countries of origin that have resettlement departures data |
+| `get_origin_countries_demographics` | Get countries of origin that have resettlement demographics data |
+| `get_resettlement_destinations` | Get all available resettlement destination countries |
+
+---
+
+#### Query — Submissions & Departures
+
+| Tool | Description |
+|---|---|
+| `get_resettlement_submissions` | Get paginated resettlement submissions data (UNHCR referrals to resettlement countries). Returns 20 results per page. Filter by year, country of origin, country of asylum, and destination |
+| `get_resettlement_departures` | Get paginated resettlement departures data (persons who actually departed to resettlement countries). Returns 20 results per page. Filter by year, country of origin, country of asylum, and destination |
+| `get_resettlement_demographics` | Get resettlement submissions demographic breakdown by age and gender. Filter by year, country of origin, and resettlement destination |
+
+---
+
+#### Utilities
+
+| Tool | Description |
+|---|---|
+| `resolve_rsq_url_hash` | Decode a UNHCR RSQ URL hash back into its full query URL — useful for reconstructing saved queries |
+| `export_rsq_csv` | Export resettlement query results as a CSV. Specify `type` as `submissions` or `departures` and apply any filters |
+
+---
+
+**Common filter parameters** available across query tools:
+
+| Parameter | Description |
+|---|---|
+| `year` | Year(s), comma-separated (e.g. `2022,2023`) |
+| `origin` | Country of origin code(s), comma-separated |
+| `asylum` | Country of asylum code(s), comma-separated |
+| `resettlement` | Resettlement destination country code(s), comma-separated |
+| `page` | Pagination page number (20 results per page) |
+| `language` | Response language: `en` (default) or `fr` |
+
+---
+
 ## Troubleshooting
 
 ### IFRC GO Server
@@ -512,6 +674,14 @@ Your app identifier is invalid or malformed. Make sure you copied the full base6
 
 **`API Error 422`**
 A parameter value is invalid — check the allowed values for filters like `ipc_phase`, `population_group`, or `event_type` in the tool descriptions above.
+
+### UNHCR Servers
+
+**`API Error 400`**
+A filter parameter is invalid. Check that country codes are valid 3-character UNHCR or ISO3 codes (use `list_countries` to look them up), and that year values are integers within the available range (use `list_years` to check).
+
+**`Empty results`**
+The UNHCR Population and RSQ APIs only return data for country-year combinations that exist in the database. Try broadening your filters or removing the `coo`/`coa` constraints to confirm data exists for your query.
 
 ### All Servers
 
