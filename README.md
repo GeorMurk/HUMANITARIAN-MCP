@@ -1034,4 +1034,4 @@ Always pass a `country` or `start`/`end` year filter when using this tool. Witho
 - Check that the file paths in the config exactly match where you cloned this repository.
 - On macOS you can verify paths by running `ls /YOUR/PATH/TO/MCPs/ifrc-mcp/server.js` in Terminal.
 
-# Thanks for all Humanitarians for the Great work you do for the Society/Communities and for the Humanitarian Organizations that provide and publish data that facilitate Humanitarian work, Thank you.
+## Thanks for all Humanitarians for the Great work you do for the Society/Communities and for the Humanitarian Organizations that provide and publish data that facilitate Humanitarian work, Thank you.
