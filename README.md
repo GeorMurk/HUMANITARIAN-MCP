@@ -7,7 +7,7 @@
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <a href="https://data.humdata.org"><img src="https://github.com/OCHA-DAP.png?size=120" alt="HDX / OCHA" height="80"/></a>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://ipcinfo.org"><img src="https://github.com/ipcinfo.png?size=120" alt="IPC" height="80"/></a>
+  <a href="https://ipcinfo.org"><img src="https://www.ipcinfo.org/fileadmin/templates/ipcinfo-assets/SVG_120218/IPC_Interim_Logo_Blu_EN.png" alt="IPC" height="80"/></a>
 </p>
 
 <p align="center">
