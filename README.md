@@ -16,7 +16,7 @@
   They are compatible with any MCP-capable AI assistant or agent framework.
 </p>
 
-This repository contains seven **MCP servers** that connect LLMs/Agents to live humanitarian data — letting any MCP-compatible AI assistant query real-world disaster, displacement, food security, and resettlement data without copy-pasting or manual lookups.
+This repository contains eight **MCP servers** that connect LLMs/Agents to live humanitarian data — letting any MCP-compatible AI assistant query real-world disaster, displacement, food security, and resettlement data without copy-pasting or manual lookups.
 
 ---
 
@@ -37,6 +37,7 @@ This repository contains seven **MCP servers** that connect LLMs/Agents to live 
 | **UNHCR Resettlement Data MCP**  | `unhcr-resettlement-mcp/` | Query the UNHCR Resettlement Statistics (RSQ) API — submissions, departures, and demographic breakdowns for resettlement programmes                                                     |
 | **FEWS NET FDW MCP**             | `fewsnet-mcp/`            | Query the FEWS NET Famine Early Warning Systems Network API — IPC food security classifications, market prices, crop production, nutrition, trade flows, and humanitarian response data |
 | **IPC-CH MCP**                   | `ipc-mcp/`                | Query the IPC-CH Public API — official IPC acute and chronic food insecurity analyses, area-level phase data, population tracking, and IDP point data                                   |
+| **ReliefWeb MCP**                | `reliefweb-mcp/`          | Query the ReliefWeb API — humanitarian reports, situation reports, maps, disaster pages, country profiles, job listings, training opportunities, and taxonomy reference data from 4,000+ sources |
 
 **IFRC** stands for the _International Federation of Red Cross and Red Crescent Societies_. The **GO** (Global Operations)[IFRC GO](https://go.ifrc.org) platform is a public database tracking humanitarian operations, disaster appeals, field reports, and response activities worldwide.
 
@@ -47,6 +48,8 @@ This repository contains seven **MCP servers** that connect LLMs/Agents to live 
 **UNHCR** is the _UN Refugee Agency_. Their **Population Statistics API** exposes the global refugee database — figures on refugees, asylum seekers, IDPs, stateless persons, and durable solutions going back decades. Their **Resettlement (RSQ) API** covers submissions and departures for formal resettlement programmes worldwide. Both APIs are fully public and require no authentication.
 
 **IPC-CH** is the [Integrated Food Security Phase Classification](https://ipcinfo.org) — the global standard for classifying acute and chronic food insecurity. Their Public API provides official analyses, sub-national area phase data, population estimates, and IDP point data across crisis-affected countries.
+
+**ReliefWeb** is OCHA's leading online platform for reliable and timely humanitarian information. It aggregates reports, situation reports, maps, press releases, jobs, and training opportunities from 4,000+ trusted sources — UN agencies, NGOs, governments, and research institutions — covering disasters, crises, and humanitarian themes worldwide. Their API provides full-text search, rich filtering, faceting, and taxonomy reference data.
 
 ---
 
@@ -61,6 +64,7 @@ Before you start, make sure you have:
 - **An HDX app identifier** — register your app at [hapi.humdata.org](https://hapi.humdata.org/docs#/Util/get_encoded_identifier_api_v1_encode_identifier_get) to get a free base64-encoded identifier
 - **A FEWS NET FDW account** — register at [fdw.fews.net](https://fdw.fews.net) to obtain a username and password
 - **An IPC API key** — register at [ipcinfo.org](https://ipcinfo.org) to obtain a free API key
+- **A ReliefWeb app name** — register a free app name at [apidoc.reliefweb.int](https://apidoc.reliefweb.int/) (used as an identifier in API requests, not a secret key)
 
 > **Note:** The two UNHCR servers require no API token — they use a fully public API.
 
@@ -95,6 +99,9 @@ FEWSNET_PASSWORD=your_fewsnet_password_here
 
 # Required by IPC-CH server
 IPC_API_KEY=your_ipc_api_key_here
+
+# Required by ReliefWeb server
+RELIEFWEB_APPNAME=your-app-name-here
 ```
 
 Replace the placeholder values with your actual tokens. The UNHCR servers need no entries in this file.
@@ -111,6 +118,7 @@ cd unhcr-refugees-mcp && npm install && cd ..
 cd unhcr-resettlement-mcp && npm install && cd ..
 cd fewsnet-mcp && npm install && cd ..
 cd ipc-mcp && npm install && cd ..
+cd reliefweb-mcp && npm install && cd ..
 ```
 
 ---
@@ -156,12 +164,16 @@ Open it (create it if it doesn't exist) and add the following entries under `mcp
     "ipc-ch": {
       "command": "node",
       "args": ["/YOUR/PATH/TO/MCPs/ipc-mcp/server.js"]
+    },
+    "reliefweb": {
+      "command": "node",
+      "args": ["/YOUR/PATH/TO/MCPs/reliefweb-mcp/server.js"]
     }
   }
 }
 ```
 
-After saving, **restart Claude Desktop** (or your MCP-compatible agent host). You should see all seven servers' tools available in the tools panel.
+After saving, **restart Claude Desktop** (or your MCP-compatible agent host). You should see all eight servers' tools available in the tools panel.
 
 > **Other MCP hosts:** If you are connecting these servers to a different LLM or agent framework (e.g. a custom agent built with the MCP SDK, or another Claude-compatible tool), consult that framework's documentation for how to register stdio-transport MCP servers.
 
@@ -980,6 +992,140 @@ These tools require an analysis ID obtained from `list_analyses`.
 
 ---
 
+## ReliefWeb MCP Server
+
+### About
+
+This server links LLMs/Agents to the [ReliefWeb API](https://apidoc.reliefweb.int/) — OCHA's authoritative platform aggregating humanitarian information from 4,000+ trusted sources worldwide. You can ask an AI assistant questions like:
+
+- _"What are the latest situation reports on the Sudan crisis?"_
+- _"Find all OCHA reports on food security in the Sahel published in 2024."_
+- _"What humanitarian jobs are open in Kenya right now?"_
+- _"List upcoming humanitarian training courses available online for free."_
+- _"What disaster types are covered in ReliefWeb's taxonomy?"_
+
+**Registration:** Register a free app name at [apidoc.reliefweb.int](https://apidoc.reliefweb.int/) and add it to your `.env` file as `RELIEFWEB_APPNAME=your-app-name`.
+
+### Available Tools
+
+---
+
+#### Reports
+
+A **report** is any humanitarian document — situation report, map, analysis, press release, or feature — published on ReliefWeb. Reports are curated from 4,000+ sources including UN agencies, NGOs, governments, and research institutions.
+
+| Tool             | Description                                                                                                                     |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `search_reports` | Search ReliefWeb reports with full-text query and filters (country, source, theme, format, language, disaster type, date range) |
+| `get_report`     | Get a single report by ID — returns full body text, attached files, images, and all metadata                                    |
+
+---
+
+#### Disasters
+
+A **disaster** page on ReliefWeb aggregates all content (reports, maps, updates) related to a specific disaster event. Each disaster may have a GLIDE number, multiple affected countries, and links to related documents.
+
+| Tool               | Description                                                                                                                            |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `search_disasters` | Search disaster situations with filters (country, type, status, GLIDE number, featured flag, date range). Default sort: event date desc |
+| `get_disaster`     | Get a single disaster by ID — returns full description, profile, related GLIDE numbers, and all metadata                               |
+
+---
+
+#### Countries
+
+ReliefWeb maintains a profile page for each country and territory, with links to active crises, response plans, and key content.
+
+| Tool               | Description                                                                                          |
+| ------------------ | ---------------------------------------------------------------------------------------------------- |
+| `search_countries` | Search countries with filters (status, current crisis flag). Default sort: name ascending            |
+| `get_country`      | Get a single country by ID — returns full profile, overview, appeals/response plans, and useful links |
+
+---
+
+#### Jobs
+
+ReliefWeb hosts one of the largest humanitarian job boards — covering UN agencies, NGOs, and other organisations worldwide.
+
+| Tool          | Description                                                                                                                                                     |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `search_jobs` | Search humanitarian job listings with filters (country, city, source, type, career category, experience level, closing date). Default sort: closing date asc    |
+| `get_job`     | Get a single job listing by ID — returns full description, how-to-apply instructions, and all metadata                                                          |
+
+---
+
+#### Training
+
+ReliefWeb lists humanitarian training opportunities, courses, workshops, and conferences from organisations worldwide.
+
+| Tool               | Description                                                                                                                                                                  |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `search_training`  | Search training opportunities with filters (country, city, source, type, format, language, career category, cost, date). Default sort: start date asc                        |
+| `get_training`     | Get a single training by ID — returns full description, how-to-register instructions, dates, and all metadata                                                                |
+
+---
+
+#### Sources
+
+**Sources** are the organisations that contribute content to ReliefWeb — UN agencies, NGOs, governments, academic institutions, and media outlets.
+
+| Tool               | Description                                                                                         |
+| ------------------ | --------------------------------------------------------------------------------------------------- |
+| `search_sources`   | Search source organisations with filters (country, type, content type, status). Default sort: name |
+| `get_source`       | Get a single source by ID — returns description, homepage, FTS ID, and all metadata                 |
+
+---
+
+#### Blog
+
+The ReliefWeb blog covers updates about the platform, data projects, editorial decisions, and humanitarian information management.
+
+| Tool           | Description                                                                                    |
+| -------------- | ---------------------------------------------------------------------------------------------- |
+| `search_blog`  | Search ReliefWeb blog posts with filters (author, tags, date range). Default sort: created desc |
+| `get_blog`     | Get a single blog post by ID — returns full body text, author, image, and all metadata          |
+
+---
+
+#### Book (Static Pages)
+
+**Book** content refers to ReliefWeb's static reference pages — editorial guidelines, help documentation, location maps, and other site pages.
+
+| Tool           | Description                                                                        |
+| -------------- | ---------------------------------------------------------------------------------- |
+| `search_book`  | Search book/static pages with filters (status, date range). Default sort: changed desc |
+| `get_book`     | Get a single book page by ID — returns full body text and all metadata              |
+
+---
+
+#### Reference Taxonomies
+
+ReliefWeb maintains controlled vocabularies (taxonomies) used to tag and classify all content — themes, disaster types, career categories, languages, and more.
+
+| Tool                       | Description                                                                                                                                                                      |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `get_references_directory` | Get the full taxonomy directory — lists all available vocabularies with their API field mappings. Use this to discover available taxonomy names before calling the next tool      |
+| `get_reference_taxonomy`   | Get the items in a specific taxonomy. Available: `career-categories`, `content-formats`, `disaster-types`, `features`, `job-experience`, `job-types`, `languages`, `ocha-products`, `organization-types`, `themes`, `training-formats`, `training-types`, `vulnerable-groups` |
+
+---
+
+**Common search parameters** available across all ReliefWeb search tools:
+
+| Parameter        | Description                                                                              |
+| ---------------- | ---------------------------------------------------------------------------------------- |
+| `query`          | Free-text search query (supports Lucene syntax)                                          |
+| `query_operator` | `AND` (default) or `OR` — how multi-word queries are combined                            |
+| `preset`         | `minimal` (default sensible filters), `latest` (sort by date), `analysis` (includes archived content) |
+| `profile`        | Field set returned: `minimal` (title only), `list` (list-suitable fields), `full` (all fields) |
+| `facet_fields`   | Array of fields to aggregate/facet on — results appear in `response.embedded.facets`     |
+| `fields_include` | Additional fields to include alongside the profile                                       |
+| `fields_exclude` | Fields to exclude from results                                                           |
+| `limit`          | Results to return (0–1000, default 10)                                                   |
+| `offset`         | Results to skip for pagination                                                           |
+| `sort`           | Sort as `field:direction` (e.g. `date.created:desc`, `title:asc`)                        |
+
+---
+
 ## Troubleshooting
 
 ### IFRC GO Server
@@ -1025,6 +1171,19 @@ Your API key is invalid or has expired. Check that you copied the full key witho
 
 **`get_population_tracking` returns very large data or times out**
 Always pass a `country` or `start`/`end` year filter when using this tool. Without filters it returns the entire global population tracking history, which is extremely large.
+
+### ReliefWeb Server
+
+**`FATAL: Cannot start server. Missing RELIEFWEB_APPNAME`**
+Your `.env` file is missing or doesn't contain `RELIEFWEB_APPNAME`. Register a free app name at [apidoc.reliefweb.int](https://apidoc.reliefweb.int/) and add `RELIEFWEB_APPNAME=your-app-name` to your `.env` file.
+
+**`API Error 422`**
+A filter field value is invalid or doesn't match the taxonomy. Use `get_reference_taxonomy` (e.g. for `themes`, `disaster-types`, `career-categories`) to retrieve the exact allowed values before filtering.
+
+**`Search returns 0 results`**
+Taxonomy filter fields require exact string matches (e.g. `"Flood"` not `"flood"`, `"Administration/Finance"` not just `"Finance"`). Use `get_reference_taxonomy` to look up the correct values.
+
+---
 
 ### All Servers
 

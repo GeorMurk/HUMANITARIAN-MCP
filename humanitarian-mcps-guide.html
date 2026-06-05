@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Humanitarian AI Tools — A Beginner's Guide to 6 Powerful MCPs</title>
+<title>Humanitarian AI Tools — A Beginner's Guide to 7 Powerful MCPs</title>
 <style>
   :root {
     --blue: #2563eb;
@@ -18,6 +18,8 @@
     --teal-light: #ccfbf1;
     --amber: #d97706;
     --amber-light: #fef3c7;
+    --sky: #0369a1;
+    --sky-light: #e0f2fe;
     --gray: #374151;
     --gray-light: #f3f4f6;
     --white: #ffffff;
@@ -142,6 +144,7 @@
   .rsq   .card-link { color: #7c3aed; border-color: #c4b5fd; }
   .fews  .card-link { color: #b45309; border-color: #fcd34d; }
   .ipc   .card-link { color: #0d9488; border-color: #5eead4; }
+  .rw    .card-link { color: #0369a1; border-color: #7dd3fc; }
 
   .mcp-card.ifrc  { border-color: #fca5a5; background: linear-gradient(145deg, #fff5f5, white); }
   .mcp-card.hdx   { border-color: #93c5fd; background: linear-gradient(145deg, #eff6ff, white); }
@@ -149,6 +152,7 @@
   .mcp-card.rsq   { border-color: #c4b5fd; background: linear-gradient(145deg, #faf5ff, white); }
   .mcp-card.fews  { border-color: #fcd34d; background: linear-gradient(145deg, #fffbeb, white); }
   .mcp-card.ipc   { border-color: #5eead4; background: linear-gradient(145deg, #f0fdfa, white); }
+  .mcp-card.rw    { border-color: #7dd3fc; background: linear-gradient(145deg, #f0f9ff, white); }
 
   .card-icon {
     width: 52px; height: 52px;
@@ -166,6 +170,7 @@
   .rsq   .card-icon { background: #ede9fe; }
   .fews  .card-icon { background: #fef3c7; }
   .ipc   .card-icon { background: #ccfbf1; }
+  .rw    .card-icon { background: #e0f2fe; }
 
   .mcp-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
   .mcp-card .tagline { font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 10px; }
@@ -175,6 +180,7 @@
   .rsq   .tagline { color: #7c3aed; }
   .fews  .tagline { color: #b45309; }
   .ipc   .tagline { color: #0d9488; }
+  .rw    .tagline { color: #0369a1; }
   .mcp-card p { font-size: 14px; color: #4b5563; }
 
   /* ── DEEP DIVE SECTIONS ── */
@@ -205,6 +211,7 @@
   .rsq-b   { background: #ede9fe; color: #6d28d9; }
   .fews-b  { background: #fef3c7; color: #92400e; }
   .ipc-b   { background: #ccfbf1; color: #0f766e; }
+  .rw-b    { background: #e0f2fe; color: #0369a1; }
 
   .dive-header h2 { font-size: 26px; margin-bottom: 0; }
 
@@ -235,6 +242,7 @@
   .example-box.rsq   { background: #faf5ff; border-color: #a855f7; }
   .example-box.fews  { background: #fffbeb; border-color: #f59e0b; }
   .example-box.ipc   { background: #f0fdfa; border-color: #14b8a6; }
+  .example-box.rw    { background: #f0f9ff; border-color: #0ea5e9; }
 
   .example-box .ex-label {
     font-size: 11px;
@@ -346,6 +354,7 @@
   .t-rsq   { color: #7c3aed; border-color: #c4b5fd; background: #faf5ff; }
   .t-fews  { color: #b45309; border-color: #fcd34d; background: #fffbeb; }
   .t-ipc   { color: #0d9488; border-color: #5eead4; background: #f0fdfa; }
+  .t-rw    { color: #0369a1; border-color: #7dd3fc; background: #f0f9ff; }
 
   /* ── CALLOUT ── */
   .callout {
@@ -385,8 +394,8 @@
 <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
 <div class="hero">
   <div class="hero-badge"><img src="https://www.dropbox.com/scl/fo/zf8hkvg5vtq4hw1szt45c/AFToX7BwM6JvO2GNCUJ7yaA/icons/Colour/png/IFRC-icons-colour_Share-network.png?rlkey=18wk61zszq2cycrgwy9v4rutw&e=1&dl=1" alt="Share network" style="height:16px;width:auto;object-fit:contain;vertical-align:middle;margin-right:6px;"> Humanitarian AI Toolkit</div>
-  <h1>6 Powerful Data Tools<br>for Humanitarian Work</h1>
-  <p>A beginner-friendly guide to IFRC GO, HDX, UNHCR Refugee Statistics, UNHCR Resettlement, FEWS NET, and IPC-CH — and how AI assistants can use them to answer real questions.</p>
+  <h1>7 Powerful Data Tools<br>for Humanitarian Work</h1>
+  <p>A beginner-friendly guide to IFRC GO, HDX, UNHCR Refugee Statistics, UNHCR Resettlement, FEWS NET, IPC-CH, and ReliefWeb — and how AI assistants can use them to answer real questions.</p>
   <div class="hero-pills">
     <span class="pill"><img src="https://go.ifrc.org/7.26.0/asset-go-logo-2020-D07sIPWn.svg" alt="IFRC GO"> IFRC GO</span>
     <span class="pill"><img src="https://avatars.githubusercontent.com/u/5087346?s=120&v=4" alt="HDX"> HDX</span>
@@ -394,6 +403,7 @@
     <span class="pill"><img src="https://www.unhcr.org/themes/custom/project/logo.svg" alt="UNHCR"> UNHCR Resettlement</span>
     <span class="pill"><img src="https://fews.net/themes/custom/outline_frontend/dist/assets/svg/logos/fewsnet-logo.svg" alt="FEWS NET"> FEWS NET</span>
     <span class="pill"><img src="https://www.ipcinfo.org/fileadmin/templates/ipcinfo-assets/SVG_120218/IPC_Interim_Logo_Blu_EN.png" alt="IPC"> IPC-CH</span>
+    <span class="pill"><img src="https://reliefweb.int/themes/custom/common_design_subtheme/img/logos/rw-logo-desktop.svg" alt="ReliefWeb"> ReliefWeb</span>
   </div>
 </div>
 
@@ -488,9 +498,9 @@
 <!-- ═══════════════════════════ OVERVIEW CARDS ═══════════════════════════ -->
 <section>
   <div class="container">
-    <div class="section-label" style="color:var(--orange)">The Six Tools</div>
+    <div class="section-label" style="color:var(--orange)">The Seven Tools</div>
     <h2>Meet the MCPs</h2>
-    <p class="lead">Each tool connects to a different official humanitarian database. Together they cover disaster response, food security, famine early warning, displacement, and refugee resettlement.</p>
+    <p class="lead">Each tool connects to a different official humanitarian database. Together they cover disaster response, food security, famine early warning, displacement, refugee resettlement, and humanitarian information management.</p>
 
     <div class="mcp-grid">
       <div class="mcp-card ifrc">
@@ -537,6 +547,13 @@
           <a class="card-link" href="https://www.ipcinfo.org/ipcinfo-website/ipc-dashboard/" target="_blank" rel="noopener">IPC-CH ↗</a>
           <a class="card-link" href="https://www.ipcinfo.org/" target="_blank" rel="noopener">IPC ↗</a>
         </div>
+      </div>
+      <div class="mcp-card rw">
+        <div class="card-icon"><img src="https://reliefweb.int/themes/custom/common_design_subtheme/img/logos/rw-logo-desktop.svg" alt="ReliefWeb"></div>
+        <p class="tagline">ReliefWeb</p>
+        <h3>ReliefWeb Humanitarian Information</h3>
+        <p>OCHA's leading humanitarian platform — situation reports, maps, analyses, job listings, and training opportunities aggregated from 4,000+ trusted sources across UN agencies, NGOs, and governments worldwide.</p>
+        <div class="card-links"><a class="card-link" href="https://reliefweb.int/" target="_blank" rel="noopener">ReliefWeb ↗</a><a class="card-link" href="https://apidoc.reliefweb.int/" target="_blank" rel="noopener">API Docs ↗</a></div>
       </div>
     </div>
   </div>
@@ -911,6 +928,67 @@
       </div>
     </div>
 
+    <!-- ── RELIEFWEB ── -->
+    <div class="deep-dive">
+      <div class="dive-header">
+        <span class="dive-badge rw-b"><img src="https://reliefweb.int/themes/custom/common_design_subtheme/img/logos/rw-logo-desktop.svg" alt="ReliefWeb"> ReliefWeb</span>
+        <h2>The world's humanitarian library — searchable by AI</h2>
+      </div>
+      <p>ReliefWeb is OCHA's flagship humanitarian information platform, aggregating reports, situation reports, maps, analyses, press releases, and editorial content from over 4,000 trusted sources — UN agencies, NGOs, governments, and research institutions. The MCP provides full-text search, rich filtering, and taxonomy lookups across all content types, plus a live job board and training catalogue for humanitarian professionals.</p>
+
+      <div class="capabilities-grid">
+        <div class="cap-item">
+          <strong>📄 Reports &amp; Sitreps</strong>
+          Situation reports, maps, analyses, and press releases from 4,000+ sources
+        </div>
+        <div class="cap-item">
+          <strong>🚨 Disaster Pages</strong>
+          Aggregated crisis pages with GLIDE numbers, affected countries, and linked documents
+        </div>
+        <div class="cap-item">
+          <strong>🌍 Country Profiles</strong>
+          ReliefWeb country pages with active crises, response plans, and key links
+        </div>
+        <div class="cap-item">
+          <strong>💼 Humanitarian Jobs</strong>
+          Open positions at UN agencies, NGOs, and international organisations worldwide
+        </div>
+        <div class="cap-item">
+          <strong>🎓 Training Courses</strong>
+          Workshops, online courses, and conferences — free and fee-based — for humanitarian professionals
+        </div>
+        <div class="cap-item">
+          <strong>🏢 Source Directory</strong>
+          Profiles of contributing organisations with type, country, and publication history
+        </div>
+        <div class="cap-item">
+          <strong>🔖 Taxonomy Reference</strong>
+          Controlled vocabularies: themes, disaster types, career categories, languages, and more
+        </div>
+        <div class="cap-item">
+          <strong>📊 Faceted Search</strong>
+          Aggregate results by any field — see distributions of themes, countries, or dates at a glance
+        </div>
+      </div>
+
+      <div class="example-box rw">
+        <div class="ex-label">💬 Example conversation</div>
+        <div class="prompt">You: "Find the latest OCHA situation reports on Sudan published in the last 30 days, and summarise the key themes."</div>
+        <div class="response">
+          <strong>AI (using ReliefWeb MCP):</strong><br>
+          "ReliefWeb returns 12 OCHA situation reports on Sudan published in the last month. The recurring themes are: displacement (5.2 million newly displaced in 2024, the world's largest IDP crisis), humanitarian access constraints (only 30% of funding requirements met), and cross-border refugee flows into Chad and South Sudan. Three reports specifically highlight the collapse of health infrastructure in Khartoum and Darfur. Would you like the full text of the most recent report?"
+        </div>
+      </div>
+
+      <div class="example-box rw">
+        <div class="ex-label">💬 Another example</div>
+        <div class="prompt">You: "What humanitarian coordination jobs are open in East Africa right now, and which require less than 3 years of experience?"</div>
+        <div class="response">
+          <strong>AI:</strong> Searches ReliefWeb jobs filtered to East Africa and the Coordination career category, then further filters to entries with 0–2 years experience required — returning a list of open positions with organisation, location, closing date, and a direct link to apply. Ideal for early-career humanitarian professionals.
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -935,26 +1013,32 @@
           <tr>
             <td><strong>Communication &amp; Humanitarian Diplomatists</strong></td>
             <td>Write data-driven articles, briefings, and advocacy reports on displacement and food crises</td>
-            <td>UNHCR Stats + HDX + IFRC GO</td>
-            <td>Fetches latest displacement figures, food security data, and conflict events to build verified fact sheets and public-facing narratives</td>
+            <td>ReliefWeb + UNHCR Stats + HDX + IFRC GO</td>
+            <td>Searches and summarises the latest situation reports, fetches displacement figures and food security data, and builds verified fact sheets and public-facing narratives</td>
           </tr>
           <tr>
             <td><strong>Humanitarian Aid Workers</strong></td>
             <td>Coordinate emergency response, target food assistance, prepare sitreps, and identify underfunded crises</td>
-            <td>IFRC GO + HDX + FEWS NET + IPC-CH + UNHCR Stats</td>
-            <td>Pulls field reports, ERU deployments, IPC phases, funding gaps, and population data into actionable operational summaries</td>
+            <td>ReliefWeb + IFRC GO + HDX + FEWS NET + IPC-CH + UNHCR Stats</td>
+            <td>Pulls the latest situation reports, field reports, ERU deployments, IPC phases, funding gaps, and population data into actionable operational summaries</td>
+          </tr>
+          <tr>
+            <td><strong>Humanitarian Professionals (Careers)</strong></td>
+            <td>Find open job postings and training courses relevant to their skills and location</td>
+            <td>ReliefWeb</td>
+            <td>Searches open jobs and upcoming training filtered by country, career category, experience level, format, and cost — surfacing opportunities instantly without manual site browsing</td>
           </tr>
           <tr>
             <td><strong>Academia &amp; Researchers</strong></td>
             <td>Analyse long-term displacement trends, food security dynamics, and agricultural shocks</td>
-            <td>UNHCR Stats + FEWS NET + IPC-CH + HDX</td>
-            <td>Exports multi-year population and food security data, identifies statistical patterns, and compares yield forecasts against crisis outcomes</td>
+            <td>UNHCR Stats + FEWS NET + IPC-CH + HDX + ReliefWeb</td>
+            <td>Exports multi-year population and food security data, identifies statistical patterns, compares yield forecasts against crisis outcomes, and retrieves primary source documents</td>
           </tr>
           <tr>
             <td><strong>Donor / Foundations</strong></td>
             <td>Decide where their next grant will have the most impact</td>
-            <td>HDX + IFRC GO + UNHCR Stats + IPC-CH</td>
-            <td>Cross-references severity, funding gaps, and operational presence to surface high-need, low-resource locations</td>
+            <td>HDX + IFRC GO + UNHCR Stats + IPC-CH + ReliefWeb</td>
+            <td>Cross-references severity, funding gaps, and operational presence to surface high-need, low-resource locations, then retrieves the latest situation reports for context</td>
           </tr>
         </tbody>
       </table>
@@ -1042,15 +1126,16 @@
   <div class="container">
     <div class="section-label" style="color:var(--orange)">Power Combos</div>
     <h2>Mixing the tools for deeper insight</h2>
-    <p class="lead">The real power comes from combining all four MCPs in a single question. Here are some examples of multi-tool queries.</p>
+    <p class="lead">The real power comes from combining the MCPs in a single question. Here are some examples of multi-tool queries.</p>
 
     <ul class="combo-list">
       <li>
         <div class="combo-icon">🔍</div>
         <div class="combo-text">
           <strong>Crisis Impact Report</strong>
-          <span>"Give me a full picture of the situation in Yemen — active operations, food security, displaced populations, and which countries are accepting Yemeni refugees."</span>
+          <span>"Give me a full picture of the situation in Yemen — latest situation reports, active operations, food security, displaced populations, and which countries are accepting Yemeni refugees."</span>
           <div class="combo-tags">
+            <span class="combo-tag t-rw">ReliefWeb</span>
             <span class="combo-tag t-ifrc">IFRC GO</span>
             <span class="combo-tag t-hdx">HDX</span>
             <span class="combo-tag t-unhcr">UNHCR Stats</span>
@@ -1096,11 +1181,24 @@
         <div class="combo-icon">📰</div>
         <div class="combo-text">
           <strong>Automated Crisis Brief</strong>
-          <span>An agent checks IFRC GO every morning, detects new events, then automatically enriches them with HDX and UNHCR context — and emails a digest to a team.</span>
+          <span>An agent checks IFRC GO and ReliefWeb every morning, detects new events and reports, then automatically enriches them with HDX and UNHCR context — and emails a digest to a team.</span>
           <div class="combo-tags">
+            <span class="combo-tag t-rw">ReliefWeb</span>
             <span class="combo-tag t-ifrc">IFRC GO</span>
             <span class="combo-tag t-hdx">HDX</span>
             <span class="combo-tag t-unhcr">UNHCR Stats</span>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="combo-icon">📋</div>
+        <div class="combo-text">
+          <strong>Situation Report Deep Dive</strong>
+          <span>"Find all OCHA and WFP situation reports on Somalia from the last 60 days, cross-reference with current IPC phase data and FEWS NET market prices, then summarise the key deterioration drivers."</span>
+          <div class="combo-tags">
+            <span class="combo-tag t-rw">ReliefWeb</span>
+            <span class="combo-tag t-ipc">IPC-CH</span>
+            <span class="combo-tag t-fews">FEWS NET</span>
           </div>
         </div>
       </li>
@@ -1157,7 +1255,7 @@
 
 <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
 <footer>
-  <p>Data sourced from <strong>IFRC GO</strong>, <strong>OCHA HDX</strong>, <strong>UNHCR</strong>, <strong>UNHCR RSQ</strong>, <strong>FEWS NET</strong>, and <strong>IPC-CH</strong> — all official humanitarian databases. MCPs connect AI assistants directly to these live sources.</p>
+  <p>Data sourced from <strong>IFRC GO</strong>, <strong>OCHA HDX</strong>, <strong>UNHCR</strong>, <strong>UNHCR RSQ</strong>, <strong>FEWS NET</strong>, <strong>IPC-CH</strong>, and <strong>ReliefWeb</strong> — all official humanitarian databases. MCPs connect AI assistants directly to these live sources.</p>
   <p>Thanks for all Humanitarians for the Great work you do for the Society/Communities and for the Humanitarian
   Organizations that provide and publish data that facilitate Humanitarian work, Thank you.<strong></p>
 </footer>
