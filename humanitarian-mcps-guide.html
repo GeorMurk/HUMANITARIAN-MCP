@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Humanitarian AI Tools — A Beginner's Guide to 8 Powerful MCPs</title>
+<title>Humanitarian AI Tools — A Beginner's Guide to 9 Powerful MCPs</title>
 <style>
   :root {
     --blue: #2563eb;
@@ -22,6 +22,8 @@
     --sky-light: #e0f2fe;
     --hot: #d73f3f;
     --hot-light: #fce7e7;
+    --kobo: #2d7d9a;
+    --kobo-light: #d0edf5;
     --gray: #374151;
     --gray-light: #f3f4f6;
     --white: #ffffff;
@@ -148,6 +150,7 @@
   .ipc   .card-link { color: #0d9488; border-color: #5eead4; }
   .rw    .card-link { color: #0369a1; border-color: #7dd3fc; }
   .hot   .card-link { color: #d73f3f; border-color: #fca5a5; }
+  .kobo  .card-link { color: #2d7d9a; border-color: #7eccea; }
 
   .mcp-card.ifrc  { border-color: #fca5a5; background: linear-gradient(145deg, #fff5f5, white); }
   .mcp-card.hdx   { border-color: #93c5fd; background: linear-gradient(145deg, #eff6ff, white); }
@@ -157,6 +160,7 @@
   .mcp-card.ipc   { border-color: #5eead4; background: linear-gradient(145deg, #f0fdfa, white); }
   .mcp-card.rw    { border-color: #7dd3fc; background: linear-gradient(145deg, #f0f9ff, white); }
   .mcp-card.hot   { border-color: #fca5a5; background: linear-gradient(145deg, #fff5f5, white); }
+  .mcp-card.kobo  { border-color: #7eccea; background: linear-gradient(145deg, #eaf6fb, white); }
 
   .card-icon {
     width: 52px; height: 52px;
@@ -176,6 +180,7 @@
   .ipc   .card-icon { background: #ccfbf1; }
   .rw    .card-icon { background: #e0f2fe; }
   .hot   .card-icon { background: #fce7e7; }
+  .kobo  .card-icon { background: #d0edf5; }
 
   .mcp-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
   .mcp-card .tagline { font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 10px; }
@@ -187,6 +192,7 @@
   .ipc   .tagline { color: #0d9488; }
   .rw    .tagline { color: #0369a1; }
   .hot   .tagline { color: #d73f3f; }
+  .kobo  .tagline { color: #2d7d9a; }
   .mcp-card p { font-size: 14px; color: #4b5563; }
 
   /* ── DEEP DIVE SECTIONS ── */
@@ -219,6 +225,7 @@
   .ipc-b   { background: #ccfbf1; color: #0f766e; }
   .rw-b    { background: #e0f2fe; color: #0369a1; }
   .hot-b   { background: #fce7e7; color: #b91c1c; }
+  .kobo-b  { background: #d0edf5; color: #1e6080; }
 
   .dive-header h2 { font-size: 26px; margin-bottom: 0; }
 
@@ -251,6 +258,7 @@
   .example-box.ipc   { background: #f0fdfa; border-color: #14b8a6; }
   .example-box.rw    { background: #f0f9ff; border-color: #0ea5e9; }
   .example-box.hot   { background: #fff5f5; border-color: #ef4444; }
+  .example-box.kobo  { background: #eaf6fb; border-color: #2d7d9a; }
 
   .example-box .ex-label {
     font-size: 11px;
@@ -364,6 +372,7 @@
   .t-ipc   { color: #0d9488; border-color: #5eead4; background: #f0fdfa; }
   .t-rw    { color: #0369a1; border-color: #7dd3fc; background: #f0f9ff; }
   .t-hot   { color: #d73f3f; border-color: #fca5a5; background: #fff5f5; }
+  .t-kobo  { color: #2d7d9a; border-color: #7eccea; background: #eaf6fb; }
 
   /* ── CALLOUT ── */
   .callout {
@@ -403,8 +412,8 @@
 <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
 <div class="hero">
   <div class="hero-badge"><img src="https://www.dropbox.com/scl/fo/zf8hkvg5vtq4hw1szt45c/AFToX7BwM6JvO2GNCUJ7yaA/icons/Colour/png/IFRC-icons-colour_Share-network.png?rlkey=18wk61zszq2cycrgwy9v4rutw&e=1&dl=1" alt="Share network" style="height:16px;width:auto;object-fit:contain;vertical-align:middle;margin-right:6px;"> Humanitarian AI Toolkit</div>
-  <h1>8 Powerful Data Tools<br>for Humanitarian Work</h1>
-  <p>A beginner-friendly guide to IFRC GO, HDX, UNHCR Refugee Statistics, UNHCR Resettlement, FEWS NET, IPC-CH, ReliefWeb, and HOTOSM Raw Data — and how AI assistants can use them to answer real questions.</p>
+  <h1>9 Powerful Data Tools<br>for Humanitarian Work</h1>
+  <p>A beginner-friendly guide to IFRC GO, HDX, UNHCR Refugee Statistics, UNHCR Resettlement, FEWS NET, IPC-CH, ReliefWeb, HOTOSM Raw Data, and KoboToolbox — and how AI assistants can use them to answer real questions.</p>
   <div class="hero-pills">
     <span class="pill"><img src="https://go.ifrc.org/7.26.0/asset-go-logo-2020-D07sIPWn.svg" alt="IFRC GO"> IFRC GO</span>
     <span class="pill"><img src="https://avatars.githubusercontent.com/u/5087346?s=120&v=4" alt="HDX"> HDX</span>
@@ -414,6 +423,7 @@
     <span class="pill"><img src="https://www.ipcinfo.org/fileadmin/templates/ipcinfo-assets/SVG_120218/IPC_Interim_Logo_Blu_EN.png" alt="IPC"> IPC-CH</span>
     <span class="pill"><img src="https://reliefweb.int/themes/custom/common_design_subtheme/img/logos/rw-logo-desktop.svg" alt="ReliefWeb"> ReliefWeb</span>
     <span class="pill"><img src="https://github.com/hotosm.png?size=40" alt="HOTOSM" style="border-radius:50%"> HOTOSM</span>
+    <span class="pill"><img src="https://github.com/kobotoolbox.png?size=40" alt="KoBo" style="border-radius:50%"> KoboToolbox</span>
   </div>
 </div>
 
@@ -508,9 +518,9 @@
 <!-- ═══════════════════════════ OVERVIEW CARDS ═══════════════════════════ -->
 <section>
   <div class="container">
-    <div class="section-label" style="color:var(--orange)">The Eight Tools</div>
+    <div class="section-label" style="color:var(--orange)">The Nine Tools</div>
     <h2>Meet the MCPs</h2>
-    <p class="lead">Each tool connects to a different official humanitarian database. Together they cover disaster response, food security, famine early warning, displacement, refugee resettlement, humanitarian information management, and open geospatial mapping.</p>
+    <p class="lead">Each tool connects to a different official humanitarian database. Together they cover disaster response, food security, famine early warning, displacement, refugee resettlement, humanitarian information management, open geospatial mapping, and field data collection.</p>
 
     <div class="mcp-grid">
       <div class="mcp-card ifrc">
@@ -571,6 +581,13 @@
         <h3>Humanitarian OpenStreetMap Team</h3>
         <p>Live OpenStreetMap data exports for any area on Earth — buildings, roads, waterways, health facilities, and more — filtered by tags and delivered as GeoJSON, Shapefile, or other formats. Fully public API.</p>
         <div class="card-links"><a class="card-link" href="https://www.hotosm.org/" target="_blank" rel="noopener">HOTOSM ↗</a><a class="card-link" href="https://export.hotosm.org" target="_blank" rel="noopener">Export Tool ↗</a></div>
+      </div>
+      <div class="mcp-card kobo">
+        <div class="card-icon"><img src="https://github.com/kobotoolbox.png?size=120" alt="KoboToolbox" style="border-radius:50%"></div>
+        <p class="tagline">KoboToolbox</p>
+        <h3>KoboToolbox Field Data Collection</h3>
+        <p>The humanitarian sector's leading mobile data collection platform. Access surveys, retrieve and validate submissions, export data, manage webhooks, track usage, and administer organisations — all via the IFRC-hosted KoBo instance.</p>
+        <div class="card-links"><a class="card-link" href="https://kobo.ifrc.org" target="_blank" rel="noopener">KoBo IFRC ↗</a><a class="card-link" href="https://kobo.ifrc.org/api/v2/docs/" target="_blank" rel="noopener">API Docs ↗</a></div>
       </div>
     </div>
   </div>
@@ -1067,6 +1084,68 @@
       </div>
     </div>
 
+
+    <!-- ── KOBO ── -->
+    <div class="deep-dive">
+      <div class="dive-header">
+        <span class="dive-badge kobo-b"><img src="https://github.com/kobotoolbox.png?size=40" alt="KoBo" style="border-radius:50%"> KoboToolbox</span>
+        <h2>Field data collection — directly queryable by AI</h2>
+      </div>
+      <p>KoboToolbox is the most widely used open-source data collection platform in the humanitarian sector. Deployed at <a href="https://kobo.ifrc.org" target="_blank" rel="noopener">kobo.ifrc.org</a> by the IFRC, it is used by hundreds of organisations to design mobile surveys, collect submissions in the field (even offline), manage validation workflows, and export results for analysis. The MCP gives AI assistants direct access to survey assets, submission data, export pipelines, webhooks, and organisational management — without any manual dashboard navigation.</p>
+
+      <div class="capabilities-grid">
+        <div class="cap-item">
+          <strong>📋 Survey Assets</strong>
+          List, browse, and inspect deployed surveys and their form structure
+        </div>
+        <div class="cap-item">
+          <strong>📥 Submission Data</strong>
+          Retrieve, filter, and validate field submissions
+        </div>
+        <div class="cap-item">
+          <strong>✅ Validation Workflow</strong>
+          Approve, reject, or hold submissions for review
+        </div>
+        <div class="cap-item">
+          <strong>📤 Data Exports</strong>
+          Trigger and retrieve XLS/CSV exports of survey results
+        </div>
+        <div class="cap-item">
+          <strong>🔗 Webhooks</strong>
+          Inspect integrations and retry failed deliveries
+        </div>
+        <div class="cap-item">
+          <strong>🏢 Organisations</strong>
+          View members, assets, and usage across your organisation
+        </div>
+        <div class="cap-item">
+          <strong>📁 Project Views</strong>
+          List and browse saved filtered groupings of surveys
+        </div>
+        <div class="cap-item">
+          <strong>📊 Usage Stats</strong>
+          Monitor submission counts and storage usage per survey
+        </div>
+      </div>
+
+      <div class="example-box kobo">
+        <div class="ex-label">💬 Example conversation</div>
+        <div class="prompt">You: "List all my active surveys and tell me how many submissions each has received this month."</div>
+        <div class="response">
+          <strong>AI (using KoboToolbox MCP):</strong><br>
+          "You have 14 deployed surveys. Here are the top 5 by submission count: Nutrition Screening (1,842 submissions), WASH Assessment (976), Protection Monitoring (541), Health Facility Survey (312), and Shelter Assessment (204). Three surveys have had no submissions in the last 30 days — would you like me to check their deployment status?"
+        </div>
+      </div>
+
+      <div class="example-box kobo">
+        <div class="ex-label">💬 Another example</div>
+        <div class="prompt">You: "Find all submissions to the Protection Monitoring survey from last week that are still in 'not approved' status, and show me the respondent location field."</div>
+        <div class="response">
+          <strong>AI:</strong> Queries the protection monitoring asset's data endpoint with a date filter and validation status filter, returns the matching submissions with the location field highlighted — giving a quick picture of the review backlog by area without opening the KoBo dashboard.
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1334,6 +1413,30 @@
           </div>
         </div>
       </li>
+      <li>
+        <div class="combo-icon">📋</div>
+        <div class="combo-text">
+          <strong>Field Survey + Situational Context</strong>
+          <span>"Show me the latest KoBo nutrition survey submissions from northeast Nigeria, then cross-reference with IPC-CH phase data and FEWS NET market prices for the same areas."</span>
+          <div class="combo-tags">
+            <span class="combo-tag t-kobo">KoboToolbox</span>
+            <span class="combo-tag t-ipc">IPC-CH</span>
+            <span class="combo-tag t-fews">FEWS NET</span>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="combo-icon">🔔</div>
+        <div class="combo-text">
+          <strong>Survey + Displacement Correlation</strong>
+          <span>"Retrieve protection monitoring submissions flagged as high-risk from the KoBo WASH survey, and cross-check respondent locations with UNHCR IDP population figures to identify the most vulnerable communities."</span>
+          <div class="combo-tags">
+            <span class="combo-tag t-kobo">KoboToolbox</span>
+            <span class="combo-tag t-unhcr">UNHCR Stats</span>
+            <span class="combo-tag t-hdx">HDX</span>
+          </div>
+        </div>
+      </li>
     </ul>
   </div>
 </section>
@@ -1351,7 +1454,7 @@
 
 <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
 <footer>
-  <p>Data sourced from <strong>IFRC GO</strong>, <strong>OCHA HDX</strong>, <strong>UNHCR</strong>, <strong>UNHCR RSQ</strong>, <strong>FEWS NET</strong>, <strong>IPC-CH</strong>, <strong>ReliefWeb</strong>, and <strong>HOTOSM</strong> — all official humanitarian databases. MCPs connect AI assistants directly to these live sources.</p>
+  <p>Data sourced from <strong>IFRC GO</strong>, <strong>OCHA HDX</strong>, <strong>UNHCR</strong>, <strong>UNHCR RSQ</strong>, <strong>FEWS NET</strong>, <strong>IPC-CH</strong>, <strong>ReliefWeb</strong>, <strong>HOTOSM</strong>, and <strong>KoboToolbox</strong> — all official humanitarian databases. MCPs connect AI assistants directly to these live sources.</p>
   <p>Thanks for all Humanitarians for the Great work you do for the Society/Communities and for the Humanitarian
   Organizations that provide and publish data that facilitate Humanitarian work, Thank you.<strong></p>
 </footer>

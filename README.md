@@ -12,6 +12,8 @@
   <a href="https://reliefweb.int"><img src="https://reliefweb.int/themes/custom/common_design_subtheme/img/logos/rw-logo-desktop.svg" alt="ReliefWeb" height="80"/></a>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <a href="https://www.hotosm.org"><img src="https://github.com/hotosm.png?size=120" alt="HOTOSM" height="80"/></a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://kobo.ifrc.org"><img src="https://github.com/kobotoolbox.png?size=120" alt="KoBo" height="80"/></a>
 </p>
 
 <p align="center">
@@ -20,7 +22,7 @@
   They are compatible with any MCP-capable AI assistant or agent framework.
 </p>
 
-This repository contains nine **MCP servers** that connect LLMs/Agents to live humanitarian data — letting any MCP-compatible AI assistant query real-world disaster, displacement, food security, resettlement, and geospatial mapping data without copy-pasting or manual lookups.
+This repository contains ten **MCP servers** that connect LLMs/Agents to live humanitarian data — letting any MCP-compatible AI assistant query real-world disaster, displacement, food security, resettlement, geospatial mapping, and field data collection without copy-pasting or manual lookups.
 
 ---
 
@@ -43,6 +45,7 @@ This repository contains nine **MCP servers** that connect LLMs/Agents to live h
 | **IPC-CH MCP**                   | `ipc-mcp/`                | Query the IPC-CH Public API — official IPC acute and chronic food insecurity analyses, area-level phase data, population tracking, and IDP point data                                   |
 | **ReliefWeb MCP**                | `reliefweb-mcp/`          | Query the ReliefWeb API — humanitarian reports, situation reports, maps, disaster pages, country profiles, job listings, training opportunities, and taxonomy reference data from 4,000+ sources |
 | **HOTOSM Raw Data MCP**          | `hotosm-mcp/`             | Query the HOTOSM Raw Data API — export live OpenStreetMap data by geometry and tag filters, track async export tasks, retrieve country boundaries, and manage scheduled exports                  |
+| **KoboToolbox MCP**              | `kobo-mcp/`               | Query the KoboToolbox API (kobo.ifrc.org) — list and access survey assets, retrieve and validate submissions, manage exports, webhooks, permissions, organisations, and project views           |
 
 **IFRC** stands for the _International Federation of Red Cross and Red Crescent Societies_. The **GO** (Global Operations)[IFRC GO](https://go.ifrc.org) platform is a public database tracking humanitarian operations, disaster appeals, field reports, and response activities worldwide.
 
@@ -58,6 +61,8 @@ This repository contains nine **MCP servers** that connect LLMs/Agents to live h
 
 **HOTOSM** (Humanitarian OpenStreetMap Team) is a global team that activates the power of open mapping during crises and for development. The [Raw Data API](https://api-prod.raw-data.hotosm.org/v1/) provides live, on-demand exports of OpenStreetMap data — buildings, roads, waterways, and any OSM feature — filtered by geographic area and tags, returned as GeoJSON, Shapefile, FlatGeobuf, and other formats. Most endpoints are public and require no authentication.
 
+**KoboToolbox** is the world's most widely used open-source data collection platform in the humanitarian sector, maintained by [KoboToolbox](https://www.kobotoolbox.org) and hosted by IFRC at [kobo.ifrc.org](https://kobo.ifrc.org). It is used by hundreds of humanitarian organisations to design and deploy mobile surveys, collect field data, manage submissions, and export results. The API (v2) provides full programmatic access to survey assets, submission data, validation workflows, exports, webhooks, media files, organisations, and project management. Authentication via an API token is required.
+
 ---
 
 ## Prerequisites
@@ -72,6 +77,7 @@ Before you start, make sure you have:
 - **A FEWS NET FDW account** — register at [fdw.fews.net](https://fdw.fews.net) to obtain a username and password
 - **An IPC API key** — register at [ipcinfo.org](https://ipcinfo.org) to obtain a free API key
 - **A ReliefWeb app name** — register a free app name at [apidoc.reliefweb.int](https://apidoc.reliefweb.int/) (used as an identifier in API requests, not a secret key)
+- **A KoBo API token** — log in at [kobo.ifrc.org](https://kobo.ifrc.org), go to your account settings, and generate an API token
 
 > **Note:** The two UNHCR servers and the HOTOSM server require no API token for most operations — they use fully public APIs. An optional OSM OAuth access token unlocks metrics and admin endpoints on the HOTOSM server.
 
@@ -112,6 +118,12 @@ RELIEFWEB_APPNAME=your-app-name-here
 
 # Optional — HOTOSM server (public endpoints work without this; needed for metrics and admin ops)
 HOTOSM_ACCESS_TOKEN=your_osm_oauth_token_here
+
+# Required by KoBo server
+KOBO_API_TOKEN=your_kobo_api_token_here
+
+# Optional — override the KoBo instance URL (default: https://kobo.ifrc.org)
+# KOBO_BASE_URL=https://kobo.ifrc.org
 ```
 
 Replace the placeholder values with your actual tokens. The UNHCR servers and the HOTOSM server need no entries in this file for basic use.
@@ -130,6 +142,7 @@ cd fewsnet-mcp && npm install && cd ..
 cd ipc-mcp && npm install && cd ..
 cd reliefweb-mcp && npm install && cd ..
 cd hotosm-mcp && npm install && cd ..
+cd kobo-mcp && npm install && cd ..
 ```
 
 ---
@@ -183,12 +196,16 @@ Open it (create it if it doesn't exist) and add the following entries under `mcp
     "hotosm": {
       "command": "node",
       "args": ["/YOUR/PATH/TO/MCPs/hotosm-mcp/server.js"]
+    },
+    "kobo": {
+      "command": "node",
+      "args": ["/YOUR/PATH/TO/MCPs/kobo-mcp/server.js"]
     }
   }
 }
 ```
 
-After saving, **restart Claude Desktop** (or your MCP-compatible agent host). You should see all nine servers' tools available in the tools panel.
+After saving, **restart Claude Desktop** (or your MCP-compatible agent host). You should see all ten servers' tools available in the tools panel.
 
 > **Other MCP hosts:** If you are connecting these servers to a different LLM or agent framework (e.g. a custom agent built with the MCP SDK, or another Claude-compatible tool), consult that framework's documentation for how to register stdio-transport MCP servers.
 
@@ -1260,6 +1277,264 @@ A **snapshot** is an on-demand export of raw OSM data for a given geometry. The 
 
 ---
 
+## KoboToolbox MCP Server
+
+### About
+
+This server links LLMs/Agents to the [KoboToolbox API v2](https://kobo.ifrc.org/api/v2/) — the field data collection platform used by hundreds of humanitarian organisations worldwide. The IFRC instance at [kobo.ifrc.org](https://kobo.ifrc.org) is one of the largest deployments. You can ask an AI assistant questions like:
+
+- _"List all my active surveys and how many submissions each has."_
+- _"Get the last 50 submissions from the nutrition assessment survey."_
+- _"Show me all submissions in 'not approved' validation status."_
+- _"Which surveys have webhook integrations configured?"_
+- _"How much storage and how many submissions has my organisation used this month?"_
+
+### Available Tools
+
+The tools are grouped by topic. Each tool corresponds to one or more endpoints on the KoBo API v2.
+
+---
+
+#### Assets (Surveys & Projects)
+
+An **asset** is any form, template, block, or collection in KoBo. Most commonly these are surveys deployed for data collection.
+
+| Tool | Description |
+| --- | --- |
+| `list_assets` | List all assets (surveys, templates, blocks, collections) with optional search/filter/sort |
+| `get_asset` | Get full details for a single asset by its UID |
+| `get_asset_content` | Get the raw XLSForm survey content (questions, choices, settings) |
+| `get_asset_xform` | Get the XForm XML definition for a deployed survey |
+| `get_asset_xls` | Download the XLSForm (.xlsx) for a survey |
+| `get_asset_counts` | Get submission and media file counts for an asset |
+| `get_asset_reports` | Get summary report data (frequency tables, means) for a survey's questions |
+| `list_assets_metadata` | Get a lightweight metadata list of all user assets (name, uid, type, submission count) |
+| `list_assets_minimal` | Get a minimal list of all user assets (uid and name only — fastest overview) |
+
+---
+
+#### Asset Versions
+
+| Tool | Description |
+| --- | --- |
+| `list_asset_versions` | List all deployed versions of a survey (each deployment creates a new version) |
+| `get_asset_version` | Get a specific version of an asset by version UID |
+
+---
+
+#### Asset History
+
+| Tool | Description |
+| --- | --- |
+| `list_asset_history` | List the audit/change history log for an asset (who changed what and when) |
+
+---
+
+#### Submissions (Data)
+
+**Submissions** are the individual records collected by a deployed survey.
+
+| Tool | Description |
+| --- | --- |
+| `list_submissions` | List data submissions for a survey. Supports MongoDB-style query filters, field selection, sorting, and pagination |
+| `get_submission` | Get a single submission by its numeric ID |
+| `delete_submission` | Delete a single submission |
+| `duplicate_submission` | Create a copy of an existing submission |
+| `get_submissions_count` | Get the total count of submissions without fetching the data |
+| `bulk_delete_submissions` | Delete multiple submissions at once by providing a list of IDs |
+
+---
+
+#### Validation Status
+
+KoBo supports a review workflow where submissions can be marked as **approved**, **not approved**, or **on hold**.
+
+| Tool | Description |
+| --- | --- |
+| `get_submission_validation_status` | Get the validation status of a single submission |
+| `update_submission_validation_status` | Set the validation status for a single submission |
+| `bulk_update_validation_statuses` | Update validation status for multiple submissions at once |
+
+---
+
+#### Submission Attachments
+
+| Tool | Description |
+| --- | --- |
+| `list_submission_attachments` | List all file attachments (photos, audio, video) submitted with a specific submission |
+| `get_submission_attachment` | Get metadata for a specific attachment within a submission |
+| `delete_attachment` | Delete a specific file attachment from a submission |
+
+---
+
+#### Deployment
+
+| Tool | Description |
+| --- | --- |
+| `get_deployment` | Get the deployment status, live URL, and submission count for a survey |
+
+---
+
+#### Exports
+
+| Tool | Description |
+| --- | --- |
+| `list_asset_exports` | List all data export tasks (XLS, CSV, etc.) for a specific survey |
+| `get_asset_export` | Get the status and download URL of a specific export task |
+| `list_asset_export_settings` | List all saved export configurations (templates) for a survey |
+| `get_asset_export_setting` | Get a specific saved export configuration by its UID |
+| `run_export_from_setting` | Trigger a new data export using a saved export setting |
+
+---
+
+#### Permissions
+
+| Tool | Description |
+| --- | --- |
+| `list_asset_permissions` | List all permission assignments for an asset (who has what access) |
+| `list_permissions` | List all available permission type codenames in KoBo |
+
+---
+
+#### Webhooks (Hooks)
+
+| Tool | Description |
+| --- | --- |
+| `list_hooks` | List all webhooks (REST service integrations) configured for a survey |
+| `get_hook` | Get details of a specific webhook |
+| `list_hook_logs` | List delivery logs for a webhook (successes and failures) |
+| `get_hook_log` | Get details of a specific webhook delivery log entry |
+| `retry_hook_log` | Retry a failed webhook delivery for a specific log entry |
+| `retry_hook` | Retry all failed deliveries for a webhook |
+
+---
+
+#### Asset Files (Media)
+
+| Tool | Description |
+| --- | --- |
+| `list_asset_files` | List all media files attached to a survey (uploaded CSV lookup lists, background images, etc.) |
+| `get_asset_file` | Get metadata for a specific attached file |
+
+---
+
+#### Paired Data
+
+**Paired data** allows one survey to reference and pull data from another survey's submissions.
+
+| Tool | Description |
+| --- | --- |
+| `list_paired_data` | List paired data connections for a survey (links to other survey datasets) |
+| `get_paired_data` | Get details of a specific paired data connection |
+
+---
+
+#### Advanced Features (NLP)
+
+| Tool | Description |
+| --- | --- |
+| `list_advanced_features` | List NLP advanced features configured for a survey (transcription, translation, qualitative analysis) |
+
+---
+
+#### Imports
+
+| Tool | Description |
+| --- | --- |
+| `list_imports` | List all XLSForm import tasks for the authenticated user |
+| `get_import` | Get the status and result of a specific import task |
+
+---
+
+#### Asset Snapshots
+
+| Tool | Description |
+| --- | --- |
+| `list_asset_snapshots` | List all form snapshots (point-in-time copies used for Enketo previews) |
+| `get_asset_snapshot` | Get a specific form snapshot by UID |
+
+---
+
+#### Asset Subscriptions
+
+| Tool | Description |
+| --- | --- |
+| `list_asset_subscriptions` | List all public asset subscriptions for the authenticated user |
+
+---
+
+#### Tags
+
+| Tool | Description |
+| --- | --- |
+| `list_tags` | List all tags used to organise assets |
+
+---
+
+#### Users
+
+| Tool | Description |
+| --- | --- |
+| `list_users` | List users on the KoBo instance (searchable by username) |
+| `get_user` | Get the public profile for a specific user by username |
+
+---
+
+#### Organisations
+
+| Tool | Description |
+| --- | --- |
+| `list_organizations` | List organisations the authenticated user belongs to |
+| `get_organization` | Get details of a specific organisation |
+| `list_organization_members` | List members of an organisation |
+| `list_organization_assets` | List all survey assets belonging to an organisation |
+| `get_organization_asset_usage` | Get per-asset usage statistics (submissions, storage) for an organisation |
+| `get_organization_service_usage` | Get overall service usage (submissions, storage, NLP tokens) for an organisation |
+
+---
+
+#### Project Views
+
+**Project views** are saved, filtered groupings of assets — useful for managing large survey portfolios.
+
+| Tool | Description |
+| --- | --- |
+| `list_project_views` | List all project views |
+| `get_project_view` | Get details of a specific project view |
+| `list_project_view_assets` | List all survey assets that match a project view's filters |
+| `list_project_view_users` | List users who have access to assets within a project view |
+
+---
+
+#### Service & Usage Statistics
+
+| Tool | Description |
+| --- | --- |
+| `get_service_usage` | Get overall service usage stats (submissions, storage, NLP tokens) for the current user |
+| `get_asset_usage` | Get per-asset usage statistics across all surveys |
+
+---
+
+#### Languages & NLP Services
+
+| Tool | Description |
+| --- | --- |
+| `list_languages` | List all supported languages for form translation and NLP |
+| `list_transcription_services` | List available audio transcription service providers (e.g. Google, Microsoft) |
+| `list_translation_services` | List available text translation service providers |
+
+---
+
+#### Audit & History Logs
+
+| Tool | Description |
+| --- | --- |
+| `list_audit_logs` | List system-wide audit logs (superuser only) |
+| `list_project_history_logs` | List project-level history logs (changes to surveys, deployments, settings) |
+| `list_my_access_logs` | List login and API access logs for the authenticated user |
+
+---
+
 ## Troubleshooting
 
 ### IFRC GO Server
@@ -1329,6 +1604,22 @@ Large areas or heavy tag filters can take several minutes to process. Poll `get_
 
 **`request_snapshot_plain` returns 403**
 The synchronous plain endpoint requires authentication on the production server. Use `request_snapshot` (async) instead, or obtain a valid OSM access token.
+
+---
+
+### KoboToolbox Server
+
+**`FATAL: Cannot start server. Missing KOBO_API_TOKEN`**
+Your `.env` file is missing or doesn't contain `KOBO_API_TOKEN`. Log in to [kobo.ifrc.org](https://kobo.ifrc.org), go to **Account Settings → Security**, and copy your API token. Add `KOBO_API_TOKEN=your_token_here` to your `.env` file.
+
+**`API Error 401`**
+Your token is invalid or has been regenerated. Return to your KoBo account settings and copy a fresh token.
+
+**`API Error 403`**
+You don't have permission to access that asset or organisation. Check that your account has the necessary role (editor, manager, or admin) on the resource you're trying to access.
+
+**`API Error 404` on export or submission tools**
+Ensure you are using the correct asset UID. Asset UIDs start with `a` followed by a mix of letters and numbers (e.g. `aXXXXXXXXXXXXXXXX`). Use `list_assets` or `list_assets_minimal` to find the correct UID.
 
 ---
 
