@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Humanitarian AI Tools — A Beginner's Guide to 9 Powerful MCPs</title>
+<title>Humanitarian AI Tools — A Beginner's Guide to 10 Powerful MCPs</title>
 <style>
   :root {
     --blue: #2563eb;
@@ -24,6 +24,8 @@
     --hot-light: #fce7e7;
     --kobo: #2d7d9a;
     --kobo-light: #d0edf5;
+    --acaps: #7c3aed;
+    --acaps-light: #ede9fe;
     --gray: #374151;
     --gray-light: #f3f4f6;
     --white: #ffffff;
@@ -151,6 +153,7 @@
   .rw    .card-link { color: #0369a1; border-color: #7dd3fc; }
   .hot   .card-link { color: #d73f3f; border-color: #fca5a5; }
   .kobo  .card-link { color: #2d7d9a; border-color: #7eccea; }
+  .acaps .card-link { color: #7c3aed; border-color: #c4b5fd; }
 
   .mcp-card.ifrc  { border-color: #fca5a5; background: linear-gradient(145deg, #fff5f5, white); }
   .mcp-card.hdx   { border-color: #93c5fd; background: linear-gradient(145deg, #eff6ff, white); }
@@ -161,6 +164,7 @@
   .mcp-card.rw    { border-color: #7dd3fc; background: linear-gradient(145deg, #f0f9ff, white); }
   .mcp-card.hot   { border-color: #fca5a5; background: linear-gradient(145deg, #fff5f5, white); }
   .mcp-card.kobo  { border-color: #7eccea; background: linear-gradient(145deg, #eaf6fb, white); }
+  .mcp-card.acaps { border-color: #c4b5fd; background: linear-gradient(145deg, #f5f3ff, white); }
 
   .card-icon {
     width: 52px; height: 52px;
@@ -181,6 +185,7 @@
   .rw    .card-icon { background: #e0f2fe; }
   .hot   .card-icon { background: #fce7e7; }
   .kobo  .card-icon { background: #d0edf5; }
+  .acaps .card-icon { background: #ede9fe; }
 
   .mcp-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
   .mcp-card .tagline { font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 10px; }
@@ -193,6 +198,7 @@
   .rw    .tagline { color: #0369a1; }
   .hot   .tagline { color: #d73f3f; }
   .kobo  .tagline { color: #2d7d9a; }
+  .acaps .tagline { color: #7c3aed; }
   .mcp-card p { font-size: 14px; color: #4b5563; }
 
   /* ── DEEP DIVE SECTIONS ── */
@@ -226,6 +232,7 @@
   .rw-b    { background: #e0f2fe; color: #0369a1; }
   .hot-b   { background: #fce7e7; color: #b91c1c; }
   .kobo-b  { background: #d0edf5; color: #1e6080; }
+  .acaps-b { background: #ede9fe; color: #5b21b6; }
 
   .dive-header h2 { font-size: 26px; margin-bottom: 0; }
 
@@ -259,6 +266,7 @@
   .example-box.rw    { background: #f0f9ff; border-color: #0ea5e9; }
   .example-box.hot   { background: #fff5f5; border-color: #ef4444; }
   .example-box.kobo  { background: #eaf6fb; border-color: #2d7d9a; }
+  .example-box.acaps { background: #f5f3ff; border-color: #7c3aed; }
 
   .example-box .ex-label {
     font-size: 11px;
@@ -373,6 +381,7 @@
   .t-rw    { color: #0369a1; border-color: #7dd3fc; background: #f0f9ff; }
   .t-hot   { color: #d73f3f; border-color: #fca5a5; background: #fff5f5; }
   .t-kobo  { color: #2d7d9a; border-color: #7eccea; background: #eaf6fb; }
+  .t-acaps { color: #7c3aed; border-color: #c4b5fd; background: #f5f3ff; }
 
   /* ── CALLOUT ── */
   .callout {
@@ -412,8 +421,8 @@
 <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
 <div class="hero">
   <div class="hero-badge"><img src="https://www.dropbox.com/scl/fo/zf8hkvg5vtq4hw1szt45c/AFToX7BwM6JvO2GNCUJ7yaA/icons/Colour/png/IFRC-icons-colour_Share-network.png?rlkey=18wk61zszq2cycrgwy9v4rutw&e=1&dl=1" alt="Share network" style="height:16px;width:auto;object-fit:contain;vertical-align:middle;margin-right:6px;"> Humanitarian AI Toolkit</div>
-  <h1>9 Powerful Data Tools<br>for Humanitarian Work</h1>
-  <p>A beginner-friendly guide to IFRC GO, HDX, UNHCR Refugee Statistics, UNHCR Resettlement, FEWS NET, IPC-CH, ReliefWeb, HOTOSM Raw Data, and KoboToolbox — and how AI assistants can use them to answer real questions.</p>
+  <h1>10 Powerful Data Tools<br>for Humanitarian Work</h1>
+  <p>A beginner-friendly guide to IFRC GO, HDX, UNHCR Refugee Statistics, UNHCR Resettlement, FEWS NET, IPC-CH, ReliefWeb, HOTOSM Raw Data, KoboToolbox, and ACAPS — and how AI assistants can use them to answer real questions.</p>
   <div class="hero-pills">
     <span class="pill"><img src="https://go.ifrc.org/7.26.0/asset-go-logo-2020-D07sIPWn.svg" alt="IFRC GO"> IFRC GO</span>
     <span class="pill"><img src="https://avatars.githubusercontent.com/u/5087346?s=120&v=4" alt="HDX"> HDX</span>
@@ -424,6 +433,7 @@
     <span class="pill"><img src="https://reliefweb.int/themes/custom/common_design_subtheme/img/logos/rw-logo-desktop.svg" alt="ReliefWeb"> ReliefWeb</span>
     <span class="pill"><img src="https://github.com/hotosm.png?size=40" alt="HOTOSM" style="border-radius:50%"> HOTOSM</span>
     <span class="pill"><img src="https://github.com/kobotoolbox.png?size=40" alt="KoBo" style="border-radius:50%"> KoboToolbox</span>
+    <span class="pill"><img src="https://www.acaps.org/typo3conf/ext/acaps_package/Resources/Public/Favicons/android-chrome-192x192.png" alt="ACAPS" style="border-radius:50%"> ACAPS</span>
   </div>
 </div>
 
@@ -518,7 +528,7 @@
 <!-- ═══════════════════════════ OVERVIEW CARDS ═══════════════════════════ -->
 <section>
   <div class="container">
-    <div class="section-label" style="color:var(--orange)">The Nine Tools</div>
+    <div class="section-label" style="color:var(--orange)">The Ten Tools</div>
     <h2>Meet the MCPs</h2>
     <p class="lead">Each tool connects to a different official humanitarian database. Together they cover disaster response, food security, famine early warning, displacement, refugee resettlement, humanitarian information management, open geospatial mapping, and field data collection.</p>
 
@@ -588,6 +598,13 @@
         <h3>KoboToolbox Field Data Collection</h3>
         <p>The humanitarian sector's leading mobile data collection platform. Access surveys, retrieve and validate submissions, export data, manage webhooks, track usage, and administer organisations — all via the IFRC-hosted KoBo instance.</p>
         <div class="card-links"><a class="card-link" href="https://kobo.ifrc.org" target="_blank" rel="noopener">KoBo IFRC ↗</a><a class="card-link" href="https://kobo.ifrc.org/api/v2/docs/" target="_blank" rel="noopener">API Docs ↗</a></div>
+      </div>
+      <div class="mcp-card acaps">
+        <div class="card-icon"><img src="https://www.acaps.org/typo3conf/ext/acaps_package/Resources/Public/Favicons/android-chrome-192x192.png" alt="ACAPS" style="border-radius:50%"></div>
+        <p class="tagline">ACAPS</p>
+        <h3>ACAPS Crisis Severity &amp; Access</h3>
+        <p>Independent, data-driven humanitarian analysis — all 70 ACAPS datasets. Query the INFORM Severity Index, Humanitarian Access, the Risk List &amp; Radar, crisis and seasonal data, and country programmes (Afghanistan, Yemen, Ukraine, Türkiye–Syria) — filtered by country, region, or crisis, with historical monthly snapshots.</p>
+        <div class="card-links"><a class="card-link" href="https://www.acaps.org/en/data" target="_blank" rel="noopener">ACAPS Data ↗</a><a class="card-link" href="https://api.acaps.org/api/v1/" target="_blank" rel="noopener">API Docs ↗</a></div>
       </div>
     </div>
   </div>
@@ -1146,6 +1163,60 @@
       </div>
     </div>
 
+
+    <!-- ── ACAPS ── -->
+    <div class="deep-dive">
+      <div class="dive-header">
+        <span class="dive-badge acaps-b"><img src="https://www.acaps.org/typo3conf/ext/acaps_package/Resources/Public/Favicons/android-chrome-192x192.png" alt="ACAPS" style="border-radius:50%"> ACAPS</span>
+        <h2>Crisis severity and humanitarian access — scored and queryable</h2>
+      </div>
+      <p>ACAPS (the Assessment Capacities Project) provides independent, data-driven humanitarian analysis. Its <a href="https://api.acaps.org/api/v1/" target="_blank" rel="noopener">Data API</a> centralises all 70 ACAPS datasets: the INFORM Severity Index that scores how severe each crisis is, the Humanitarian Access overview and events that measure the constraints aid actors face, the Risk List and Risk Radar of situations ACAPS is watching, crisis and seasonal reference data, the archived COVID-19 Government Measures, and dedicated country-programme datasets for Afghanistan, Yemen, Ukraine, and the Türkiye–Syria earthquake. The MCP lets AI assistants pull any of these by country, region, or crisis — including historical monthly snapshots — without hunting through spreadsheets.</p>
+
+      <div class="capabilities-grid">
+        <div class="cap-item">
+          <strong>🌡️ INFORM Severity Index</strong>
+          Overall severity scores, categories, and reliability for every active crisis
+        </div>
+        <div class="cap-item">
+          <strong>🚧 Humanitarian Access</strong>
+          Access constraint indicators (I1–I9, P1–P3) and overall ACCESS scores
+        </div>
+        <div class="cap-item">
+          <strong>⚠️ Risk List &amp; Radar</strong>
+          Monitored risks with rationale, triggers, probability, impact, and level
+        </div>
+        <div class="cap-item">
+          <strong>🦠 Government Measures</strong>
+          Archived COVID-19 response measures by category and country
+        </div>
+        <div class="cap-item">
+          <strong>🗓️ Historical Snapshots</strong>
+          Retrieve any past month (e.g. Jan2024) to see how severity evolved
+        </div>
+        <div class="cap-item">
+          <strong>🌍 Country Programmes</strong>
+          Deep datasets for Afghanistan, Yemen, Ukraine, and the Türkiye–Syria earthquake
+        </div>
+      </div>
+
+      <div class="example-box acaps">
+        <div class="ex-label">💬 Example conversation</div>
+        <div class="prompt">You: "How severe is the crisis in Afghanistan, and how constrained is humanitarian access there?"</div>
+        <div class="response">
+          <strong>AI (using ACAPS MCP):</strong><br>
+          "Afghanistan's complex crisis scores 9.2 on the INFORM Severity Index — category 'Very High' with 'Very High' reliability. On the Humanitarian Access Overview it sits at the most constrained level (ACCESS score 5/5), driven by impediments to entry, movement restrictions, and interference in aid delivery. Would you like the month-by-month severity trend?"
+        </div>
+      </div>
+
+      <div class="example-box acaps">
+        <div class="ex-label">💬 Another example</div>
+        <div class="prompt">You: "What risks is ACAPS currently monitoring in Kenya, and how did Sudan's severity score look in January 2024?"</div>
+        <div class="response">
+          <strong>AI:</strong> Queries the Risk List filtered to Kenya and the INFORM Severity Index with a <code>Jan2024</code> historical snapshot for Sudan — returning the monitored Kenyan risks with their probability and impact, alongside Sudan's severity score as it stood at the start of 2024.
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1454,7 +1525,7 @@
 
 <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
 <footer>
-  <p>Data sourced from <strong>IFRC GO</strong>, <strong>OCHA HDX</strong>, <strong>UNHCR</strong>, <strong>UNHCR RSQ</strong>, <strong>FEWS NET</strong>, <strong>IPC-CH</strong>, <strong>ReliefWeb</strong>, <strong>HOTOSM</strong>, and <strong>KoboToolbox</strong> — all official humanitarian databases. MCPs connect AI assistants directly to these live sources.</p>
+  <p>Data sourced from <strong>IFRC GO</strong>, <strong>OCHA HDX</strong>, <strong>UNHCR</strong>, <strong>UNHCR RSQ</strong>, <strong>FEWS NET</strong>, <strong>IPC-CH</strong>, <strong>ReliefWeb</strong>, <strong>HOTOSM</strong>, <strong>KoboToolbox</strong>, and <strong>ACAPS</strong> — all official humanitarian databases. MCPs connect AI assistants directly to these live sources.</p>
   <p>Thanks for all Humanitarians for the Great work you do for the Society/Communities and for the Humanitarian
   Organizations that provide and publish data that facilitate Humanitarian work, Thank you.<strong></p>
 </footer>

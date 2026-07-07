@@ -22,7 +22,7 @@
   They are compatible with any MCP-capable AI assistant or agent framework.
 </p>
 
-This repository contains ten **MCP servers** that connect LLMs/Agents to live humanitarian data — letting any MCP-compatible AI assistant query real-world disaster, displacement, food security, resettlement, geospatial mapping, and field data collection without copy-pasting or manual lookups.
+This repository contains eleven **MCP servers** that connect LLMs/Agents to live humanitarian data — letting any MCP-compatible AI assistant query real-world disaster, displacement, food security, resettlement, geospatial mapping, field data collection, and crisis severity & access analysis without copy-pasting or manual lookups.
 
 ---
 
@@ -46,6 +46,7 @@ This repository contains ten **MCP servers** that connect LLMs/Agents to live hu
 | **ReliefWeb MCP**                | `reliefweb-mcp/`          | Query the ReliefWeb API — humanitarian reports, situation reports, maps, disaster pages, country profiles, job listings, training opportunities, and taxonomy reference data from 4,000+ sources |
 | **HOTOSM Raw Data MCP**          | `hotosm-mcp/`             | Query the HOTOSM Raw Data API — export live OpenStreetMap data by geometry and tag filters, track async export tasks, retrieve country boundaries, and manage scheduled exports                  |
 | **KoboToolbox MCP**              | `kobo-mcp/`               | Query the KoboToolbox API (kobo.ifrc.org) — list and access survey assets, retrieve and validate submissions, manage exports, webhooks, permissions, organisations, and project views           |
+| **ACAPS MCP**                    | `acaps-mcp/`              | Query the full ACAPS Data API (all 70 datasets) — INFORM Severity Index, Humanitarian Access, Risk List/Radar, crises, seasonal calendars, and country programmes (Afghanistan, Yemen, Ukraine, Türkiye–Syria), with historical snapshots |
 
 **IFRC** stands for the _International Federation of Red Cross and Red Crescent Societies_. The **GO** (Global Operations)[IFRC GO](https://go.ifrc.org) platform is a public database tracking humanitarian operations, disaster appeals, field reports, and response activities worldwide.
 
@@ -63,6 +64,8 @@ This repository contains ten **MCP servers** that connect LLMs/Agents to live hu
 
 **KoboToolbox** is the world's most widely used open-source data collection platform in the humanitarian sector, maintained by [KoboToolbox](https://www.kobotoolbox.org) and hosted by IFRC at [kobo.ifrc.org](https://kobo.ifrc.org). It is used by hundreds of humanitarian organisations to design and deploy mobile surveys, collect field data, manage submissions, and export results. The API (v2) provides full programmatic access to survey assets, submission data, validation workflows, exports, webhooks, media files, organisations, and project management. Authentication via an API token is required.
 
+**ACAPS** (the _Assessment Capacities Project_) is an independent information provider that delivers data-driven humanitarian analysis. Their [Data API](https://api.acaps.org/api/v1/) centralises all **70 ACAPS datasets** — the **INFORM Severity Index** and its components (crisis severity scores and categories), the **Humanitarian Access** overview and events, the **Risk List** and **Risk Radar**, crisis and country reference lists, the seasonal events calendar, the archived **COVID-19 Government Measures**, and dedicated country-programme datasets for **Afghanistan, Yemen, Ukraine, and the Türkiye–Syria earthquake**. Data is filterable by country, region, and crisis, and many datasets expose historical monthly snapshots. Authentication uses a token obtained automatically from your ACAPS account username and password.
+
 ---
 
 ## Prerequisites
@@ -78,6 +81,7 @@ Before you start, make sure you have:
 - **An IPC API key** — register at [ipcinfo.org](https://ipcinfo.org) to obtain a free API key
 - **A ReliefWeb app name** — register a free app name at [apidoc.reliefweb.int](https://apidoc.reliefweb.int/) (used as an identifier in API requests, not a secret key)
 - **A KoBo API token** — log in at [kobo.ifrc.org](https://kobo.ifrc.org), go to your account settings, and generate an API token
+- **An ACAPS account** — register a free account at [api.acaps.org/register/](https://api.acaps.org/register/); the server uses your username (email) and password to fetch an auth token automatically
 
 > **Note:** The two UNHCR servers and the HOTOSM server require no API token for most operations — they use fully public APIs. An optional OSM OAuth access token unlocks metrics and admin endpoints on the HOTOSM server.
 
@@ -124,6 +128,10 @@ KOBO_API_TOKEN=your_kobo_api_token_here
 
 # Optional — override the KoBo instance URL (default: https://kobo.ifrc.org)
 # KOBO_BASE_URL=https://kobo.ifrc.org
+
+# Required by ACAPS server (your ACAPS account credentials)
+ACAPS_USERNAME=your_acaps_email_here
+ACAPS_PASSWORD=your_acaps_password_here
 ```
 
 Replace the placeholder values with your actual tokens. The UNHCR servers and the HOTOSM server need no entries in this file for basic use.
@@ -143,6 +151,7 @@ cd ipc-mcp && npm install && cd ..
 cd reliefweb-mcp && npm install && cd ..
 cd hotosm-mcp && npm install && cd ..
 cd kobo-mcp && npm install && cd ..
+cd acaps-mcp && npm install && cd ..
 ```
 
 ---
@@ -200,12 +209,16 @@ Open it (create it if it doesn't exist) and add the following entries under `mcp
     "kobo": {
       "command": "node",
       "args": ["/YOUR/PATH/TO/MCPs/kobo-mcp/server.js"]
+    },
+    "acaps": {
+      "command": "node",
+      "args": ["/YOUR/PATH/TO/MCPs/acaps-mcp/server.js"]
     }
   }
 }
 ```
 
-After saving, **restart Claude Desktop** (or your MCP-compatible agent host). You should see all ten servers' tools available in the tools panel.
+After saving, **restart Claude Desktop** (or your MCP-compatible agent host). You should see all eleven servers' tools available in the tools panel.
 
 > **Other MCP hosts:** If you are connecting these servers to a different LLM or agent framework (e.g. a custom agent built with the MCP SDK, or another Claude-compatible tool), consult that framework's documentation for how to register stdio-transport MCP servers.
 
@@ -1535,6 +1548,96 @@ KoBo supports a review workflow where submissions can be marked as **approved**,
 
 ---
 
+## ACAPS MCP Server
+
+### About
+
+This server links LLMs/Agents to the [ACAPS Data API](https://api.acaps.org/api/v1/) — the centralised home of ACAPS' data-driven humanitarian analysis. You can ask an AI assistant questions like:
+
+- _"How severe is the crisis in Afghanistan according to the INFORM Severity Index?"_
+- _"Which countries have the most constrained humanitarian access right now?"_
+- _"List the risks ACAPS is currently monitoring in Kenya."_
+- _"What was the INFORM Severity Index for Sudan in January 2024?"_
+- _"Show me the COVID-19 lockdown measures Kenya implemented."_
+
+Authentication is handled automatically: the server posts your `ACAPS_USERNAME` and `ACAPS_PASSWORD` to the ACAPS token endpoint, caches the returned token, and refreshes it if it expires.
+
+### Available Tools
+
+These **20 tools cover all 70 ACAPS dataset endpoints**. Most tools share a common shape: results are paginated (100 records per page — use `page`), can be sorted with `ordering` (prefix a field with `-` for descending), and accept a `filters` object for any exact-match field beyond the named ones (run `list_acaps_datasets` to see every dataset's fields). Datasets with a monthly history accept a `date` argument (e.g. `Jan2024`); omit it for the latest snapshot. Time-series tools also accept `date_from` / `date_to` to bound records by date.
+
+Full coverage is guaranteed two ways: `list_acaps_datasets` enumerates every endpoint and its fields, and `acaps_request` can call any of them by slug. The remaining tools are ergonomic wrappers over the most-used datasets and the four country programmes.
+
+---
+
+#### Discovery & generic access
+
+| Tool                  | Description                                                                                          |
+| --------------------- | ---------------------------------------------------------------------------------------------------- |
+| `list_acaps_datasets` | Catalog of all 70 endpoints — slug, group, path, whether it takes a `date`, and filterable fields (filter by `group`) |
+| `acaps_request`       | Escape hatch — call **any** dataset by its `slug` with optional `date`, `ordering`, `page`, and `filters` |
+
+---
+
+#### INFORM Severity Index
+
+The INFORM Severity Index (formerly the Global Crisis Severity Index) measures the severity of humanitarian crises worldwide, broken down into component scores.
+
+| Tool                            | Description                                                                                     |
+| ------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `list_inform_severity`          | Overall severity scores, categories, and reliability by crisis (filter by `iso3`, `country`, `regions`, `crisis_id`, `date`) |
+| `get_inform_severity_component` | A component of the index for a period — `complexity`, `conditions_of_people_affected`, `core_indicators`, `country_indicators`, `impact_of_crisis`, `reliability`, `reliability_indicators`, `reliability_updated_days`, `log`, `country_log` |
+
+---
+
+#### Humanitarian Access
+
+| Tool                             | Description                                                                                     |
+| -------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `list_humanitarian_access`       | Access overview by crisis — `view`: `overview` (default), `weighted_scores`, `infogap_weighted_scores`, or `log` |
+| `list_humanitarian_access_events`| Individual access-constraint events — `view`: `events` (default) or `events_expand_admin` |
+
+---
+
+#### Risk
+
+| Tool              | Description                                                                                     |
+| ----------------- | ----------------------------------------------------------------------------------------------- |
+| `list_risk_list`  | ACAPS Risk List — risk titles, rationale, triggers, probability, impact, and level |
+| `list_risk_radar` | Risk Radar / beta risk monitoring — `kind`: `risks` (default), `triggers`, `beta_risks`, `beta_triggers` |
+
+---
+
+#### Reference & global datasets
+
+| Tool                            | Description                                                                                     |
+| ------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `list_countries`                | ACAPS country reference list |
+| `list_crises`                   | Crisis reference list (active and historical), with drivers and geoscope |
+| `list_government_measures`      | COVID-19 Government Measures (archived Dec 2020); country-code field is `iso` |
+| `list_covid_secondary_impacts`  | COVID-19 Secondary Impacts — wider pandemic-impact indicators |
+| `list_daily_monitoring`         | Daily monitoring picks — noteworthy developments tracked day-to-day |
+| `list_information_landscape`    | Information Landscape — information gaps/coverage by country and admin-1 |
+| `list_protection_risks`         | Protection Risks Monitor — protection risks by country and admin-1 |
+| `list_seasonal_calendar`        | Seasonal Events Calendar — harvests, lean seasons, and hazards by area |
+
+---
+
+#### Country programmes
+
+Each of these routes to that programme's family of datasets via a `table` argument.
+
+| Tool                          | Description                                                                                     |
+| ----------------------------- | ----------------------------------------------------------------------------------------------- |
+| `get_afghanistan_dataset`     | Afghanistan core datasets (`acled`, `ipc_current`, `non_food_prices`, `reach_food_basket`, `reach_multi_item_prices`, `wfp_food_prices`) |
+| `get_yemen_dataset`           | Yemen datasets — 14 core-dataset tables plus `monitoring` and `monitoring_indicators` |
+| `get_ukraine_dataset`         | Ukraine datasets (`master_dataset`, `regional_dataset`, `subnational_access`, `subnational_access_raion` accept a `date`; plus `access_events`, `damages`, and `*_log`) |
+| `get_turkiye_syria_dataset`   | Türkiye–Syria earthquake datasets (`humanitarian_access` and `inform_severity_index` accept a `date`; plus risk, protection, information-landscape and seasonal calendars) |
+
+> **Note:** In the COVID-19 Government Measures dataset the country-code field is `iso` (not `iso3`), and the dataset is archived — no data has been added since 8 December 2020. Some historical datasets end before the current month (e.g. Ukraine's latest snapshot may be a month or two back) — omit `date` to always get the latest available.
+
+---
+
 ## Troubleshooting
 
 ### IFRC GO Server
@@ -1620,6 +1723,22 @@ You don't have permission to access that asset or organisation. Check that your 
 
 **`API Error 404` on export or submission tools**
 Ensure you are using the correct asset UID. Asset UIDs start with `a` followed by a mix of letters and numbers (e.g. `aXXXXXXXXXXXXXXXX`). Use `list_assets` or `list_assets_minimal` to find the correct UID.
+
+---
+
+### ACAPS Server
+
+**`FATAL: Cannot start server. Missing ACAPS_USERNAME / ACAPS_PASSWORD`**
+Your `.env` file is missing the ACAPS credentials. Add `ACAPS_USERNAME=your_email` and `ACAPS_PASSWORD=your_password` to your `.env` file. Register a free account at [api.acaps.org/register/](https://api.acaps.org/register/) if you don't have one.
+
+**`Authentication failed (400)` or `(401)`**
+Your ACAPS username or password is incorrect. Verify you can log in at [api.acaps.org](https://api.acaps.org), and check for stray spaces in the `.env` values.
+
+**`API Error 404`** or `Unknown dataset slug`
+The dataset `slug` or historical `date` doesn't exist. Run `list_acaps_datasets` to see every valid slug and which datasets take a `date`. A `date` must be formatted like `Jan2024` and fall within that dataset's available history — some programmes (e.g. Ukraine) end a month or two before the current month, so omit `date` to get the latest available snapshot.
+
+**`Empty results` when filtering**
+ACAPS filters are exact matches on field names. If a named filter returns nothing, check the field name with `list_acaps_datasets` (or pass it through the `filters` object). Note that Government Measures uses `iso` (not `iso3`) for the country code and is archived (no data after December 2020).
 
 ---
 
