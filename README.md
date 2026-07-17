@@ -47,6 +47,7 @@ This repository contains eleven **MCP servers** that connect LLMs/Agents to live
 | **HOTOSM Raw Data MCP**          | `hotosm-mcp/`             | Query the HOTOSM Raw Data API — export live OpenStreetMap data by geometry and tag filters, track async export tasks, retrieve country boundaries, and manage scheduled exports                  |
 | **KoboToolbox MCP**              | `kobo-mcp/`               | Query the KoboToolbox API (kobo.ifrc.org) — list and access survey assets, retrieve and validate submissions, manage exports, webhooks, permissions, organisations, and project views           |
 | **ACAPS MCP**                    | `acaps-mcp/`              | Query the full ACAPS Data API (all 70 datasets) — INFORM Severity Index, Humanitarian Access, Risk List/Radar, crises, seasonal calendars, and country programmes (Afghanistan, Yemen, Ukraine, Türkiye–Syria), with historical snapshots |
+| **World Bank Data Catalog MCP**  | `worldbank-mcp/`          | Query the World Bank Data Catalog (DDH) API — search 7,900+ datasets, retrieve dataset/indicator/resource metadata, pull tabular resource data with filtering, browse collections, citations, and codelist lookups |
 
 **IFRC** stands for the _International Federation of Red Cross and Red Crescent Societies_. The **GO** (Global Operations)[IFRC GO](https://go.ifrc.org) platform is a public database tracking humanitarian operations, disaster appeals, field reports, and response activities worldwide.
 
@@ -66,6 +67,8 @@ This repository contains eleven **MCP servers** that connect LLMs/Agents to live
 
 **ACAPS** (the _Assessment Capacities Project_) is an independent information provider that delivers data-driven humanitarian analysis. Their [Data API](https://api.acaps.org/api/v1/) centralises all **70 ACAPS datasets** — the **INFORM Severity Index** and its components (crisis severity scores and categories), the **Humanitarian Access** overview and events, the **Risk List** and **Risk Radar**, crisis and country reference lists, the seasonal events calendar, the archived **COVID-19 Government Measures**, and dedicated country-programme datasets for **Afghanistan, Yemen, Ukraine, and the Türkiye–Syria earthquake**. Data is filterable by country, region, and crisis, and many datasets expose historical monthly snapshots. Authentication uses a token obtained automatically from your ACAPS account username and password.
 
+**World Bank Data Catalog** is the [Development Data Hub (DDH)](https://datacatalog.worldbank.org) — the World Bank's central catalogue of development datasets. The [DDH OpenAPI](https://ddh-openapi.worldbank.org/docs/index.html) exposes **7,900+ datasets** across topics like economic growth, poverty, climate change, health, education, and gender. You can search the catalogue, retrieve rich metadata for datasets, indicators, and resources, pull tabular data directly from resource files (with OData-style filtering and column selection), browse curated collections and dataset citations, and look up controlled vocabularies via codelists. The API is fully public and requires no authentication.
+
 ---
 
 ## Prerequisites
@@ -82,8 +85,9 @@ Before you start, make sure you have:
 - **A ReliefWeb app name** — register a free app name at [apidoc.reliefweb.int](https://apidoc.reliefweb.int/) (used as an identifier in API requests, not a secret key)
 - **A KoBo API token** — log in at [kobo.ifrc.org](https://kobo.ifrc.org), go to your account settings, and generate an API token
 - **An ACAPS account** — register a free account at [api.acaps.org/register/](https://api.acaps.org/register/); the server uses your username (email) and password to fetch an auth token automatically
+- **Nothing for the World Bank Data Catalog server** — the DDH API is fully public and needs no credentials
 
-> **Note:** The two UNHCR servers and the HOTOSM server require no API token for most operations — they use fully public APIs. An optional OSM OAuth access token unlocks metrics and admin endpoints on the HOTOSM server.
+> **Note:** The two UNHCR servers, the HOTOSM server, and the World Bank Data Catalog server require no API token for most operations — they use fully public APIs. An optional OSM OAuth access token unlocks metrics and admin endpoints on the HOTOSM server.
 
 ---
 
@@ -132,9 +136,12 @@ KOBO_API_TOKEN=your_kobo_api_token_here
 # Required by ACAPS server (your ACAPS account credentials)
 ACAPS_USERNAME=your_acaps_email_here
 ACAPS_PASSWORD=your_acaps_password_here
+
+# Optional — override the World Bank Data Catalog base URL (default: https://ddh-openapi.worldbank.org)
+# WORLDBANK_API_BASE=https://ddh-openapi.worldbank.org
 ```
 
-Replace the placeholder values with your actual tokens. The UNHCR servers and the HOTOSM server need no entries in this file for basic use.
+Replace the placeholder values with your actual tokens. The UNHCR servers, the HOTOSM server, and the World Bank Data Catalog server need no entries in this file for basic use.
 
 > **Tip:** You can also place the `.env` file inside an individual server folder (e.g., `hdx-mcp/`). Each server searches in multiple locations.
 
@@ -152,6 +159,7 @@ cd reliefweb-mcp && npm install && cd ..
 cd hotosm-mcp && npm install && cd ..
 cd kobo-mcp && npm install && cd ..
 cd acaps-mcp && npm install && cd ..
+cd worldbank-mcp && npm install && cd ..
 ```
 
 ---
@@ -213,12 +221,16 @@ Open it (create it if it doesn't exist) and add the following entries under `mcp
     "acaps": {
       "command": "node",
       "args": ["/YOUR/PATH/TO/MCPs/acaps-mcp/server.js"]
+    },
+    "worldbank": {
+      "command": "node",
+      "args": ["/YOUR/PATH/TO/MCPs/worldbank-mcp/server.js"]
     }
   }
 }
 ```
 
-After saving, **restart Claude Desktop** (or your MCP-compatible agent host). You should see all eleven servers' tools available in the tools panel.
+After saving, **restart Claude Desktop** (or your MCP-compatible agent host). You should see all twelve servers' tools available in the tools panel.
 
 > **Other MCP hosts:** If you are connecting these servers to a different LLM or agent framework (e.g. a custom agent built with the MCP SDK, or another Claude-compatible tool), consult that framework's documentation for how to register stdio-transport MCP servers.
 
@@ -1638,6 +1650,87 @@ Each of these routes to that programme's family of datasets via a `table` argume
 
 ---
 
+## World Bank Data Catalog MCP Server
+
+### About
+
+This server links LLMs/Agents to the [World Bank Data Catalog (DDH) API](https://ddh-openapi.worldbank.org/docs/index.html) — the World Bank's central catalogue of 7,900+ development datasets. You can ask an AI assistant questions like:
+
+- _"Search the World Bank catalog for datasets about girls' education."_
+- _"What indicators are in the World Development Indicators dataset?"_
+- _"Show me the metadata for the IBRD Statement of Loans dataset."_
+- _"Pull the first 50 rows of that resource where country = Kenya."_
+- _"List the most recently updated World Bank datasets."_
+
+The DDH API is fully public — no token or account is required. Set `WORLDBANK_API_BASE` in your `.env` only if you need to point at a non-default host.
+
+### Available Tools
+
+These **20 tools** cover the DDH catalog API. A typical workflow is to **search** or **list** datasets, take a `dataset_unique_id`, list its **resources** or **indicators**, then pull tabular rows with `get_resource_data`. Listing endpoints paginate with `top` (page size) and `skip` (offset); `get_resource_data` additionally accepts an OData-style `filter` and a comma-separated `select` for columns.
+
+---
+
+#### Search & discovery
+
+| Tool                   | Description                                                                                     |
+| ---------------------- | ----------------------------------------------------------------------------------------------- |
+| `search_catalog`       | Query the catalog for datasets or resources — `qname` (`dataset`/`resource`), `param` (free-text), `filter`, `top`, `skip` |
+| `list_datasets`        | List all datasets in the catalog (`top`, `skip`) |
+| `list_recent_datasets` | View recently published (new or updated) datasets |
+| `list_codelists`       | View all lookup vocabularies (topics, licenses, formats, etc.) |
+| `get_codelist`         | View lookup values for a specific `code_list_type` |
+
+---
+
+#### Datasets
+
+A **dataset** is the top-level catalogue record. Each has a `dataset_unique_id` used by the other tools.
+
+| Tool                   | Description                                                              |
+| ---------------------- | ------------------------------------------------------------------------ |
+| `get_dataset`          | View metadata for a specific dataset (optional `version`)               |
+| `get_dataset_history`  | View a dataset's version history (requires `version`)                   |
+| `download_dataset`     | Get the download URL/info for a dataset                                 |
+
+---
+
+#### Indicators
+
+An **indicator** is a measured series (e.g. GDP, literacy rate) exposed by a dataset.
+
+| Tool             | Description                                                        |
+| ---------------- | ----------------------------------------------------------------- |
+| `list_indicators`| List all indicators for a `dataset_unique_id`                     |
+| `get_indicator`  | View metadata for a specific indicator (latest dataset version)  |
+
+---
+
+#### Resources
+
+A **resource** is a file (CSV, Excel, etc.) attached to a dataset. Resource data can be queried row-by-row.
+
+| Tool                    | Description                                                                   |
+| ----------------------- | ---------------------------------------------------------------------------- |
+| `list_resources`        | List all resources for a `dataset_unique_id`                                 |
+| `get_resource`          | View metadata for a specific resource                                        |
+| `get_resource_metadata` | Retrieve the schema/metadata for the data inside a resource file            |
+| `get_resource_data`     | Retrieve tabular rows from a resource, with `filter`, `select`, `top`, `skip` |
+| `download_resource`     | Get the download URL/info for a resource file                               |
+| `list_resource_folder`  | List all resources inside a resource folder (requires `version`)            |
+
+---
+
+#### Collections & citations
+
+| Tool               | Description                                          |
+| ------------------ | --------------------------------------------------- |
+| `list_collections` | List all curated dataset collections (`top`, `skip`) |
+| `get_collection`   | View a specific collection by `collection_id`       |
+| `list_citations`   | List citations for a `dataset_unique_id`            |
+| `get_citation`     | View the latest version of a specific citation      |
+
+---
+
 ## Troubleshooting
 
 ### IFRC GO Server
@@ -1739,6 +1832,19 @@ The dataset `slug` or historical `date` doesn't exist. Run `list_acaps_datasets`
 
 **`Empty results` when filtering**
 ACAPS filters are exact matches on field names. If a named filter returns nothing, check the field name with `list_acaps_datasets` (or pass it through the `filters` object). Note that Government Measures uses `iso` (not `iso3`) for the country code and is archived (no data after December 2020).
+
+---
+
+### World Bank Data Catalog Server
+
+**`API Error 404`**
+The `dataset_unique_id`, `resource_unique_id`, `indicator_unique_id`, or `collection_id` doesn't exist. Use `search_catalog` or `list_datasets` to find valid dataset ids, then `list_resources` / `list_indicators` to get the ids beneath a dataset.
+
+**`API Error 400`**
+A query parameter is malformed. `get_resource_data`'s `filter` expects an OData-style expression and `select` a comma-separated column list — check the resource's columns with `get_resource_metadata` first. For `search_catalog`, `qname` must be `dataset` or `resource`.
+
+**No credentials needed**
+This server uses the fully public DDH API, so there is nothing to configure in `.env`. If every request fails to connect, verify network access to `https://ddh-openapi.worldbank.org` (or set `WORLDBANK_API_BASE` to an alternate host).
 
 ---
 

@@ -1,0 +1,9 @@
+.git
+.gitignore
+.claude
+.DS_Store
+**/.DS_Store
+.env
+**/.env
+*.md
+humanitarian-mcps-guide.html

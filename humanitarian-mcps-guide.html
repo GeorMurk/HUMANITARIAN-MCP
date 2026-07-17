@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Humanitarian AI Tools — A Beginner's Guide to 10 Powerful MCPs</title>
+<title>Humanitarian AI Tools — A Beginner's Guide to 11 Powerful MCPs</title>
 <style>
   :root {
     --blue: #2563eb;
@@ -26,6 +26,8 @@
     --kobo-light: #d0edf5;
     --acaps: #7c3aed;
     --acaps-light: #ede9fe;
+    --wb: #1d4f91;
+    --wb-light: #e4edf7;
     --gray: #374151;
     --gray-light: #f3f4f6;
     --white: #ffffff;
@@ -154,6 +156,7 @@
   .hot   .card-link { color: #d73f3f; border-color: #fca5a5; }
   .kobo  .card-link { color: #2d7d9a; border-color: #7eccea; }
   .acaps .card-link { color: #7c3aed; border-color: #c4b5fd; }
+  .wb    .card-link { color: #1d4f91; border-color: #a9c7e8; }
 
   .mcp-card.ifrc  { border-color: #fca5a5; background: linear-gradient(145deg, #fff5f5, white); }
   .mcp-card.hdx   { border-color: #93c5fd; background: linear-gradient(145deg, #eff6ff, white); }
@@ -165,6 +168,7 @@
   .mcp-card.hot   { border-color: #fca5a5; background: linear-gradient(145deg, #fff5f5, white); }
   .mcp-card.kobo  { border-color: #7eccea; background: linear-gradient(145deg, #eaf6fb, white); }
   .mcp-card.acaps { border-color: #c4b5fd; background: linear-gradient(145deg, #f5f3ff, white); }
+  .mcp-card.wb    { border-color: #a9c7e8; background: linear-gradient(145deg, #eef4fb, white); }
 
   .card-icon {
     width: 52px; height: 52px;
@@ -186,6 +190,7 @@
   .hot   .card-icon { background: #fce7e7; }
   .kobo  .card-icon { background: #d0edf5; }
   .acaps .card-icon { background: #ede9fe; }
+  .wb    .card-icon { background: #e4edf7; }
 
   .mcp-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
   .mcp-card .tagline { font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 10px; }
@@ -199,6 +204,7 @@
   .hot   .tagline { color: #d73f3f; }
   .kobo  .tagline { color: #2d7d9a; }
   .acaps .tagline { color: #7c3aed; }
+  .wb    .tagline { color: #1d4f91; }
   .mcp-card p { font-size: 14px; color: #4b5563; }
 
   /* ── DEEP DIVE SECTIONS ── */
@@ -233,6 +239,7 @@
   .hot-b   { background: #fce7e7; color: #b91c1c; }
   .kobo-b  { background: #d0edf5; color: #1e6080; }
   .acaps-b { background: #ede9fe; color: #5b21b6; }
+  .wb-b    { background: #e4edf7; color: #16407a; }
 
   .dive-header h2 { font-size: 26px; margin-bottom: 0; }
 
@@ -267,6 +274,7 @@
   .example-box.hot   { background: #fff5f5; border-color: #ef4444; }
   .example-box.kobo  { background: #eaf6fb; border-color: #2d7d9a; }
   .example-box.acaps { background: #f5f3ff; border-color: #7c3aed; }
+  .example-box.wb    { background: #eef4fb; border-color: #1d4f91; }
 
   .example-box .ex-label {
     font-size: 11px;
@@ -382,6 +390,7 @@
   .t-hot   { color: #d73f3f; border-color: #fca5a5; background: #fff5f5; }
   .t-kobo  { color: #2d7d9a; border-color: #7eccea; background: #eaf6fb; }
   .t-acaps { color: #7c3aed; border-color: #c4b5fd; background: #f5f3ff; }
+  .t-wb    { color: #1d4f91; border-color: #a9c7e8; background: #eef4fb; }
 
   /* ── CALLOUT ── */
   .callout {
@@ -421,8 +430,8 @@
 <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
 <div class="hero">
   <div class="hero-badge"><img src="https://www.dropbox.com/scl/fo/zf8hkvg5vtq4hw1szt45c/AFToX7BwM6JvO2GNCUJ7yaA/icons/Colour/png/IFRC-icons-colour_Share-network.png?rlkey=18wk61zszq2cycrgwy9v4rutw&e=1&dl=1" alt="Share network" style="height:16px;width:auto;object-fit:contain;vertical-align:middle;margin-right:6px;"> Humanitarian AI Toolkit</div>
-  <h1>10 Powerful Data Tools<br>for Humanitarian Work</h1>
-  <p>A beginner-friendly guide to IFRC GO, HDX, UNHCR Refugee Statistics, UNHCR Resettlement, FEWS NET, IPC-CH, ReliefWeb, HOTOSM Raw Data, KoboToolbox, and ACAPS — and how AI assistants can use them to answer real questions.</p>
+  <h1>11 Powerful Data Tools<br>for Humanitarian Work</h1>
+  <p>A beginner-friendly guide to IFRC GO, HDX, UNHCR Refugee Statistics, UNHCR Resettlement, FEWS NET, IPC-CH, ReliefWeb, HOTOSM Raw Data, KoboToolbox, ACAPS, and the World Bank Data Catalog — and how AI assistants can use them to answer real questions.</p>
   <div class="hero-pills">
     <span class="pill"><img src="https://go.ifrc.org/7.26.0/asset-go-logo-2020-D07sIPWn.svg" alt="IFRC GO"> IFRC GO</span>
     <span class="pill"><img src="https://avatars.githubusercontent.com/u/5087346?s=120&v=4" alt="HDX"> HDX</span>
@@ -434,6 +443,7 @@
     <span class="pill"><img src="https://github.com/hotosm.png?size=40" alt="HOTOSM" style="border-radius:50%"> HOTOSM</span>
     <span class="pill"><img src="https://github.com/kobotoolbox.png?size=40" alt="KoBo" style="border-radius:50%"> KoboToolbox</span>
     <span class="pill"><img src="https://www.acaps.org/typo3conf/ext/acaps_package/Resources/Public/Favicons/android-chrome-192x192.png" alt="ACAPS" style="border-radius:50%"> ACAPS</span>
+    <span class="pill"><img src="https://github.com/worldbank.png?size=40" alt="World Bank" style="border-radius:50%"> World Bank</span>
   </div>
 </div>
 
@@ -605,6 +615,13 @@
         <h3>ACAPS Crisis Severity &amp; Access</h3>
         <p>Independent, data-driven humanitarian analysis — all 70 ACAPS datasets. Query the INFORM Severity Index, Humanitarian Access, the Risk List &amp; Radar, crisis and seasonal data, and country programmes (Afghanistan, Yemen, Ukraine, Türkiye–Syria) — filtered by country, region, or crisis, with historical monthly snapshots.</p>
         <div class="card-links"><a class="card-link" href="https://www.acaps.org/en/data" target="_blank" rel="noopener">ACAPS Data ↗</a><a class="card-link" href="https://api.acaps.org/api/v1/" target="_blank" rel="noopener">API Docs ↗</a></div>
+      </div>
+      <div class="mcp-card wb">
+        <div class="card-icon"><img src="https://github.com/worldbank.png?size=120" alt="World Bank" style="border-radius:50%"></div>
+        <p class="tagline">World Bank</p>
+        <h3>World Bank Data Catalog</h3>
+        <p>The World Bank's Development Data Hub — a catalogue of 7,900+ development datasets on economies, poverty, climate, health, education, and gender. Search the catalog, read dataset/indicator/resource metadata, pull tabular rows with filtering, and browse collections and citations. Fully public, no key required.</p>
+        <div class="card-links"><a class="card-link" href="https://datacatalog.worldbank.org" target="_blank" rel="noopener">Data Catalog ↗</a><a class="card-link" href="https://ddh-openapi.worldbank.org/docs/index.html" target="_blank" rel="noopener">API Docs ↗</a></div>
       </div>
     </div>
   </div>
@@ -1217,6 +1234,59 @@
       </div>
     </div>
 
+    <!-- ── WORLD BANK ── -->
+    <div class="deep-dive">
+      <div class="dive-header">
+        <span class="dive-badge wb-b"><img src="https://github.com/worldbank.png?size=120" alt="World Bank" style="border-radius:50%"> World Bank</span>
+        <h2>The World Bank's development data catalog — searchable and machine-readable</h2>
+      </div>
+      <p>The World Bank's <a href="https://datacatalog.worldbank.org" target="_blank" rel="noopener">Development Data Hub (DDH)</a> is the central catalogue of 7,900+ development datasets, exposed through the public <a href="https://ddh-openapi.worldbank.org/docs/index.html" target="_blank" rel="noopener">DDH OpenAPI</a>. It spans economic growth, poverty, climate change, health, education, gender, and more. The MCP lets AI assistants search the catalogue, read rich metadata for datasets, indicators, and resources, pull tabular data straight from resource files (with OData-style filtering and column selection), and browse curated collections, citations, and codelist lookups — no account or API key needed.</p>
+
+      <div class="capabilities-grid">
+        <div class="cap-item">
+          <strong>🔍 Catalog Search</strong>
+          Find datasets or resources by free-text query and filters across 7,900+ records
+        </div>
+        <div class="cap-item">
+          <strong>📚 Dataset Metadata</strong>
+          Titles, descriptions, topics, licenses, versions, and history for any dataset
+        </div>
+        <div class="cap-item">
+          <strong>📈 Indicators</strong>
+          List and describe the measured series (GDP, literacy, etc.) inside a dataset
+        </div>
+        <div class="cap-item">
+          <strong>🗂️ Resource Data</strong>
+          Pull tabular rows from resource files with column selection and row filters
+        </div>
+        <div class="cap-item">
+          <strong>🆕 Recent &amp; Collections</strong>
+          Track newly published datasets and browse curated thematic collections
+        </div>
+        <div class="cap-item">
+          <strong>🔓 No Auth Required</strong>
+          Fully public API — nothing to register, no token to manage
+        </div>
+      </div>
+
+      <div class="example-box wb">
+        <div class="ex-label">💬 Example conversation</div>
+        <div class="prompt">You: "Find World Bank datasets about girls' education and show me what's inside the top result."</div>
+        <div class="response">
+          <strong>AI (using World Bank MCP):</strong><br>
+          "The catalog returns 2,900+ education datasets. The top match is an education-quality impact evaluation dataset. It contains 4 resource files and a set of indicators covering enrolment, test scores, and attendance. Want me to pull the first rows of the survey resource, filtered to a specific country?"
+        </div>
+      </div>
+
+      <div class="example-box wb">
+        <div class="ex-label">💬 Another example</div>
+        <div class="prompt">You: "What are the most recently updated datasets in the World Bank catalog?"</div>
+        <div class="response">
+          <strong>AI:</strong> Calls the recent-datasets endpoint and lists the newest publications — such as the IBRD Statement of Loans and Guarantees (updated today) — with their titles, sources, and last-updated dates.
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1525,7 +1595,7 @@
 
 <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
 <footer>
-  <p>Data sourced from <strong>IFRC GO</strong>, <strong>OCHA HDX</strong>, <strong>UNHCR</strong>, <strong>UNHCR RSQ</strong>, <strong>FEWS NET</strong>, <strong>IPC-CH</strong>, <strong>ReliefWeb</strong>, <strong>HOTOSM</strong>, <strong>KoboToolbox</strong>, and <strong>ACAPS</strong> — all official humanitarian databases. MCPs connect AI assistants directly to these live sources.</p>
+  <p>Data sourced from <strong>IFRC GO</strong>, <strong>OCHA HDX</strong>, <strong>UNHCR</strong>, <strong>UNHCR RSQ</strong>, <strong>FEWS NET</strong>, <strong>IPC-CH</strong>, <strong>ReliefWeb</strong>, <strong>HOTOSM</strong>, <strong>KoboToolbox</strong>, <strong>ACAPS</strong>, and the <strong>World Bank Data Catalog</strong> — all official humanitarian and development databases. MCPs connect AI assistants directly to these live sources.</p>
   <p>Thanks for all Humanitarians for the Great work you do for the Society/Communities and for the Humanitarian
   Organizations that provide and publish data that facilitate Humanitarian work, Thank you.<strong></p>
 </footer>
