@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Humanitarian AI Tools — A Beginner's Guide to 11 Powerful MCPs</title>
+<title>Humanitarian AI Tools — A Beginner's Guide to 13 Powerful MCPs</title>
 <style>
   :root {
     --blue: #2563eb;
@@ -147,6 +147,7 @@
   }
   .card-link:hover { opacity: .7; }
   .ifrc  .card-link { color: #dc2626; border-color: #fca5a5; }
+  .monty .card-link { color: #4f46e5; border-color: #c7d2fe; }
   .hdx   .card-link { color: #2563eb; border-color: #93c5fd; }
   .unhcr .card-link { color: #16a34a; border-color: #6ee7b7; }
   .rsq   .card-link { color: #7c3aed; border-color: #c4b5fd; }
@@ -159,6 +160,7 @@
   .wb    .card-link { color: #1d4f91; border-color: #a9c7e8; }
 
   .mcp-card.ifrc  { border-color: #fca5a5; background: linear-gradient(145deg, #fff5f5, white); }
+  .mcp-card.monty { border-color: #c7d2fe; background: linear-gradient(145deg, #eef2ff, white); }
   .mcp-card.hdx   { border-color: #93c5fd; background: linear-gradient(145deg, #eff6ff, white); }
   .mcp-card.unhcr { border-color: #6ee7b7; background: linear-gradient(145deg, #f0fdf4, white); }
   .mcp-card.rsq   { border-color: #c4b5fd; background: linear-gradient(145deg, #faf5ff, white); }
@@ -181,6 +183,7 @@
   }
   .card-icon img { width: 100%; height: 100%; object-fit: contain; }
   .ifrc  .card-icon { background: #fee2e2; }
+  .monty .card-icon { background: #e0e7ff; }
   .hdx   .card-icon { background: #dbeafe; }
   .unhcr .card-icon { background: #d1fae5; }
   .rsq   .card-icon { background: #ede9fe; }
@@ -195,6 +198,7 @@
   .mcp-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
   .mcp-card .tagline { font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 10px; }
   .ifrc  .tagline { color: #dc2626; }
+  .monty .tagline { color: #4f46e5; }
   .hdx   .tagline { color: #2563eb; }
   .unhcr .tagline { color: #16a34a; }
   .rsq   .tagline { color: #7c3aed; }
@@ -230,6 +234,7 @@
   .pill { display: flex; align-items: center; gap: 6px; }
   .pill img { height: 18px; width: auto; object-fit: contain; }
   .ifrc-b  { background: #fee2e2; color: #b91c1c; }
+  .monty-b { background: #e0e7ff; color: #3730a3; }
   .hdx-b   { background: #dbeafe; color: #1d4ed8; }
   .unhcr-b { background: #d1fae5; color: #15803d; }
   .rsq-b   { background: #ede9fe; color: #6d28d9; }
@@ -265,6 +270,7 @@
     border-left: 4px solid;
   }
   .example-box.ifrc  { background: #fff5f5; border-color: #ef4444; }
+  .example-box.monty { background: #eef2ff; border-color: #4f46e5; }
   .example-box.hdx   { background: #eff6ff; border-color: #3b82f6; }
   .example-box.unhcr { background: #f0fdf4; border-color: #22c55e; }
   .example-box.rsq   { background: #faf5ff; border-color: #a855f7; }
@@ -430,10 +436,11 @@
 <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
 <div class="hero">
   <div class="hero-badge"><img src="https://www.dropbox.com/scl/fo/zf8hkvg5vtq4hw1szt45c/AFToX7BwM6JvO2GNCUJ7yaA/icons/Colour/png/IFRC-icons-colour_Share-network.png?rlkey=18wk61zszq2cycrgwy9v4rutw&e=1&dl=1" alt="Share network" style="height:16px;width:auto;object-fit:contain;vertical-align:middle;margin-right:6px;"> Humanitarian AI Toolkit</div>
-  <h1>11 Powerful Data Tools<br>for Humanitarian Work</h1>
-  <p>A beginner-friendly guide to IFRC GO, HDX, UNHCR Refugee Statistics, UNHCR Resettlement, FEWS NET, IPC-CH, ReliefWeb, HOTOSM Raw Data, KoboToolbox, ACAPS, and the World Bank Data Catalog — and how AI assistants can use them to answer real questions.</p>
+  <h1>13 Powerful Data Tools<br>for Humanitarian Work</h1>
+  <p>A beginner-friendly guide to IFRC GO, Monty, HDX, UNHCR Refugee Statistics, UNHCR Resettlement, FEWS NET, IPC-CH, ReliefWeb, HOTOSM Raw Data, KoboToolbox, ACAPS, the World Bank Data Catalog, and World Bank Data360 — and how AI assistants can use them to answer real questions.</p>
   <div class="hero-pills">
     <span class="pill"><img src="https://go.ifrc.org/7.26.0/asset-go-logo-2020-D07sIPWn.svg" alt="IFRC GO"> IFRC GO</span>
+    <span class="pill">🛰️ Monty</span>
     <span class="pill"><img src="https://avatars.githubusercontent.com/u/5087346?s=120&v=4" alt="HDX"> HDX</span>
     <span class="pill"><img src="https://www.unhcr.org/themes/custom/project/logo.svg" alt="UNHCR"> UNHCR Refugees</span>
     <span class="pill"><img src="https://www.unhcr.org/themes/custom/project/logo.svg" alt="UNHCR"> UNHCR Resettlement</span>
@@ -444,6 +451,7 @@
     <span class="pill"><img src="https://github.com/kobotoolbox.png?size=40" alt="KoBo" style="border-radius:50%"> KoboToolbox</span>
     <span class="pill"><img src="https://www.acaps.org/typo3conf/ext/acaps_package/Resources/Public/Favicons/android-chrome-192x192.png" alt="ACAPS" style="border-radius:50%"> ACAPS</span>
     <span class="pill"><img src="https://github.com/worldbank.png?size=40" alt="World Bank" style="border-radius:50%"> World Bank</span>
+    <span class="pill"><img src="https://github.com/worldbank.png?size=40" alt="World Bank Data360" style="border-radius:50%"> World Bank Data360</span>
   </div>
 </div>
 
@@ -550,6 +558,13 @@
         <p>Real-time disaster alerts, emergency operations, deployed teams, and field reports from the world's largest humanitarian network.</p>
         <div class="card-links"><a class="card-link" href="https://go.ifrc.org/" target="_blank" rel="noopener">IFRC GO ↗</a></div>
       </div>
+      <div class="mcp-card monty">
+        <div class="card-icon">🛰️</div>
+        <p class="tagline">Monty</p>
+        <h3>Montandon — Global Disaster Event Catalog</h3>
+        <p>A geospatial catalog of disaster events built on the STAC standard, hosted by IFRC. Browse and search collections of earth-observation and disaster data — earthquakes, floods, and more — as items with geometry, dates, and attached data files.</p>
+        <div class="card-links"><a class="card-link" href="https://go.ifrc.org/montandon-landing" target="_blank" rel="noopener">Montandon ↗</a><a class="card-link" href="https://stacspec.org" target="_blank" rel="noopener">STAC Spec ↗</a></div>
+      </div>
       <div class="mcp-card hdx">
         <div class="card-icon"><img src="https://avatars.githubusercontent.com/u/5087346?s=120&v=4" alt="HDX" style="border-radius:50%"></div>
         <p class="tagline">HDX</p>
@@ -623,6 +638,13 @@
         <p>The World Bank's Development Data Hub — a catalogue of 7,900+ development datasets on economies, poverty, climate, health, education, and gender. Search the catalog, read dataset/indicator/resource metadata, pull tabular rows with filtering, and browse collections and citations. Fully public, no key required.</p>
         <div class="card-links"><a class="card-link" href="https://datacatalog.worldbank.org" target="_blank" rel="noopener">Data Catalog ↗</a><a class="card-link" href="https://ddh-openapi.worldbank.org/docs/index.html" target="_blank" rel="noopener">API Docs ↗</a></div>
       </div>
+      <div class="mcp-card wb">
+        <div class="card-icon"><img src="https://github.com/worldbank.png?size=120" alt="World Bank Data360" style="border-radius:50%"></div>
+        <p class="tagline">World Bank</p>
+        <h3>World Bank Data360</h3>
+        <p>The World Bank's next-generation data platform — 40× more data than the legacy portal, drawing indicators and datasets from across the World Bank Group and partners (WDI, IMF, UN, OECD) for 200+ economies. Search indicators, pull time-series observations by country and year, read indicator metadata, and discover the available dimensions. Fully public, no key required.</p>
+        <div class="card-links"><a class="card-link" href="https://data360.worldbank.org" target="_blank" rel="noopener">Data360 ↗</a><a class="card-link" href="https://data360.worldbank.org/en/api" target="_blank" rel="noopener">API Docs ↗</a></div>
+      </div>
     </div>
   </div>
 </section>
@@ -683,6 +705,59 @@
         <div class="prompt">You: "Show me all surge alerts in the past 30 days"</div>
         <div class="response">
           <strong>AI:</strong> Fetches the latest surge alerts from IFRC GO, showing position name, required skills, country, and open/closed status — so coordinators can spot where specialists are still needed.
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MONTY ── -->
+    <div class="deep-dive">
+      <div class="dive-header">
+        <span class="dive-badge monty-b">🛰️ Monty</span>
+        <h2>A searchable, geospatial catalog of disaster events</h2>
+      </div>
+      <p><a href="https://go.ifrc.org/montandon-landing" target="_blank" rel="noopener">Monty (Montandon)</a> is a geospatial data API hosted by IFRC and built on the open <a href="https://stacspec.org" target="_blank" rel="noopener">STAC</a> (SpatioTemporal Asset Catalog) standard — a common format for cataloguing earth-observation and disaster data. Think of a <em>collection</em> as a category of events (say, all earthquakes from a given source), an <em>item</em> as a single event with its geometry and date, and <em>assets</em> as the files attached to it. The MCP lets AI assistants browse the collections, search items by area and time, and read the details of any event — no key required.</p>
+
+      <div class="capabilities-grid">
+        <div class="cap-item">
+          <strong>🗂️ Collections</strong>
+          List and inspect the available datasets of disaster events
+        </div>
+        <div class="cap-item">
+          <strong>🌍 Item Search</strong>
+          Find events by bounding box and date range across a collection
+        </div>
+        <div class="cap-item">
+          <strong>📄 Event Details</strong>
+          Read a single item's geometry, dates, and links to data files
+        </div>
+        <div class="cap-item">
+          <strong>🛰️ STAC Standard</strong>
+          Built on the open SpatioTemporal Asset Catalog specification
+        </div>
+        <div class="cap-item">
+          <strong>🩺 API Status</strong>
+          Check the API root, conformance, health, and reachability
+        </div>
+        <div class="cap-item">
+          <strong>🔓 No Auth Required</strong>
+          Public API — nothing to register, no token to manage
+        </div>
+      </div>
+
+      <div class="example-box monty">
+        <div class="ex-label">💬 Example conversation</div>
+        <div class="prompt">You: "Search Monty for flood events in East Africa in 2024."</div>
+        <div class="response">
+          <strong>AI (using Monty MCP):</strong><br>
+          "Querying the flood collection with a bounding box over East Africa and a 2024 date range. I found a set of flood items — each with its location, event date, and links to the associated data files. Want the details of a specific event, or the full list as a table?"
+        </div>
+      </div>
+
+      <div class="example-box monty">
+        <div class="ex-label">💬 Another example</div>
+        <div class="prompt">You: "What data collections does Monty have?"</div>
+        <div class="response">
+          <strong>AI:</strong> Calls <code>list_collections</code> and returns the available categories of disaster events — such as earthquake and flood catalogs sourced from providers like DesInventar — with a short description of each.
         </div>
       </div>
     </div>
@@ -1287,6 +1362,59 @@
       </div>
     </div>
 
+    <!-- ── WORLD BANK DATA360 ── -->
+    <div class="deep-dive">
+      <div class="dive-header">
+        <span class="dive-badge wb-b"><img src="https://github.com/worldbank.png?size=120" alt="World Bank Data360" style="border-radius:50%"> World Bank Data360</span>
+        <h2>The World Bank's next-generation data platform — indicators and time series for 200+ economies</h2>
+      </div>
+      <p><a href="https://data360.worldbank.org" target="_blank" rel="noopener">World Bank Data360</a> consolidates 40× more data than the legacy open-data portal, bringing together indicators and datasets from across the World Bank Group and partner organisations — WDI, IMF, UN, OECD, and more — for 200+ economies, each with structured metadata and time-series observations. The MCP lets AI assistants search for indicators, pull the actual observations for any economy and time range, read what an indicator measures and where it comes from, and discover which dimensions and filters (country, frequency, sex, age, …) have data — all through the fully public <a href="https://data360.worldbank.org/en/api" target="_blank" rel="noopener">Data360 API</a>, no account or key needed.</p>
+
+      <div class="capabilities-grid">
+        <div class="cap-item">
+          <strong>🔍 Indicator Search</strong>
+          Find indicators or datasets by free-text query across the whole Data360 catalog
+        </div>
+        <div class="cap-item">
+          <strong>📊 Time-Series Data</strong>
+          Pull observations by economy (ISO3) and year range, with dimension filters
+        </div>
+        <div class="cap-item">
+          <strong>🌍 200+ Economies</strong>
+          Compare countries side by side across WDI, IMF, UN, OECD and other sources
+        </div>
+        <div class="cap-item">
+          <strong>📚 Indicator Metadata</strong>
+          Definitions, sources, methodology, and classifications for each series
+        </div>
+        <div class="cap-item">
+          <strong>🎛️ Dimensions &amp; Filters</strong>
+          Discover the valid REF_AREA, FREQ, SEX, AGE codes that actually have data
+        </div>
+        <div class="cap-item">
+          <strong>🔓 No Auth Required</strong>
+          Fully public API — nothing to register, no token to manage
+        </div>
+      </div>
+
+      <div class="example-box wb">
+        <div class="ex-label">💬 Example conversation</div>
+        <div class="prompt">You: "Show me the total population of Kenya, Uganda and Tanzania from 2015 to 2023."</div>
+        <div class="response">
+          <strong>AI (using World Bank Data360 MCP):</strong><br>
+          "Searching Data360 for the population indicator, then pulling observations from the WDI database for KEN, UGA and TZA (2015–2023). Here are the annual totals side by side — Kenya grew from about 48M to 55M, Uganda from 38M to 48M, and Tanzania from 51M to 65M. Want this as a chart, or the growth rates?"
+        </div>
+      </div>
+
+      <div class="example-box wb">
+        <div class="ex-label">💬 Another example</div>
+        <div class="prompt">You: "Find Data360 indicators about maternal mortality and tell me what the main one measures."</div>
+        <div class="response">
+          <strong>AI:</strong> Searches indicators for "maternal mortality", returns the matching series with their database IDs, then reads the metadata for the top result — reporting its definition, unit, source, and methodology, and which economies and years have data.
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1595,7 +1723,7 @@
 
 <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
 <footer>
-  <p>Data sourced from <strong>IFRC GO</strong>, <strong>OCHA HDX</strong>, <strong>UNHCR</strong>, <strong>UNHCR RSQ</strong>, <strong>FEWS NET</strong>, <strong>IPC-CH</strong>, <strong>ReliefWeb</strong>, <strong>HOTOSM</strong>, <strong>KoboToolbox</strong>, <strong>ACAPS</strong>, and the <strong>World Bank Data Catalog</strong> — all official humanitarian and development databases. MCPs connect AI assistants directly to these live sources.</p>
+  <p>Data sourced from <strong>IFRC GO</strong>, <strong>Monty</strong>, <strong>OCHA HDX</strong>, <strong>UNHCR</strong>, <strong>UNHCR RSQ</strong>, <strong>FEWS NET</strong>, <strong>IPC-CH</strong>, <strong>ReliefWeb</strong>, <strong>HOTOSM</strong>, <strong>KoboToolbox</strong>, <strong>ACAPS</strong>, the <strong>World Bank Data Catalog</strong>, and <strong>World Bank Data360</strong> — all official humanitarian and development databases. MCPs connect AI assistants directly to these live sources.</p>
   <p>Thanks for all Humanitarians for the Great work you do for the Society/Communities and for the Humanitarian
   Organizations that provide and publish data that facilitate Humanitarian work, Thank you.<strong></p>
 </footer>

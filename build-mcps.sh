@@ -20,6 +20,7 @@ SERVERS=(
   "kobo:kobo-mcp:server.js"
   "acaps:acaps-mcp:server.js"
   "worldbank:worldbank-mcp:server.js"
+  "worldbankdata360:worldbankdata360-mcp:server.js"
 )
 
 for entry in "${SERVERS[@]}"; do

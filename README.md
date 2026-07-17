@@ -22,7 +22,7 @@
   They are compatible with any MCP-capable AI assistant or agent framework.
 </p>
 
-This repository contains eleven **MCP servers** that connect LLMs/Agents to live humanitarian data — letting any MCP-compatible AI assistant query real-world disaster, displacement, food security, resettlement, geospatial mapping, field data collection, and crisis severity & access analysis without copy-pasting or manual lookups.
+This repository contains thirteen **MCP servers** that connect LLMs/Agents to live humanitarian data — letting any MCP-compatible AI assistant query real-world disaster, displacement, food security, resettlement, geospatial mapping, field data collection, and crisis severity & access analysis without copy-pasting or manual lookups.
 
 ---
 
@@ -48,6 +48,7 @@ This repository contains eleven **MCP servers** that connect LLMs/Agents to live
 | **KoboToolbox MCP**              | `kobo-mcp/`               | Query the KoboToolbox API (kobo.ifrc.org) — list and access survey assets, retrieve and validate submissions, manage exports, webhooks, permissions, organisations, and project views           |
 | **ACAPS MCP**                    | `acaps-mcp/`              | Query the full ACAPS Data API (all 70 datasets) — INFORM Severity Index, Humanitarian Access, Risk List/Radar, crises, seasonal calendars, and country programmes (Afghanistan, Yemen, Ukraine, Türkiye–Syria), with historical snapshots |
 | **World Bank Data Catalog MCP**  | `worldbank-mcp/`          | Query the World Bank Data Catalog (DDH) API — search 7,900+ datasets, retrieve dataset/indicator/resource metadata, pull tabular resource data with filtering, browse collections, citations, and codelist lookups |
+| **World Bank Data360 MCP**       | `worldbankdata360-mcp/`   | Query the World Bank [Data360](https://data360.worldbank.org) API — search indicators and datasets, retrieve time-series observations, indicator metadata, and available dimension/filter values across WDI, IMF, UN, OECD and more (200+ economies) |
 
 **IFRC** stands for the _International Federation of Red Cross and Red Crescent Societies_. The **GO** (Global Operations)[IFRC GO](https://go.ifrc.org) platform is a public database tracking humanitarian operations, disaster appeals, field reports, and response activities worldwide.
 
@@ -69,6 +70,8 @@ This repository contains eleven **MCP servers** that connect LLMs/Agents to live
 
 **World Bank Data Catalog** is the [Development Data Hub (DDH)](https://datacatalog.worldbank.org) — the World Bank's central catalogue of development datasets. The [DDH OpenAPI](https://ddh-openapi.worldbank.org/docs/index.html) exposes **7,900+ datasets** across topics like economic growth, poverty, climate change, health, education, and gender. You can search the catalogue, retrieve rich metadata for datasets, indicators, and resources, pull tabular data directly from resource files (with OData-style filtering and column selection), browse curated collections and dataset citations, and look up controlled vocabularies via codelists. The API is fully public and requires no authentication.
 
+**World Bank Data360** is the World Bank's next-generation data platform at [data360.worldbank.org](https://data360.worldbank.org), consolidating **40× more data** than the legacy open-data portal — indicators and datasets from across the World Bank Group and partner organisations (WDI, IMF, UN, OECD, and more) covering **200+ economies** with structured metadata and time-series observations. The [Data360 API](https://data360.worldbank.org/en/api) lets you search indicators and datasets, retrieve time-series observations for any indicator/economy, read rich indicator metadata (definition, source, methodology), and discover the available dimensions and filter values (REF_AREA, FREQ, SEX, AGE, …) before pulling data. The API is fully public and requires no authentication.
+
 ---
 
 ## Prerequisites
@@ -85,9 +88,9 @@ Before you start, make sure you have:
 - **A ReliefWeb app name** — register a free app name at [apidoc.reliefweb.int](https://apidoc.reliefweb.int/) (used as an identifier in API requests, not a secret key)
 - **A KoBo API token** — log in at [kobo.ifrc.org](https://kobo.ifrc.org), go to your account settings, and generate an API token
 - **An ACAPS account** — register a free account at [api.acaps.org/register/](https://api.acaps.org/register/); the server uses your username (email) and password to fetch an auth token automatically
-- **Nothing for the World Bank Data Catalog server** — the DDH API is fully public and needs no credentials
+- **Nothing for the two World Bank servers** — the DDH Data Catalog API and the Data360 API are both fully public and need no credentials
 
-> **Note:** The two UNHCR servers, the HOTOSM server, and the World Bank Data Catalog server require no API token for most operations — they use fully public APIs. An optional OSM OAuth access token unlocks metrics and admin endpoints on the HOTOSM server.
+> **Note:** The two UNHCR servers, the HOTOSM server, and the two World Bank servers require no API token for most operations — they use fully public APIs. An optional OSM OAuth access token unlocks metrics and admin endpoints on the HOTOSM server.
 
 ---
 
@@ -139,9 +142,12 @@ ACAPS_PASSWORD=your_acaps_password_here
 
 # Optional — override the World Bank Data Catalog base URL (default: https://ddh-openapi.worldbank.org)
 # WORLDBANK_API_BASE=https://ddh-openapi.worldbank.org
+
+# Optional — override the World Bank Data360 base URL (default: https://data360api.worldbank.org)
+# DATA360_API_BASE=https://data360api.worldbank.org
 ```
 
-Replace the placeholder values with your actual tokens. The UNHCR servers, the HOTOSM server, and the World Bank Data Catalog server need no entries in this file for basic use.
+Replace the placeholder values with your actual tokens. The UNHCR servers, the HOTOSM server, and the two World Bank servers need no entries in this file for basic use.
 
 > **Tip:** You can also place the `.env` file inside an individual server folder (e.g., `hdx-mcp/`). Each server searches in multiple locations.
 
@@ -160,6 +166,7 @@ cd hotosm-mcp && npm install && cd ..
 cd kobo-mcp && npm install && cd ..
 cd acaps-mcp && npm install && cd ..
 cd worldbank-mcp && npm install && cd ..
+cd worldbankdata360-mcp && npm install && cd ..
 ```
 
 ---
@@ -225,12 +232,16 @@ Open it (create it if it doesn't exist) and add the following entries under `mcp
     "worldbank": {
       "command": "node",
       "args": ["/YOUR/PATH/TO/MCPs/worldbank-mcp/server.js"]
+    },
+    "worldbankdata360": {
+      "command": "node",
+      "args": ["/YOUR/PATH/TO/MCPs/worldbankdata360-mcp/server.js"]
     }
   }
 }
 ```
 
-After saving, **restart Claude Desktop** (or your MCP-compatible agent host). You should see all twelve servers' tools available in the tools panel.
+After saving, **restart Claude Desktop** (or your MCP-compatible agent host). You should see all thirteen servers' tools available in the tools panel.
 
 > **Other MCP hosts:** If you are connecting these servers to a different LLM or agent framework (e.g. a custom agent built with the MCP SDK, or another Claude-compatible tool), consult that framework's documentation for how to register stdio-transport MCP servers.
 
@@ -1731,6 +1742,54 @@ A **resource** is a file (CSV, Excel, etc.) attached to a dataset. Resource data
 
 ---
 
+## World Bank Data360 MCP Server
+
+### About
+
+This server links LLMs/Agents to the [World Bank Data360 API](https://data360.worldbank.org/en/api) — the World Bank's next-generation data platform (base: `https://data360api.worldbank.org`), which consolidates **40× more data** than the legacy open-data portal. It brings together indicators and datasets from across the World Bank Group and partner organisations (WDI, IMF, UN, OECD, and more) covering **200+ economies**, each with structured metadata and time-series observations. You can ask an AI assistant questions like:
+
+- _"Find Data360 indicators about maternal mortality."_
+- _"What's the total population of Kenya from 2010 to 2023?"_
+- _"Show me GDP for Kenya, Uganda and Tanzania side by side."_
+- _"What does the WDI population indicator actually measure, and where does the data come from?"_
+- _"Which countries and years have data for this indicator?"_
+
+The Data360 API is fully public — no token or account is required. Set `DATA360_API_BASE` in your `.env` only if you need to point at a non-default host.
+
+### Available Tools
+
+These **7 tools** cover the Data360 API. A typical workflow is to **search_indicators** for a topic (which returns the indicator `idno` and its `databases[].idno`), optionally call **get_dimensions** to see the valid filter codes (REF_AREA, FREQ, SEX, AGE, …), then call **get_data** with a `database_id` + `indicator_id` (and any filters) to pull the time-series observations. `get_data` returns up to 1,000 rows per call — paginate with `skip`.
+
+---
+
+#### Search & discovery
+
+| Tool                | Description                                                                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `search_indicators` | **Start here.** Free-text search over indicators or datasets — returns the indicator `idno`, its `databases[].idno`, coverage, frequency, and dimensions |
+| `search`            | Advanced/faceted metadata search over the Data360 catalog (full-text, OData `filter`/`orderby`/`select`, `facets`) — the officially documented `searchv2` endpoint |
+| `list_indicators`   | List all indicator IDs available in a given database/dataset you already know (e.g. `WB_WDI`)                 |
+
+---
+
+#### Data
+
+| Tool       | Description                                                                                                          |
+| ---------- | ------------------------------------------------------------------------------------------------------------------ |
+| `get_data` | Retrieve time-series observations (`OBS_VALUE` per `TIME_PERIOD`) for an indicator — filter by `ref_area` (ISO3), `time_from`/`time_to`, `sex`, `age`, `freq`, and other dimension codes; paginate with `skip` |
+
+---
+
+#### Metadata & dimensions
+
+| Tool                 | Description                                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------------ |
+| `get_metadata`       | Rich metadata for an indicator: name, definition, source, methodology, classifications, and codelists |
+| `get_dimensions`     | List the available filter values (REF_AREA, FREQ, SEX, AGE, UNIT_MEASURE, …) that actually have data — with rich labels, via the portal API |
+| `get_disaggregation` | The same available dimension codes via the officially documented `disaggregation` endpoint            |
+
+---
+
 ## Troubleshooting
 
 ### IFRC GO Server
@@ -1845,6 +1904,19 @@ A query parameter is malformed. `get_resource_data`'s `filter` expects an OData-
 
 **No credentials needed**
 This server uses the fully public DDH API, so there is nothing to configure in `.env`. If every request fails to connect, verify network access to `https://ddh-openapi.worldbank.org` (or set `WORLDBANK_API_BASE` to an alternate host).
+
+---
+
+### World Bank Data360 Server
+
+**Empty results from `get_data`**
+The `database_id` + `indicator_id` pair is valid but no observations match your filters. Confirm the IDs came from `search_indicators` (use the indicator's `idno` and one of its `databases[].idno`), then call `get_dimensions` to see which `ref_area`, `time_period`, and other dimension codes actually have data before narrowing your query.
+
+**`API Error 400` or `404`**
+A required ID or parameter is malformed. `get_data` needs both `database_id` and `indicator_id`; `ref_area` should be ISO3 economy codes (comma-separated for several, e.g. `KEN,UGA,TZA`). For the `search` tool, `filter`/`orderby`/`select` must be valid OData expressions.
+
+**No credentials needed**
+This server uses the fully public Data360 API, so there is nothing to configure in `.env`. If every request fails to connect, verify network access to `https://data360api.worldbank.org` (or set `DATA360_API_BASE` to an alternate host).
 
 ---
 
