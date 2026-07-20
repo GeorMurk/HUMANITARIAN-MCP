@@ -2,33 +2,34 @@
 # Build a Docker image for every humanitarian MCP server.
 # Each image is tagged mcp-humanitarian/<name>:latest and is used by the
 # Docker MCP gateway (see ~/.docker/mcp/catalogs/humanitarian.yaml).
+#
+# Servers are discovered from the *-mcp directories present in this folder, so
+# the script picks up any server you have locally without needing a hardcoded
+# list. Image name = directory minus the -mcp suffix; the entrypoint is
+# server.js, or index.js for servers that use that instead.
 set -euo pipefail
 cd "$(dirname "$0")"
 
-# name:dir:entrypoint
-SERVERS=(
-  "ifrc:ifrc-mcp:server.js"
-  "monty:monty-mcp:index.js"
-  "hdx:hdx-mcp:server.js"
-  "unhcr-refugees:unhcr-refugees-mcp:server.js"
-  "unhcr-resettlement:unhcr-resettlement-mcp:server.js"
-  "ipc:ipc-mcp:server.js"
-  "fewsnet:fewsnet-mcp:server.js"
-  "reliefweb:reliefweb-mcp:server.js"
-  "springer:springer-mcp:server.js"
-  "hotosm:hotosm-mcp:server.js"
-  "kobo:kobo-mcp:server.js"
-  "acaps:acaps-mcp:server.js"
-  "worldbank:worldbank-mcp:server.js"
-  "worldbankdata360:worldbankdata360-mcp:server.js"
-)
+shopt -s nullglob
+count=0
 
-for entry in "${SERVERS[@]}"; do
-  IFS=":" read -r name dir file <<< "$entry"
+for dir in *-mcp; do
+  name="${dir%-mcp}"
+
+  if [ -f "${dir}/server.js" ]; then
+    file="server.js"
+  elif [ -f "${dir}/index.js" ]; then
+    file="index.js"
+  else
+    echo ">>> Skipping ${dir}: no server.js or index.js entrypoint" >&2
+    continue
+  fi
+
   echo ">>> Building mcp-humanitarian/${name}:latest from ${dir} (entry: ${file})"
   docker build -q -t "mcp-humanitarian/${name}:latest" \
     -f Dockerfile --build-arg "ENTRY=${file}" "${dir}"
+  count=$((count + 1))
 done
 
-echo "Done. Built ${#SERVERS[@]} images:"
+echo "Done. Built ${count} images:"
 docker images "mcp-humanitarian/*"

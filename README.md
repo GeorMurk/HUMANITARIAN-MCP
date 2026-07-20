@@ -173,7 +173,14 @@ cd worldbankdata360-mcp && npm install && cd ..
 
 ## Configure Your LLM/Agent Host
 
-These servers work with any MCP-compatible LLM or agent framework. The example below shows configuration for **Claude Desktop** <img src="https://github.com/anthropics.png?size=20" alt="Claude" height="14" style="vertical-align:middle"/>, which was the primary host these servers were developed and tested against.
+These servers work with any MCP-compatible LLM or agent framework. The examples below show configuration for **Claude Desktop** <img src="https://github.com/anthropics.png?size=20" alt="Claude" height="14" style="vertical-align:middle"/>, which was the primary host these servers were developed and tested against.
+
+There are two ways to wire them up:
+
+- **[Option A — Local Node processes](#option-a--local-node-processes)**: one `node` entry per server. Simplest; requires Node.js and the `npm install` step above.
+- **[Option B — Docker](#option-b--docker)**: each server runs as a container behind the Docker MCP gateway, with secrets stored in the Docker keychain instead of a `.env` file.
+
+### Option A — Local Node processes
 
 Find your Claude Desktop configuration file:
 
@@ -242,6 +249,74 @@ Open it (create it if it doesn't exist) and add the following entries under `mcp
 ```
 
 After saving, **restart Claude Desktop** (or your MCP-compatible agent host). You should see all thirteen servers' tools available in the tools panel.
+
+### Option B — Docker
+
+Instead of running each server as a local `node` process, you can build one container image per server and let the **Docker MCP gateway** (Docker Desktop's MCP Toolkit) start them on demand. Your host talks to a single gateway process; the gateway launches each MCP as an ephemeral container. Secrets are pulled from the Docker Desktop keychain at run time and are never baked into images.
+
+> **Requires Docker Desktop to be running.** If it isn't, the gateway cannot start and none of these servers are available.
+
+**1. Build the images**
+
+```bash
+./build-mcps.sh
+```
+
+This builds `mcp-humanitarian/<name>:latest` for every server, using the shared root `Dockerfile` with each server's directory as the build context. To build a single server:
+
+```bash
+docker build -t mcp-humanitarian/ifrc:latest -f Dockerfile --build-arg ENTRY=server.js ifrc-mcp
+```
+
+(Most servers use `ENTRY=server.js`; `monty-mcp` uses `ENTRY=index.js`.)
+
+**2. Load your secrets into the Docker keychain**
+
+Secret names match the environment variable names in your `.env`:
+
+```bash
+for name in IFRC_API_TOKEN HDX_API_TOKEN IPC_API_KEY FEWSNET_USERNAME \
+  FEWSNET_PASSWORD RELIEFWEB_APPNAME HOTOSM_ACCESS_TOKEN KOBO_API_TOKEN \
+  ACAPS_USERNAME ACAPS_PASSWORD; do
+  docker mcp secret rm "$name" 2>/dev/null
+  val=$(grep -m1 "^${name}=" .env); val=${val#${name}=}
+  printf '%s' "$val" | docker mcp secret set "$name"
+done
+```
+
+`monty` reuses `IFRC_API_TOKEN`; the UNHCR and World Bank servers need no secrets.
+
+**3. Point Claude Desktop at the gateway**
+
+Replace the per-server entries from Option A with a single gateway entry:
+
+```json
+{
+  "mcpServers": {
+    "MCP_DOCKER": {
+      "command": "docker",
+      "args": [
+        "mcp", "gateway", "run",
+        "--additional-catalog", "humanitarian.yaml",
+        "--registry", "humanitarian-registry.yaml"
+      ]
+    }
+  }
+}
+```
+
+This expects a catalog at `~/.docker/mcp/catalogs/humanitarian.yaml` (mapping each server name to its image and its `secrets:`) and an enabled-server list at `~/.docker/mcp/humanitarian-registry.yaml`. Give every server a `prefix:` in the catalog — some servers expose identically named tools (e.g. `fewsnet` and `hdx` both have `get_currencies`), and the gateway refuses to start on a tool-name collision.
+
+**4. Verify before restarting your host**
+
+```bash
+docker mcp gateway run --additional-catalog humanitarian.yaml \
+  --registry humanitarian-registry.yaml --dry-run --verbose
+```
+
+Every enabled server should report a tool count with no `Secret '...' not found` warnings. Then restart Claude Desktop.
+
+> See **[DOCKER.md](DOCKER.md)** for the full reference: catalog layout, tool-name prefixes, rebuilding, and reverting to the local-process setup. Note that images are local only and are run with `--pull never`, so a `docker system prune -a` deletes them — re-run `./build-mcps.sh` to restore.
 
 > **Other MCP hosts:** If you are connecting these servers to a different LLM or agent framework (e.g. a custom agent built with the MCP SDK, or another Claude-compatible tool), consult that framework's documentation for how to register stdio-transport MCP servers.
 

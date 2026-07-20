@@ -1,6 +1,6 @@
 # Running the humanitarian MCPs in Docker
 
-All 12 humanitarian MCP servers in this repo run as Docker containers, served
+All 13 humanitarian MCP servers in this repo run as Docker containers, served
 through the **Docker MCP gateway** (Docker Desktop's MCP Toolkit). Claude Desktop
 talks to a single gateway process; the gateway launches each MCP as an ephemeral
 container on demand. **If Docker Desktop is not running, the gateway cannot start
@@ -25,7 +25,7 @@ docker mcp gateway run \
   --registry humanitarian-registry.yaml
 ```
 
-`--additional-catalog` adds our 12 servers on top of the official Docker MCP
+`--additional-catalog` adds our 13 servers on top of the official Docker MCP
 catalog (which still provides `github-official` and `postman`). `--registry`
 lists exactly which servers are enabled. This replaces the previous per-server
 `node .../server.js` entries. Note: this deliberately avoids `--profile`, which
@@ -64,8 +64,8 @@ Secret name == environment variable name. To (re)load them all from `.env`:
 
 ```bash
 for name in IFRC_API_TOKEN HDX_API_TOKEN IPC_API_KEY FEWSNET_USERNAME \
-  FEWSNET_PASSWORD RELIEFWEB_APPNAME SPRINGER_OPEN_API_KEY SPRINGER_META_API_KEY \
-  HOTOSM_ACCESS_TOKEN KOBO_API_TOKEN ACAPS_USERNAME ACAPS_PASSWORD; do
+  FEWSNET_PASSWORD RELIEFWEB_APPNAME HOTOSM_ACCESS_TOKEN KOBO_API_TOKEN \
+  ACAPS_USERNAME ACAPS_PASSWORD; do
   docker mcp secret rm "$name" 2>/dev/null
   val=$(grep -m1 "^${name}=" .env); val=${val#${name}=}
   printf '%s' "$val" | docker mcp secret set "$name"
@@ -84,7 +84,7 @@ docker mcp gateway run --additional-catalog humanitarian.yaml \
   --registry humanitarian-registry.yaml --dry-run --verbose
 ```
 
-You should see all 14 servers enabled (github-official, postman + the 12) each
+You should see all 15 servers enabled (github-official, postman + the 13) each
 reporting a tool count, and no `Secret '...' not found` warnings.
 
 ## Reverting to the old profile-based setup
