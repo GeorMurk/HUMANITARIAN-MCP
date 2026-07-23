@@ -22,7 +22,7 @@
   They are compatible with any MCP-capable AI assistant or agent framework.
 </p>
 
-This repository contains thirteen **MCP servers** that connect LLMs/Agents to live humanitarian data — letting any MCP-compatible AI assistant query real-world disaster, displacement, food security, resettlement, geospatial mapping, field data collection, and crisis severity & access analysis without copy-pasting or manual lookups.
+This repository contains fourteen **MCP servers** that connect LLMs/Agents to live humanitarian data — letting any MCP-compatible AI assistant query real-world disaster, displacement, food security, resettlement, geospatial mapping, field data collection, conflict & protest events, and crisis severity & access analysis without copy-pasting or manual lookups.
 
 ---
 
@@ -49,6 +49,7 @@ This repository contains thirteen **MCP servers** that connect LLMs/Agents to li
 | **ACAPS MCP**                    | `acaps-mcp/`              | Query the full ACAPS Data API (all 70 datasets) — INFORM Severity Index, Humanitarian Access, Risk List/Radar, crises, seasonal calendars, and country programmes (Afghanistan, Yemen, Ukraine, Türkiye–Syria), with historical snapshots |
 | **World Bank Data Catalog MCP**  | `worldbank-mcp/`          | Query the World Bank Data Catalog (DDH) API — search 7,900+ datasets, retrieve dataset/indicator/resource metadata, pull tabular resource data with filtering, browse collections, citations, and codelist lookups |
 | **World Bank Data360 MCP**       | `worldbankdata360-mcp/`   | Query the World Bank [Data360](https://data360.worldbank.org) API — search indicators and datasets, retrieve time-series observations, indicator metadata, and available dimension/filter values across WDI, IMF, UN, OECD and more (200+ economies) |
+| **ACLED MCP**                    | `acled-mcp/`              | Query the ACLED (Armed Conflict Location & Event Data) API — political violence, protest and conflict events with rich filtering, deleted-event IDs for mirror sync, CAST conflict forecasts, and actor/country/region reference lookups |
 
 **IFRC** stands for the _International Federation of Red Cross and Red Crescent Societies_. The **GO** (Global Operations)[IFRC GO](https://go.ifrc.org) platform is a public database tracking humanitarian operations, disaster appeals, field reports, and response activities worldwide.
 
@@ -72,6 +73,8 @@ This repository contains thirteen **MCP servers** that connect LLMs/Agents to li
 
 **World Bank Data360** is the World Bank's next-generation data platform at [data360.worldbank.org](https://data360.worldbank.org), consolidating **40× more data** than the legacy open-data portal — indicators and datasets from across the World Bank Group and partner organisations (WDI, IMF, UN, OECD, and more) covering **200+ economies** with structured metadata and time-series observations. The [Data360 API](https://data360.worldbank.org/en/api) lets you search indicators and datasets, retrieve time-series observations for any indicator/economy, read rich indicator metadata (definition, source, methodology), and discover the available dimensions and filter values (REF_AREA, FREQ, SEX, AGE, …) before pulling data. The API is fully public and requires no authentication.
 
+**ACLED** (the _Armed Conflict Location & Event Data_ project) is the leading source of real-time data on political violence and protest worldwide. Their [API](https://acleddata.com/acled-api-documentation) provides disaggregated, individually geolocated event records — battles, protests, riots, violence against civilians, explosions/remote violence, and strategic developments — coded by date, actors, location (down to admin levels and coordinates), and fatalities. The MCP exposes the main event endpoint with rich filtering (country, region, actor, event type, date/year ranges, fatalities), the deleted-event endpoint for keeping a local mirror in sync, the **CAST** (Conflict Alert System) monthly forecast endpoint, and reference lookups for actors, actor types, countries (ISO codes) and regions. Authentication uses an OAuth2 access token obtained automatically from your ACLED account email and password.
+
 ---
 
 ## Prerequisites
@@ -88,6 +91,7 @@ Before you start, make sure you have:
 - **A ReliefWeb app name** — register a free app name at [apidoc.reliefweb.int](https://apidoc.reliefweb.int/) (used as an identifier in API requests, not a secret key)
 - **A KoBo API token** — log in at [kobo.ifrc.org](https://kobo.ifrc.org), go to your account settings, and generate an API token
 - **An ACAPS account** — register a free account at [api.acaps.org/register/](https://api.acaps.org/register/); the server uses your username (email) and password to fetch an auth token automatically
+- **An ACLED account** — register a free account at [acleddata.com/register/](https://acleddata.com/register/); the server uses your account email and password to fetch an OAuth access token automatically
 - **Nothing for the two World Bank servers** — the DDH Data Catalog API and the Data360 API are both fully public and need no credentials
 
 > **Note:** The two UNHCR servers, the HOTOSM server, and the two World Bank servers require no API token for most operations — they use fully public APIs. An optional OSM OAuth access token unlocks metrics and admin endpoints on the HOTOSM server.
@@ -140,6 +144,10 @@ KOBO_API_TOKEN=your_kobo_api_token_here
 ACAPS_USERNAME=your_acaps_email_here
 ACAPS_PASSWORD=your_acaps_password_here
 
+# Required by ACLED server (your ACLED account credentials)
+ACLED_USERNAME=your_acled_email_here
+ACLED_PASSWORD=your_acled_password_here
+
 # Optional — override the World Bank Data Catalog base URL (default: https://ddh-openapi.worldbank.org)
 # WORLDBANK_API_BASE=https://ddh-openapi.worldbank.org
 
@@ -167,6 +175,7 @@ cd kobo-mcp && npm install && cd ..
 cd acaps-mcp && npm install && cd ..
 cd worldbank-mcp && npm install && cd ..
 cd worldbankdata360-mcp && npm install && cd ..
+cd acled-mcp && npm install && cd ..
 ```
 
 ---
@@ -243,12 +252,16 @@ Open it (create it if it doesn't exist) and add the following entries under `mcp
     "worldbankdata360": {
       "command": "node",
       "args": ["/YOUR/PATH/TO/MCPs/worldbankdata360-mcp/server.js"]
+    },
+    "acled": {
+      "command": "node",
+      "args": ["/YOUR/PATH/TO/MCPs/acled-mcp/server.js"]
     }
   }
 }
 ```
 
-After saving, **restart Claude Desktop** (or your MCP-compatible agent host). You should see all thirteen servers' tools available in the tools panel.
+After saving, **restart Claude Desktop** (or your MCP-compatible agent host). You should see all fourteen servers' tools available in the tools panel.
 
 ### Option B — Docker
 
@@ -277,7 +290,7 @@ Secret names match the environment variable names in your `.env`:
 ```bash
 for name in IFRC_API_TOKEN HDX_API_TOKEN IPC_API_KEY FEWSNET_USERNAME \
   FEWSNET_PASSWORD RELIEFWEB_APPNAME HOTOSM_ACCESS_TOKEN KOBO_API_TOKEN \
-  ACAPS_USERNAME ACAPS_PASSWORD; do
+  ACAPS_USERNAME ACAPS_PASSWORD ACLED_USERNAME ACLED_PASSWORD; do
   docker mcp secret rm "$name" 2>/dev/null
   val=$(grep -m1 "^${name}=" .env); val=${val#${name}=}
   printf '%s' "$val" | docker mcp secret set "$name"
@@ -1865,6 +1878,57 @@ These **7 tools** cover the Data360 API. A typical workflow is to **search_indic
 
 ---
 
+## ACLED MCP Server
+
+### About
+
+This server links LLMs/Agents to the [ACLED API](https://acleddata.com/acled-api-documentation) — the Armed Conflict Location & Event Data project's real-time database of political violence and protest. You can ask an AI assistant questions like:
+
+- _"How many battles were recorded in Sudan in 2024, and how many fatalities?"_
+- _"List peaceful protests in Kenya between January and March 2024."_
+- _"Which actors were involved in violence against civilians in the Sahel last year?"_
+- _"What does ACLED's CAST model forecast for conflict in Nigeria next month?"_
+- _"Find the exact ACLED actor name for Al Shabaab."_
+
+Authentication is handled automatically: the server posts your `ACLED_USERNAME` (account email) and `ACLED_PASSWORD` to ACLED's OAuth2 token endpoint, caches the returned Bearer access token, and refreshes it if it expires.
+
+### Available Tools
+
+These **8 tools cover all 7 ACLED read endpoints** plus a raw escape hatch. The event tools support ACLED's filtering conventions: multiple values OR'd with `|` (e.g. `Kenya|Uganda`), column selection via `fields`, pagination via `limit`/`page` (`limit=0` returns all matching rows), and range filters for year, date, and fatalities. The `acled_request` passthrough exposes any advanced `_where` operator (`=`, `LIKE`, `>`, `<`, `BETWEEN`) for queries the wrappers don't cover.
+
+---
+
+#### Event data
+
+| Tool                 | Description                                                                                     |
+| -------------------- | ----------------------------------------------------------------------------------------------- |
+| `get_acled_events`   | Query conflict/protest events with rich filters — country, `iso`, region, event/sub-event/disorder type, actor1/2, admin1/2, location, civilian targeting, single year or `year_from`/`year_to` range, `date_from`/`date_to` range, `fatalities_min`, `fields`, `limit`, `page` |
+| `get_deleted_events` | List event IDs removed from the dataset since a `deleted_timestamp` (Unix timestamp or date) — for keeping a local mirror in sync |
+| `get_cast_forecast`  | ACLED CAST (Conflict Alert System) monthly conflict forecasts vs. observed values — filter by country, `iso`, region, year, month |
+
+---
+
+#### Reference & lookup
+
+| Tool               | Description                                                                                     |
+| ------------------ | ----------------------------------------------------------------------------------------------- |
+| `list_actors`      | Look up actors by name (partial match) — returns `mal_actor_id` and label; use to find exact actor names for event filters |
+| `list_actor_types` | List actor type categories (State forces, Rebel group, Political militia, Protesters, Civilians, …) |
+| `list_countries`   | Country reference — name, ISO 2-letter, ISO3, and numeric ISO code (resolves the `iso` value events use, e.g. Kenya = 404) |
+| `list_regions`     | World regions in order — a region's 1-based position is the numeric `region` code (1 = Western Africa, 3 = Eastern Africa, 8 = Middle East, …) |
+
+---
+
+#### Generic access
+
+| Tool            | Description                                                                                     |
+| --------------- | ----------------------------------------------------------------------------------------------- |
+| `acled_request` | Escape hatch — call any ACLED read endpoint (`/api/acled/read`, `/api/deleted/read`, `/api/cast/read`, …) with arbitrary query parameters, including `_where` operator suffixes |
+
+> **Note:** ACLED region and country filters on the events endpoint use numeric codes — use `list_regions` and `list_countries` to resolve them. Requests are sent with a browser User-Agent because ACLED's endpoints sit behind Cloudflare bot protection.
+
+---
+
 ## Troubleshooting
 
 ### IFRC GO Server
@@ -1992,6 +2056,22 @@ A required ID or parameter is malformed. `get_data` needs both `database_id` and
 
 **No credentials needed**
 This server uses the fully public Data360 API, so there is nothing to configure in `.env`. If every request fails to connect, verify network access to `https://data360api.worldbank.org` (or set `DATA360_API_BASE` to an alternate host).
+
+---
+
+### ACLED Server
+
+**`FATAL: Cannot start server. Missing ACLED_USERNAME / ACLED_PASSWORD`**
+Your `.env` file is missing the ACLED credentials. Add `ACLED_USERNAME=your_email` and `ACLED_PASSWORD=your_password` to your `.env` file. Register a free account at [acleddata.com/register/](https://acleddata.com/register/) if you don't have one.
+
+**`Authentication failed (400)` or `(401)`**
+Your ACLED email or password is incorrect. Verify you can log in at [acleddata.com](https://acleddata.com), and check for stray spaces in the `.env` values. A `400 invalid_request` usually means a credential field is empty.
+
+**`Authentication failed (403)` with a "Just a moment..." HTML body**
+This is Cloudflare's bot challenge. The server already sends a browser User-Agent to pass it; if you still see it, ACLED may be rate-limiting or temporarily challenging your IP — wait and retry.
+
+**`Empty results` when filtering events**
+ACLED region and country filters on the events endpoint use numeric codes, not names. Use `list_regions` (position = code) and `list_countries` (numeric ISO) to resolve them. Actor and location filters are partial (LIKE) matches — use `list_actors` to find exact actor labels.
 
 ---
 

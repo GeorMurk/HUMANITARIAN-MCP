@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Humanitarian AI Tools — A Beginner's Guide to 13 Powerful MCPs</title>
+<title>Humanitarian AI Tools — A Beginner's Guide to 14 Powerful MCPs</title>
 <style>
   :root {
     --blue: #2563eb;
@@ -26,6 +26,8 @@
     --kobo-light: #d0edf5;
     --acaps: #7c3aed;
     --acaps-light: #ede9fe;
+    --acled: #be123c;
+    --acled-light: #ffe4e6;
     --wb: #1d4f91;
     --wb-light: #e4edf7;
     --gray: #374151;
@@ -157,6 +159,7 @@
   .hot   .card-link { color: #d73f3f; border-color: #fca5a5; }
   .kobo  .card-link { color: #2d7d9a; border-color: #7eccea; }
   .acaps .card-link { color: #7c3aed; border-color: #c4b5fd; }
+  .acled .card-link { color: #be123c; border-color: #fda4af; }
   .wb    .card-link { color: #1d4f91; border-color: #a9c7e8; }
 
   .mcp-card.ifrc  { border-color: #fca5a5; background: linear-gradient(145deg, #fff5f5, white); }
@@ -170,6 +173,7 @@
   .mcp-card.hot   { border-color: #fca5a5; background: linear-gradient(145deg, #fff5f5, white); }
   .mcp-card.kobo  { border-color: #7eccea; background: linear-gradient(145deg, #eaf6fb, white); }
   .mcp-card.acaps { border-color: #c4b5fd; background: linear-gradient(145deg, #f5f3ff, white); }
+  .mcp-card.acled { border-color: #fda4af; background: linear-gradient(145deg, #fff1f2, white); }
   .mcp-card.wb    { border-color: #a9c7e8; background: linear-gradient(145deg, #eef4fb, white); }
 
   .card-icon {
@@ -193,7 +197,15 @@
   .hot   .card-icon { background: #fce7e7; }
   .kobo  .card-icon { background: #d0edf5; }
   .acaps .card-icon { background: #ede9fe; }
+  .acled .card-icon { background: #1a334a; }
   .wb    .card-icon { background: #e4edf7; }
+
+  /* ACLED official logo — always on #1a334a so the white logo reads */
+  .card-icon svg.acled-logo { width: 100%; height: 100%; object-fit: contain; }
+  .pill.pill-acled { background: #1a334a; border-color: #1a334a; padding: 7px 16px; }
+  .pill.pill-acled svg.acled-logo { height: 17px; width: auto; display: block; }
+  .dive-badge.acled-b { background: #1a334a; padding: 10px 16px; }
+  .dive-badge.acled-b svg.acled-logo { height: 26px; width: auto; display: block; }
 
   .mcp-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
   .mcp-card .tagline { font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 10px; }
@@ -208,6 +220,7 @@
   .hot   .tagline { color: #d73f3f; }
   .kobo  .tagline { color: #2d7d9a; }
   .acaps .tagline { color: #7c3aed; }
+  .acled .tagline { color: #be123c; }
   .wb    .tagline { color: #1d4f91; }
   .mcp-card p { font-size: 14px; color: #4b5563; }
 
@@ -244,6 +257,7 @@
   .hot-b   { background: #fce7e7; color: #b91c1c; }
   .kobo-b  { background: #d0edf5; color: #1e6080; }
   .acaps-b { background: #ede9fe; color: #5b21b6; }
+  .acled-b { background: #ffe4e6; color: #9f1239; }
   .wb-b    { background: #e4edf7; color: #16407a; }
 
   .dive-header h2 { font-size: 26px; margin-bottom: 0; }
@@ -280,6 +294,7 @@
   .example-box.hot   { background: #fff5f5; border-color: #ef4444; }
   .example-box.kobo  { background: #eaf6fb; border-color: #2d7d9a; }
   .example-box.acaps { background: #f5f3ff; border-color: #7c3aed; }
+  .example-box.acled { background: #fff1f2; border-color: #be123c; }
   .example-box.wb    { background: #eef4fb; border-color: #1d4f91; }
 
   .example-box .ex-label {
@@ -396,6 +411,7 @@
   .t-hot   { color: #d73f3f; border-color: #fca5a5; background: #fff5f5; }
   .t-kobo  { color: #2d7d9a; border-color: #7eccea; background: #eaf6fb; }
   .t-acaps { color: #7c3aed; border-color: #c4b5fd; background: #f5f3ff; }
+  .t-acled { color: #be123c; border-color: #fda4af; background: #fff1f2; }
   .t-wb    { color: #1d4f91; border-color: #a9c7e8; background: #eef4fb; }
 
   /* ── CALLOUT ── */
@@ -432,12 +448,20 @@
 </style>
 </head>
 <body>
+<!-- ACLED official logo (inlined, self-contained) -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true"><symbol id="acled-logo" viewBox="0 0 332.8 109.8"><path fill="#fff" d="M20.7,61.1c-.2-.7-.7-1.5-1.3-1.4-.6,0-.8,1.1-.7,1.6.1.7.7,1.4,1.3,1.4.7,0,.8-1,.7-1.6h0ZM23.2,73.5c-.4,0-.5.5-.4.9.1.4.6.9,1,1,.4,0,.6-.5.4-.9-.1-.4-.6-1-1.1-1ZM20.7,70.8c-.5,0-.6.7-.5,1.2.2.6.7,1.3,1.3,1.3.6,0,.7-.7.5-1.2-.2-.6-.7-1.3-1.3-1.3h0ZM18.3,68.5c-.5,0-.6.8-.5,1.2.2.6.7,1.2,1.2,1.3.6,0,.6-.8.5-1.2-.2-.6-.7-1.3-1.2-1.3ZM15.7,66.1c-.6,0-.7,1-.5,1.6.2.7.7,1.6,1.4,1.6.7,0,.7-1,.5-1.6-.2-.8-.7-1.6-1.4-1.7h0ZM15.8,38.2c.8-.3,1.3-1.5,1.3-2.5,0-.9-.5-1.7-1.2-1.4-.8.4-1.3,1.5-1.3,2.4,0,.9.4,1.7,1.2,1.4ZM31.7,29.9c0,.8.9,1.3,1.5,1.1.8-.2,1.4-1.3,1.4-1.9,0-.8-.9-1.3-1.5-1.1-.8.2-1.4,1.3-1.4,1.9ZM29.1,32c.9-.3,1.5-1.3,1.5-2.2,0-.9-.8-1.5-1.6-1.2-.9.3-1.5,1.2-1.5,2.2,0,.9.7,1.5,1.6,1.3h0ZM32.1,33.5c0-1-.8-1.6-1.7-1.4-.9.3-1.6,1.2-1.5,2.2,0,.9.8,1.6,1.7,1.4.9-.3,1.6-1.3,1.6-2.3h0ZM29.4,21.4c-.8.3-1.5,1.3-1.6,2,0,.8.8,1.2,1.4,1,.9-.3,1.6-1.2,1.6-2,0-.8-.8-1.2-1.5-1ZM28.3,26.9c.4-.1.9-.8.9-1.2,0-.4-.5-.7-.8-.6-.4.1-.8.8-.9,1.2,0,.4.5.8.8.6h0ZM29.4,27c0,.9.9,1.4,1.6,1.2.9-.3,1.6-1.2,1.6-2.1,0-.9-.9-1.3-1.6-1.2-.9.3-1.5,1.2-1.6,2.1ZM20.7,39.6c.5-.2.9-1,.9-1.5,0-.5-.5-1-.9-.9-.5.2-.8,1-.8,1.5,0,.4.4,1.1.9.9h0ZM21.3,40.2c-.9.3-1.5,1.5-1.5,2.6,0,1.1.7,2,1.7,1.8,1-.3,1.6-1.5,1.5-2.7,0-1.1-.8-2-1.8-1.7h0ZM23.8,23.2c-.3.1-.7.6-.7.9,0,.3.3.5.5.4.3-.1.6-.6.7-.9,0-.3-.3-.5-.5-.4ZM28.7,21.4c1-.4,1.9-1.4,1.9-2.4,0-.9-.8-1.4-1.7-1.1-1,.4-1.8,1.4-1.9,2.3,0,.9.7,1.4,1.6,1.1ZM37.9,22.6c1.2-.3,2.1-1.4,2.1-2.5,0-1.1-1.1-1.6-2.2-1.3-1.1.3-2.1,1.3-2.1,2.5,0,1.1,1,1.6,2.1,1.4ZM38.9,18.3c1.1-.3,2.1-1.3,2.1-2.3,0-1-1.1-1.4-2.1-1.2-1.1.3-2,1.3-2.1,2.3,0,1,1,1.5,2.1,1.2h0ZM13.1,41.1c.7-.3,1.1-1.5,1.2-2.4,0-.9-.4-1.7-1.1-1.4-.7.4-1.1,1.5-1.1,2.4,0,.8.4,1.7,1.1,1.4ZM15.2,63.2c-.2-.8-.7-1.9-1.5-1.9-.7,0-.7,1.3-.6,2,.2.8.7,1.9,1.5,1.9.7,0,.8-1.3.7-2ZM18.1,59.7c-.3-1.4-1.2-2.9-2.4-2.8-1.1.2-1.4,1.8-1.2,3.1.3,1.3,1.1,2.8,2.3,2.8,1.2-.1,1.5-1.8,1.3-3.1h0ZM39.4,80.3c-1.6,0-2.5,1.3-2,2.6.5,1.4,2.1,2.5,3.7,2.5,1.6,0,2.5-1.1,2.1-2.5-.5-1.4-2.2-2.6-3.8-2.7ZM41.9,89.7c.9,0,1.5-.5,1.2-1.3-.3-.8-1.3-1.4-2.3-1.5-.9,0-1.4.5-1.1,1.3.3.8,1.3,1.3,2.2,1.4h0ZM32.6,86.6c-.8,0-1.1.5-.8,1.1.4.7,1.2,1.4,2.1,1.5.8.1,1.1-.4.9-1.1-.4-.7-1.2-1.4-2.1-1.5ZM42.2,99.3c-.3,0-.6,0-.4.2.2.2.6.3.9.4.3,0,.5,0,.4-.2-.2-.2-.6-.3-.9-.4h0ZM40.7,98.5c-.3,0-.5,0-.4.2.2.2.6.4.9.4.3,0,.5,0,.4-.2-.2-.2-.6-.4-.9-.4ZM39,97.8c-.3,0-.5,0-.3.2.2.2.6.4.9.4.3,0,.5,0,.3-.2-.2-.3-.6-.4-.9-.5ZM39.8,97.9c.2.3.6.4.9.5.3,0,.5,0,.4-.2-.2-.2-.6-.4-.9-.5-.3,0-.6,0-.4.2h0ZM40.2,97c-.3-.4-1-.7-1.5-.8-.5,0-.9,0-.6.4.3.4,1,.7,1.5.8.5,0,.9,0,.6-.4h0ZM39.5,95.2c-.3-.6-1.3-1-2-1.2-.7-.1-1.2.2-.8.7.4.5,1.3,1,2,1.1.7.1,1.2-.1.8-.7ZM38,90.3c.4.7,1.3,1.2,2.2,1.3.9,0,1.3-.4,1.1-1.1-.3-.7-1.3-1.3-2.2-1.4-.9,0-1.3.4-1,1.1ZM35.2,83.6c-1.4,0-2.1,1-1.6,2.1.6,1.2,2,2.3,3.5,2.4,1.4.1,2.2-.8,1.7-2-.5-1.3-2.1-2.4-3.6-2.5h0ZM35.8,79.8c-.5-1.4-2-2.7-3.6-2.8-1.5,0-2.1,1.3-1.6,2.6.5,1.4,1.9,2.6,3.5,2.7,1.5,0,2.2-1.1,1.8-2.5h0ZM26.4,74.3c-1.4,0-1.8,1.3-1.3,2.6.5,1.3,1.8,2.6,3.2,2.8,1.4,0,1.9-1.2,1.5-2.5-.5-1.4-1.9-2.8-3.3-2.9h0ZM16.9,55.8c.2,1.4,1.2,2.9,2.5,2.8,1.3-.2,1.8-1.9,1.7-3.5-.3-1.5-1.3-3-2.6-2.8-1.3.3-1.8,2-1.6,3.4ZM76.2,67.5c1.1-.3,1.9-1.3,1.8-2.4-.2-1.1-1.2-1.8-2.3-1.6-1.1.2-2,1.3-1.9,2.5.1,1.1,1.2,1.8,2.3,1.6ZM78.6,66.7c-1.1.2-1.9,1.3-1.8,2.4.1,1.1,1.1,1.7,2.2,1.5,1.1-.3,1.9-1.3,1.8-2.3,0-1.1-1.1-1.8-2.1-1.5h0ZM74.1,60.6c-.2-1.2-1.2-1.9-2.4-1.8-1.2.2-2,1.4-1.9,2.5.2,1.2,1.2,1.9,2.4,1.7,1.2-.2,2-1.3,1.9-2.5h0ZM59.1,39.4c1.3-.2,2.2-1.4,2.1-2.7-.2-1.3-1.5-2.2-2.7-2-1.3.2-2.2,1.4-2.1,2.7.2,1.3,1.5,2.2,2.8,2ZM70.3,33.2c1.6-.2,2.7-1.6,2.4-3.2-.3-1.6-1.9-2.6-3.5-2.5-1.6.2-2.7,1.6-2.5,3.2.3,1.6,1.9,2.7,3.5,2.5h0ZM77.2,24.7c1.4-.1,2.3-1.3,2-2.7-.4-1.4-1.8-2.4-3.3-2.3-1.4,0-2.4,1.2-2.1,2.6.4,1.4,1.9,2.5,3.4,2.4h0ZM56.1,29c-.3,0-.7.5-.7.8,0,.3.6.6.9.6.3,0,.7-.5.7-.8,0-.3-.6-.6-.9-.6ZM53.5,32.1c.8-.1,1.4-1.1,1.3-1.7-.1-.8-1.1-1.2-1.7-1.2-.8.2-1.3,1.1-1.3,1.6.1.8,1.1,1.3,1.7,1.2h0ZM55.7,32.6c.1.8,1.1,1.3,1.7,1.2.8-.1,1.4-1.1,1.3-1.7-.1-.8-1.1-1.3-1.7-1.2-.8.1-1.4,1.1-1.3,1.7h0ZM56.2,28.3c.8-.2,1.3-1,1.3-1.6-.1-.8-1.1-1.2-1.7-1.1-.8.1-1.4,1-1.3,1.6.1.8,1.1,1.2,1.7,1.1ZM58,25.2c1-.1,1.8-1,1.6-2-.2-1-1.1-1.5-2.1-1.4-1,.2-1.8,1-1.6,1.9.1,1,1.1,1.6,2.1,1.4ZM62.2,24c1-.2,1.7-1,1.6-1.9-.2-1-1.2-1.5-2.1-1.4-1,.1-1.7.9-1.6,1.9.2,1,1.2,1.6,2.2,1.4h0ZM61.5,27.1c.2,1.3,1.6,2.1,2.9,2,1.3-.2,2.3-1.3,2.1-2.6-.3-1.3-1.6-2.1-2.9-2-1.3.2-2.3,1.3-2.1,2.6ZM82.8,34.9c1.5-.2,2.3-1.5,2-3-.3-1.5-1.7-2.7-3.2-2.6-1.4.1-2.4,1.5-2.1,3,.4,1.5,1.8,2.7,3.3,2.6ZM90.8,39c-.3-1.5-1.5-2.7-2.9-2.6-1.4.2-2.3,1.6-2,3.1.3,1.6,1.7,2.7,3,2.6,1.4-.2,2.1-1.6,1.9-3.2h0ZM99.1,41.3c1.1-.2,1.5-1.5,1.3-2.8-.3-1.3-1.1-2.5-2.3-2.4-1.1,0-1.6,1.5-1.4,2.8.3,1.4,1.3,2.6,2.4,2.5ZM100.6,33.3c-.3-1.3-1.3-2.4-2.3-2.5-1,0-1.5,1.2-1.2,2.5.3,1.3,1.4,2.5,2.4,2.5,1,0,1.4-1.3,1.1-2.6ZM99.1,30.6c1,0,1.3-1.1,1-2.3-.4-1.2-1.3-2.3-2.3-2.4-1,0-1.4,1.1-1.1,2.3.4,1.3,1.4,2.4,2.4,2.5h0ZM93.6,19.9c1,0,1.4-.8,1-1.8-.5-1.1-1.5-2.1-2.6-2.3-1-.1-1.5.7-1.1,1.8.4,1.2,1.6,2.2,2.7,2.3h0ZM93.2,23.2c-1.1,0-1.6,1.1-1.3,2.3.4,1.3,1.5,2.5,2.7,2.5,1.1,0,1.5-1.1,1.2-2.3-.4-1.3-1.5-2.3-2.6-2.4ZM93.4,28.5c-1.2,0-1.8,1.3-1.5,2.6.4,1.4,1.5,2.6,2.7,2.5,1.2,0,1.7-1.3,1.4-2.6-.3-1.3-1.4-2.5-2.6-2.5h0ZM103.5,57.1c0-.3-.2-.8-.5-.7-.4.1-.5.7-.5,1.1,0,.3.2.8.6.7.3-.1.5-.7.5-1h0ZM102,53.5c-.5.2-.8,1.1-.8,1.6,0,.7.4,1.2.9,1.1.5-.2.8-1.1.8-1.6,0-.7-.4-1.2-.9-1.1h0ZM101.9,50.8c-.1-1.1-.8-2-1.6-1.9-.9.2-1.5,1.5-1.3,2.6.1,1.1.8,2.1,1.7,1.8.9-.3,1.4-1.5,1.3-2.6h0ZM98.3,21.5c.7.1.9-.5.7-1.2-.7-.9-1.5-1.7-2.2-2.5-.8-.1-1,.6-.7,1.5.4,1,1.4,2,2.2,2.1h0ZM101,23.5c.2,0,.3,0,.4-.1-.5-.7-1-1.4-1.6-2.1-.2.2-.1.6,0,.9.3.6.7,1.2,1.2,1.3ZM103.3,26.5c0,0,.2,0,.2,0-.5-.9-1.1-1.7-1.6-2.5,0,.3,0,.6,0,.9.3.7.7,1.5,1.4,1.6ZM98.8,25c.3.9,1.1,1.9,1.8,1.9.7,0,.9-.8.6-1.6-.3-.9-1-1.8-1.8-1.9-.7,0-1,.7-.6,1.6h0ZM102.4,36.4c-.1-.4-.4-1.1-.9-1.1-.5,0-.6.7-.5,1.1,0,.4.4,1.1.9,1.1.5,0,.5-.7.5-1.1ZM105.5,35.4c.5,0,.5-.9.4-1.5-.2-.7-.5-1.4-1.1-1.5-.5,0-.6.9-.5,1.5.2.7.5,1.5,1.2,1.5h0ZM103.2,37.1c.2,1,.6,2,1.5,1.9.7,0,.8-1.1.7-2-.2-.9-.6-1.9-1.4-1.9-.7,0-.9,1.1-.7,2h0ZM100.8,32.1c.3,1,.9,1.9,1.7,1.9.7,0,.9-1,.7-1.9-.3-.9-.9-1.9-1.6-1.9-.7,0-1,.9-.7,1.9h0ZM102.9,42.5c.7-.1,1-1.2.9-2.2-.2-1-.8-2-1.6-1.9-.8,0-1.1,1.2-.9,2.2.2,1,.8,2,1.6,1.9h0ZM104,48.9c.9-.2,1.3-1.6,1.2-2.8-.1-1.2-.8-2.4-1.7-2.2-.9.2-1.3,1.6-1.2,2.8.2,1.3.9,2.4,1.8,2.2ZM100.2,47.7c1.1-.2,1.6-1.7,1.4-3-.2-1.3-1-2.5-2.1-2.3-1.1.2-1.7,1.6-1.5,3,.2,1.4,1.1,2.6,2.2,2.3h0ZM106.2,73.2c-.2.2-.4.5-.4.7,0,.2,0,.4.2.2.2-.2.3-.5.4-.7,0-.2,0-.4-.1-.2h0ZM110.2,60.2c-.3.3-.4.8-.4,1.1,0,.3,0,.9.2.6.3-.3.4-.7.4-1.1,0-.3,0-.9-.2-.6h0ZM107.1,70.2c-.3.3-.5.7-.6,1.1,0,.4,0,.6.2.4.3-.3.5-.7.6-1.1,0-.4,0-.6-.2-.4ZM105.2,71.7c0,.4,0,.7.3.4.3-.3.5-.7.6-1.1,0-.4,0-.7-.3-.4-.4.3-.5.8-.7,1.2h0ZM105.5,72.6c-.4.4-.9,1.1-1.1,1.8-.1.6,0,.9.4.5.4-.4.9-1.1,1-1.7.1-.6,0-.9-.4-.6h0ZM104.3,72.2c-.5.4-1,1.2-1.1,1.8-.1.6,0,1,.6.6.5-.4.9-1.1,1.1-1.8.1-.6,0-1-.5-.6h0ZM107.8,66.2c-.6.5-1.2,1.7-1.3,2.7-.1.9,0,1.5.6,1,.6-.5,1.1-1.6,1.3-2.6.2-.9,0-1.6-.6-1.1ZM96.3,46.7c-1.2.2-1.9,1.7-1.8,3.2.2,1.4,1.2,2.6,2.4,2.3,1.2-.3,1.8-1.8,1.7-3.1-.2-1.4-1.1-2.6-2.3-2.3h0ZM96.5,43.2c-.3-1.4-1.3-2.6-2.5-2.5-1.3.2-2,1.6-1.8,3.1.2,1.5,1.4,2.7,2.6,2.5,1.2-.2,1.9-1.7,1.7-3.1ZM87.8,30.3c-1.3.1-2.1,1.4-1.8,2.9.3,1.5,1.7,2.7,3,2.6,1.3-.2,2.1-1.5,1.8-2.9-.3-1.5-1.6-2.6-2.9-2.6ZM86.3,27c.4,1.4,1.7,2.6,3,2.5,1.2,0,1.9-1.3,1.6-2.6-.4-1.4-1.6-2.4-2.9-2.5-1.3,0-2,1.2-1.7,2.6ZM91,22.8c1.1,0,1.6-1,1.3-2.1-.5-1.2-1.6-2.2-2.8-2.3-1.1,0-1.7.9-1.3,2.1.4,1.3,1.7,2.3,2.9,2.4ZM86.1,23.9c1.3,0,2-1.1,1.6-2.4-.4-1.3-1.7-2.3-3-2.4-1.3,0-2,1-1.7,2.3.4,1.3,1.8,2.4,3.1,2.4h0ZM84.7,38.2c-.3-1.6-1.7-2.7-3.2-2.6-1.5.2-2.5,1.7-2.2,3.3.3,1.6,1.7,2.8,3.3,2.6,1.5-.2,2.4-1.7,2.2-3.3ZM93.3,59.6c-.6.2-1,1-1,1.5,0,.7.6,1.1,1.1.9.6-.2,1-1,.9-1.5,0-.7-.6-1.1-1.1-.9h0ZM94.2,51.4c-.2-1.4-1.2-2.4-2.4-2.2-1.2.3-2,1.7-1.9,3.1.2,1.4,1.2,2.4,2.4,2.2,1.2-.3,2-1.7,1.8-3.1h0ZM85.1,47.6c-1.4.2-2.3,1.7-2.1,3.2.2,1.5,1.5,2.5,2.8,2.3,1.4-.3,2.2-1.7,2.1-3.2-.2-1.5-1.4-2.5-2.8-2.3ZM81.2,42.5c-1.5.2-2.6,1.8-2.4,3.4.3,1.7,1.7,2.8,3.3,2.6,1.5-.3,2.5-1.8,2.3-3.4-.3-1.6-1.7-2.8-3.2-2.6ZM69.1,48.1c1-.2,1.6-1.4,1.5-2-.2-1-1.3-1.6-2-1.5-.9.1-1.6,1.4-1.5,2,.2,1,1.3,1.6,2,1.5ZM83.3,54.9c-.7.2-1.2,1.1-1.1,1.6,0,.7.9,1.2,1.4,1.1.7-.1,1.1-1.1,1.1-1.6-.1-.7-.9-1.2-1.4-1.1ZM81.6,57.9c-.7.2-1.1,1-1.1,1.6,0,.7.9,1.1,1.4,1.1.7-.1,1.1-1,1.1-1.5-.1-.7-.8-1.2-1.4-1.1h0ZM79.9,60.7c-.7.1-1.2,1-1.1,1.6.1.7.9,1.1,1.4,1,.7-.1,1.2-1,1.1-1.5,0-.7-.9-1.1-1.4-1h0ZM76.1,56.5c1.1-.2,1.9-1.4,1.8-2.5-.2-1.2-1.2-2-2.4-1.9-1.2.2-2,1.4-1.9,2.6.2,1.2,1.3,2,2.4,1.8ZM76.6,43.8c1.6-.3,2.6-1.8,2.4-3.4-.3-1.6-1.8-2.8-3.4-2.6-1.6.2-2.7,1.7-2.4,3.4.3,1.7,1.8,2.9,3.4,2.7h0ZM76,25.2c-1.5.1-2.5,1.4-2.2,2.9.4,1.5,1.9,2.6,3.4,2.5,1.5-.2,2.5-1.5,2.2-3-.4-1.5-1.8-2.6-3.3-2.5h0ZM70,40.2c1.6-.2,2.8-1.8,2.5-3.4-.3-1.7-1.9-2.8-3.5-2.6-1.6.2-2.8,1.7-2.5,3.4.3,1.7,1.9,2.9,3.5,2.6h0ZM63.4,44.9c1.7-.3,2.8-1.8,2.6-3.6-.3-1.7-1.9-2.8-3.6-2.6-1.7.3-2.9,1.8-2.7,3.5.3,1.7,1.9,2.9,3.6,2.7ZM50.5,51.6c1.1-.2,1.9-1.2,1.7-2.3-.2-1.1-1.2-1.9-2.3-1.7-1.1.2-1.8,1.2-1.7,2.3.1,1.1,1.2,1.8,2.2,1.7h0ZM62.9,56.3c-.2-1.2-1.3-2-2.5-1.8-1.2.2-2,1.3-1.9,2.5.2,1.2,1.3,2,2.5,1.8,1.2-.2,2-1.3,1.9-2.5ZM66.3,64.2c1.9-.3,3.2-2.1,3-3.9-.3-1.9-2-3.1-3.9-2.9-1.9.3-3.3,2.1-3,4,.3,1.9,2.1,3.1,3.9,2.8ZM53.1,51.7c-2.1.4-3.4,2.2-3.1,4.3.4,2,2.2,3.4,4.3,3.2,2-.3,3.4-2.2,3.1-4.2-.4-2.1-2.2-3.5-4.3-3.2ZM57.6,59.5c-2,.4-3.4,2.2-3.1,4.1.4,1.9,2.2,3.3,4.3,3,2-.3,3.4-2.1,3.1-4.1-.3-2-2.2-3.4-4.3-3.1h0ZM69.3,64.1c-1.9.4-3.4,2.2-3.2,4.1.3,1.9,2.1,3,4,2.7,1.9-.4,3.3-2.1,3.2-4-.3-1.9-2-3.1-4-2.8ZM76.2,77.6c-1.7.4-3.2,1.9-3.1,3.5.2,1.5,1.7,2.2,3.4,1.9,1.6-.4,3-1.8,3-3.3,0-1.5-1.6-2.3-3.3-2h0ZM68.9,80.4c-1.7.3-3.2,1.7-3,3.2.2,1.5,1.9,2.2,3.6,1.9,1.7-.3,3.1-1.6,3-3.1-.2-1.5-1.8-2.3-3.6-2.1ZM67.6,78.8c1.8-.3,3.3-1.9,3.1-3.6-.2-1.7-2-2.8-3.9-2.5-1.9.3-3.3,2-3.1,3.7.3,1.7,2.1,2.7,3.9,2.4ZM52.3,67.3c-1.9.3-3.2,2-2.9,3.8.4,1.9,2.2,3.1,4.1,2.9,1.9-.2,3.2-1.8,2.9-3.7-.4-1.9-2.2-3.2-4.2-3ZM16.4,51.2c1.2-.3,1.8-2.1,1.7-3.5-.2-1.4-1-2.8-2.2-2.5-1.2.4-1.7,2.1-1.6,3.5.1,1.4.9,2.8,2.1,2.6ZM13.3,58.3c-.2-1.2-.9-2.8-1.9-2.6-.9.2-1.1,1.8-.9,2.9.2,1.1.9,2.6,1.8,2.6,1,0,1.1-1.7.9-2.9ZM12.5,51c-.1-1.2-.7-2.7-1.7-2.4-.9.3-1.2,1.9-1.1,3.1.1,1.1.7,2.6,1.6,2.4.9-.2,1.3-1.9,1.1-3.2h0ZM12.5,42.1c-1,.4-1.5,2.1-1.4,3.4,0,1.2.6,2.6,1.6,2.3,1-.3,1.5-2.1,1.5-3.4,0-1.2-.7-2.7-1.7-2.3h0ZM10.2,42.8c.9-.4,1.4-2.1,1.4-3.3,0-.9-.3-2-1-2-.5,1.6-1,3.3-1.3,4.9.2.4.5.6.9.4Z"/>
+  <path fill="#fff" d="M107.8,70.3c-.6.6-1,1.4-1.2,2.2-.2.7,0,1.1.4.7,0,0,0,0,0-.1.4-.9.7-1.9,1.1-2.9,0,0-.2,0-.3.1h0ZM73.4,34.4c.3,1.6,1.8,2.8,3.4,2.6,1.5-.2,2.6-1.7,2.3-3.2-.3-1.6-1.8-2.7-3.4-2.6-1.6.2-2.6,1.6-2.3,3.2ZM93,34.5c-1.3.1-1.9,1.5-1.7,2.9.3,1.5,1.5,2.6,2.7,2.5,1.2-.2,1.8-1.5,1.6-2.9-.3-1.4-1.4-2.6-2.6-2.5h0ZM49.3,58.5c-2,.3-3.3,2.1-2.9,4.1.4,1.9,2.2,3.3,4.2,3.1,2-.2,3.3-2.1,3-4-.3-2-2.2-3.4-4.2-3.2ZM28.5,80.4c-1.3-.1-1.7,1-1.2,2.2.5,1.2,1.9,2.4,3.2,2.6,1.3.2,1.8-.9,1.4-2-.5-1.3-1.9-2.5-3.3-2.7h0ZM35.5,90c-1.2-.2-1.8.5-1.3,1.5.6,1,2,1.8,3.3,2,1.2.1,1.9-.4,1.4-1.4-.6-1-2.1-1.9-3.4-2.1ZM81.5,23.3c-1.4,0-2.3,1.2-2,2.7.4,1.5,1.8,2.6,3.3,2.5,1.3,0,2.2-1.3,1.9-2.8-.4-1.5-1.8-2.5-3.2-2.5h0ZM87.6,16.3c-.5-1.2-1.7-2.1-2.9-2.2-1.2,0-1.9.8-1.5,1.9.4,1.2,1.8,2.2,3,2.3,1.2,0,1.8-.8,1.4-2ZM69.9,57.9c1.2-.2,2-1.3,1.8-2.5-.1-1.2-1.2-2-2.4-1.8-1.2.2-2,1.3-1.8,2.5.1,1.2,1.3,2,2.4,1.8ZM54.2,38.7c-1.7.3-2.8,1.9-2.7,3.6.3,1.7,1.8,2.8,3.5,2.6,1.7-.3,2.9-1.9,2.7-3.6-.3-1.7-1.8-2.8-3.5-2.6h0ZM78.1,56.2c-1.2.2-2,1.4-1.8,2.5.2,1.2,1.2,1.9,2.3,1.7,1.1-.2,1.9-1.3,1.8-2.5-.1-1.2-1.2-2-2.3-1.8ZM108.5,69.4c.4-1.2.7-2.3,1-3.5-.6.7-.9,1.6-1.1,2.5-.1.6-.1,1,0,1.1h0ZM74.4,71c-1.8.4-3.3,2.1-3.1,3.8.2,1.8,1.9,2.7,3.7,2.3,1.8-.4,3.2-2,3.1-3.7-.2-1.7-1.8-2.7-3.6-2.4h0ZM74.2,45.2c-1.6.3-2.8,1.8-2.6,3.6.2,1.7,1.8,2.9,3.4,2.6,1.7-.3,2.7-1.9,2.5-3.5-.3-1.7-1.8-2.8-3.4-2.6ZM24.7,42.9c-1.1.3-1.7,1.5-1.6,2.7.1,1.1.9,2.1,2,1.9,1.1-.2,1.7-1.5,1.6-2.7-.1-1.2-.9-2.1-2-1.9h0ZM52,47.3c.5,0,1.2-.8,1.2-1.6,0-.5-.8-1.2-1.5-1.2-.5.1-1.2.8-1.2,1.6,0,.5.8,1.3,1.5,1.2h0ZM95.4,20.4c-1-.1-1.4.8-1,2,.4,1.2,1.5,2.3,2.5,2.4,1,0,1.3-.9.9-2-.4-1.1-1.4-2.2-2.4-2.4ZM62.9,30.2c-1.6.2-2.8,1.7-2.6,3.3.3,1.6,1.9,2.7,3.5,2.5,1.7-.3,2.8-1.7,2.6-3.4-.3-1.6-1.9-2.7-3.5-2.5h0ZM20.7,45.5c-1.4.4-2,2.1-1.9,3.7.2,1.5,1.2,3,2.6,2.7,1.4-.3,2.2-2.1,2-3.7-.2-1.6-1.2-3-2.7-2.7h0ZM35.6,27.4c1.2-.3,2.1-1.5,2.1-2.7,0-1.1-1-1.7-2.2-1.5-1.1.3-2,1.5-2,2.6,0,1.1,1,1.8,2.1,1.5h0ZM61,66.6c-2,.3-3.4,2.1-3.1,3.9.3,1.9,2.2,3,4.1,2.8,1.9-.3,3.3-2,3.1-3.8-.3-1.9-2.2-3.1-4.2-2.9h0ZM71.2,87.3c-1.5.4-3,1.5-2.9,2.7.2,1.2,1.8,1.7,3.2,1.4,1.5-.3,2.9-1.3,2.9-2.6,0-1.2-1.7-1.8-3.2-1.5h0ZM74.6,83.8c-.9.2-1.8,1-1.8,1.8,0,.8,1,1.2,1.9,1,.9-.2,1.8-.9,1.8-1.8,0-.8-1-1.2-1.9-1ZM109.5,59.9c-.4.3-.4.8-.5,1.2,0,.4,0,.9.3.6.3-.3.4-.8.5-1.2,0-.4,0-.8-.3-.6ZM92.7,54.9c-.9.2-1.5,1.2-1.4,2.3,0,1,.8,1.7,1.7,1.5.9-.2,1.4-1.2,1.4-2.2,0-1-.8-1.7-1.7-1.5h0ZM14,50.8c-1.1.3-1.4,1.9-1.3,3.3.2,1.3.9,2.8,2,2.6,1.1-.2,1.5-1.9,1.3-3.3-.2-1.3-1-2.8-2.1-2.6h0ZM9.1,43.6c-.3,1.6-.5,3.2-.7,4.8.2.4.5.6.9.5.9-.3,1.1-2,1.1-3.2,0-1-.5-2.4-1.3-2.1h0ZM91.9,45.5c-.2-1.5-1.4-2.7-2.8-2.5-1.4.2-2.3,1.7-2.1,3.3.2,1.6,1.5,2.7,2.9,2.5,1.4-.2,2.2-1.8,2-3.3ZM71.6,27c1.5-.2,2.6-1.4,2.3-2.9-.4-1.5-1.9-2.4-3.4-2.4-1.5.2-2.6,1.4-2.3,2.9.3,1.5,1.9,2.5,3.5,2.4h0ZM34.9,21.9c0-1-1-1.6-2-1.3-1.1.3-1.9,1.4-2,2.5,0,1,.9,1.6,1.9,1.3,1.1-.3,2-1.4,2-2.5ZM103.4,75.2c-.6.5-1.3,1.4-1.5,2.3-.2.7,0,1,.7.6.6-.5,1.2-1.4,1.5-2.2.2-.8,0-1.1-.6-.7ZM103,30.1c.7,0,.7-.7.5-1.4-.2-.6-.8-1.5-1.4-1.6-.7,0-.7.7-.5,1.4.2.7.8,1.6,1.4,1.6ZM25.8,20.8c-.5.2-1.1.9-1.2,1.6,0,.5.4.9,1,.7.5-.2,1.1-1,1.2-1.6,0-.5-.4-.9-1-.7h0ZM33.6,20c1.5-.5,2.9-1.9,2.9-3.4,0-1.3-1.3-2-2.7-1.5-1.4.5-2.7,1.9-2.9,3.3,0,1.4,1.2,2.1,2.6,1.7h0Z"/>
+  <path fill="#fff" d="M152.7,60.2l-7.4-15.9-7.4,15.9h14.8ZM135.1,66.2l-4.1,8.8h-7.3l17.9-38.6h7.3l17.9,38.6h-7.3l-4.1-8.8h-20.3,0Z"/>
+  <path fill="#fff" d="M191.1,69c2.4,0,4.4-.4,6.1-1.1,1.7-.8,3.5-2,5.3-3.6l4.4,4.3c-4.3,4.5-9.5,6.8-15.7,6.8s-11.2-1.9-15.3-5.6c-4-3.8-6-8.5-6-14.2s2.1-10.5,6.2-14.3c4.1-3.8,9.4-5.7,15.6-5.7s11.6,2.2,15.8,6.6l-4.4,4.5c-1.9-1.8-3.8-3-5.5-3.7-1.7-.7-3.7-1.1-6-1.1-4.1,0-7.6,1.3-10.4,3.8-2.8,2.5-4.2,5.7-4.2,9.7s1.4,7.2,4.1,9.8c2.8,2.6,6.1,3.9,9.9,3.9h0Z"/>
+  <polygon fill="#fff" points="215.3 74.9 215.3 36.4 222.2 36.4 222.2 68.8 240.7 68.8 240.7 74.9 215.3 74.9"/>
+  <polygon fill="#fff" points="276.8 36.4 276.8 42.5 255.1 42.5 255.1 52.7 274.6 52.7 274.6 58.5 255.1 58.5 255.1 68.8 277.5 68.8 277.5 74.9 248.3 74.9 248.3 36.4 276.8 36.4"/>
+  <path fill="#fff" d="M316,55.6c0-8.8-5.3-13.2-16-13.2h-6.9v26.4h7.6c4.9,0,8.7-1.1,11.3-3.3,2.6-2.2,4-5.5,4-9.9h0ZM300.3,36.4c7.3,0,12.9,1.7,16.8,5.1,3.9,3.3,5.9,8,5.9,14s-1.9,10.7-5.7,14.2c-3.8,3.5-9.6,5.2-17.4,5.2h-13.5v-38.6h14Z"/></symbol></svg>
 
 <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
 <div class="hero">
   <div class="hero-badge"><img src="https://www.dropbox.com/scl/fo/zf8hkvg5vtq4hw1szt45c/AFToX7BwM6JvO2GNCUJ7yaA/icons/Colour/png/IFRC-icons-colour_Share-network.png?rlkey=18wk61zszq2cycrgwy9v4rutw&e=1&dl=1" alt="Share network" style="height:16px;width:auto;object-fit:contain;vertical-align:middle;margin-right:6px;"> Humanitarian AI Toolkit</div>
-  <h1>13 Powerful Data Tools<br>for Humanitarian Work</h1>
-  <p>A beginner-friendly guide to IFRC GO, Monty, HDX, UNHCR Refugee Statistics, UNHCR Resettlement, FEWS NET, IPC-CH, ReliefWeb, HOTOSM Raw Data, KoboToolbox, ACAPS, the World Bank Data Catalog, and World Bank Data360 — and how AI assistants can use them to answer real questions.</p>
+  <h1>14 Powerful Data Tools<br>for Humanitarian Work</h1>
+  <p>A beginner-friendly guide to IFRC GO, Monty, HDX, UNHCR Refugee Statistics, UNHCR Resettlement, FEWS NET, IPC-CH, ReliefWeb, HOTOSM Raw Data, KoboToolbox, ACAPS, the World Bank Data Catalog, World Bank Data360, and ACLED — and how AI assistants can use them to answer real questions.</p>
   <div class="hero-pills">
     <span class="pill"><img src="https://go.ifrc.org/7.26.0/asset-go-logo-2020-D07sIPWn.svg" alt="IFRC GO"> IFRC GO</span>
     <span class="pill">🛰️ Monty</span>
@@ -452,6 +476,7 @@
     <span class="pill"><img src="https://www.acaps.org/typo3conf/ext/acaps_package/Resources/Public/Favicons/android-chrome-192x192.png" alt="ACAPS" style="border-radius:50%"> ACAPS</span>
     <span class="pill"><img src="https://github.com/worldbank.png?size=40" alt="World Bank" style="border-radius:50%"> World Bank</span>
     <span class="pill"><img src="https://github.com/worldbank.png?size=40" alt="World Bank Data360" style="border-radius:50%"> World Bank Data360</span>
+    <span class="pill pill-acled"><svg class="acled-logo" viewBox="0 0 332.8 109.8" role="img" aria-label="ACLED"><use href="#acled-logo"/></svg></span>
   </div>
 </div>
 
@@ -546,9 +571,9 @@
 <!-- ═══════════════════════════ OVERVIEW CARDS ═══════════════════════════ -->
 <section>
   <div class="container">
-    <div class="section-label" style="color:var(--orange)">The Ten Tools</div>
+    <div class="section-label" style="color:var(--orange)">The Fourteen Tools</div>
     <h2>Meet the MCPs</h2>
-    <p class="lead">Each tool connects to a different official humanitarian database. Together they cover disaster response, food security, famine early warning, displacement, refugee resettlement, humanitarian information management, open geospatial mapping, and field data collection.</p>
+    <p class="lead">Each tool connects to a different official humanitarian database. Together they cover disaster response, food security, famine early warning, displacement, refugee resettlement, humanitarian information management, open geospatial mapping, field data collection, development data, and conflict &amp; protest events.</p>
 
     <div class="mcp-grid">
       <div class="mcp-card ifrc">
@@ -644,6 +669,13 @@
         <h3>World Bank Data360</h3>
         <p>The World Bank's next-generation data platform — 40× more data than the legacy portal, drawing indicators and datasets from across the World Bank Group and partners (WDI, IMF, UN, OECD) for 200+ economies. Search indicators, pull time-series observations by country and year, read indicator metadata, and discover the available dimensions. Fully public, no key required.</p>
         <div class="card-links"><a class="card-link" href="https://data360.worldbank.org" target="_blank" rel="noopener">Data360 ↗</a><a class="card-link" href="https://data360.worldbank.org/en/api" target="_blank" rel="noopener">API Docs ↗</a></div>
+      </div>
+      <div class="mcp-card acled">
+        <div class="card-icon"><svg class="acled-logo" viewBox="0 0 332.8 109.8" role="img" aria-label="ACLED"><use href="#acled-logo"/></svg></div>
+        <p class="tagline">ACLED</p>
+        <h3>ACLED Conflict &amp; Protest Events</h3>
+        <p>The leading real-time source on political violence and protest worldwide. Query individually geolocated events — battles, protests, riots, violence against civilians, explosions/remote violence — by country, region, actor, event type, date range, and fatalities; pull CAST conflict forecasts; and look up actor, country, and region reference codes.</p>
+        <div class="card-links"><a class="card-link" href="https://acleddata.com" target="_blank" rel="noopener">ACLED Data ↗</a><a class="card-link" href="https://acleddata.com/acled-api-documentation" target="_blank" rel="noopener">API Docs ↗</a></div>
       </div>
     </div>
   </div>
@@ -1415,6 +1447,59 @@
       </div>
     </div>
 
+    <!-- ── ACLED ── -->
+    <div class="deep-dive">
+      <div class="dive-header">
+        <span class="dive-badge acled-b"><svg class="acled-logo" viewBox="0 0 332.8 109.8" role="img" aria-label="ACLED"><use href="#acled-logo"/></svg></span>
+        <h2>Political violence and protest — geolocated, dated, and queryable</h2>
+      </div>
+      <p>ACLED (the Armed Conflict Location &amp; Event Data project) is the leading real-time source on political violence and protest around the world. Its <a href="https://acleddata.com/acled-api-documentation" target="_blank" rel="noopener">API</a> records individual events — battles, protests, riots, violence against civilians, explosions/remote violence, and strategic developments — each coded with a date, the actors involved, a precise location (down to admin levels and coordinates), and reported fatalities. The MCP lets AI assistants filter events by country, region, actor, event type, and date or year range, retrieve CAST monthly conflict forecasts, keep a local mirror in sync via deleted-event IDs, and resolve actor, country, and region reference codes — no spreadsheets or manual API calls needed.</p>
+
+      <div class="capabilities-grid">
+        <div class="cap-item">
+          <strong>⚔️ Conflict Events</strong>
+          Battles, violence against civilians, and explosions/remote violence with fatalities
+        </div>
+        <div class="cap-item">
+          <strong>📢 Protests &amp; Riots</strong>
+          Demonstrations and unrest, coded by actor and sub-event type
+        </div>
+        <div class="cap-item">
+          <strong>📍 Precise Geolocation</strong>
+          Admin-1/2 divisions and latitude/longitude for every event
+        </div>
+        <div class="cap-item">
+          <strong>🔮 CAST Forecasts</strong>
+          Monthly Conflict Alert System forecasts vs. observed values by country
+        </div>
+        <div class="cap-item">
+          <strong>👥 Actor Lookups</strong>
+          Find exact actor names, actor types, and country/region codes
+        </div>
+        <div class="cap-item">
+          <strong>🔄 Mirror Sync</strong>
+          Deleted-event IDs to keep a local copy of the dataset up to date
+        </div>
+      </div>
+
+      <div class="example-box acled">
+        <div class="ex-label">💬 Example conversation</div>
+        <div class="prompt">You: "How many battles were recorded in Sudan in 2024, and how many people were killed?"</div>
+        <div class="response">
+          <strong>AI (using ACLED MCP):</strong><br>
+          "Querying ACLED for events in Sudan in 2024 with event type 'Battles'. There were thousands of recorded battle events with several thousand associated fatalities, concentrated in Khartoum, El Gezira, and the Darfur states. Would you like the monthly trend, a breakdown by admin-1 region, or the main armed actors involved?"
+        </div>
+      </div>
+
+      <div class="example-box acled">
+        <div class="ex-label">💬 Another example</div>
+        <div class="prompt">You: "List peaceful protests in Kenya between January and March 2024, and find ACLED's exact name for Al Shabaab."</div>
+        <div class="response">
+          <strong>AI:</strong> Queries the events endpoint for Kenya filtered to sub-event type 'Peaceful protest' over the Jan–Mar 2024 date range, then looks up the actor reference to return ACLED's canonical label ("Al Shabaab") and its actor ID for use in further queries.
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1723,7 +1808,7 @@
 
 <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
 <footer>
-  <p>Data sourced from <strong>IFRC GO</strong>, <strong>Monty</strong>, <strong>OCHA HDX</strong>, <strong>UNHCR</strong>, <strong>UNHCR RSQ</strong>, <strong>FEWS NET</strong>, <strong>IPC-CH</strong>, <strong>ReliefWeb</strong>, <strong>HOTOSM</strong>, <strong>KoboToolbox</strong>, <strong>ACAPS</strong>, the <strong>World Bank Data Catalog</strong>, and <strong>World Bank Data360</strong> — all official humanitarian and development databases. MCPs connect AI assistants directly to these live sources.</p>
+  <p>Data sourced from <strong>IFRC GO</strong>, <strong>Monty</strong>, <strong>OCHA HDX</strong>, <strong>UNHCR</strong>, <strong>UNHCR RSQ</strong>, <strong>FEWS NET</strong>, <strong>IPC-CH</strong>, <strong>ReliefWeb</strong>, <strong>HOTOSM</strong>, <strong>KoboToolbox</strong>, <strong>ACAPS</strong>, the <strong>World Bank Data Catalog</strong>, <strong>World Bank Data360</strong>, and <strong>ACLED</strong> — all official humanitarian and development databases. MCPs connect AI assistants directly to these live sources.</p>
   <p>Thanks for all Humanitarians for the Great work you do for the Society/Communities and for the Humanitarian
   Organizations that provide and publish data that facilitate Humanitarian work, Thank you.<strong></p>
 </footer>

@@ -1,6 +1,6 @@
 # Running the humanitarian MCPs in Docker
 
-All 13 humanitarian MCP servers in this repo run as Docker containers, served
+All 15 humanitarian MCP servers in this repo run as Docker containers, served
 through the **Docker MCP gateway** (Docker Desktop's MCP Toolkit). Claude Desktop
 talks to a single gateway process; the gateway launches each MCP as an ephemeral
 container on demand. **If Docker Desktop is not running, the gateway cannot start
@@ -65,7 +65,7 @@ Secret name == environment variable name. To (re)load them all from `.env`:
 ```bash
 for name in IFRC_API_TOKEN HDX_API_TOKEN IPC_API_KEY FEWSNET_USERNAME \
   FEWSNET_PASSWORD RELIEFWEB_APPNAME HOTOSM_ACCESS_TOKEN KOBO_API_TOKEN \
-  ACAPS_USERNAME ACAPS_PASSWORD; do
+  ACAPS_USERNAME ACAPS_PASSWORD ACLED_USERNAME ACLED_PASSWORD; do
   docker mcp secret rm "$name" 2>/dev/null
   val=$(grep -m1 "^${name}=" .env); val=${val#${name}=}
   printf '%s' "$val" | docker mcp secret set "$name"
@@ -84,7 +84,7 @@ docker mcp gateway run --additional-catalog humanitarian.yaml \
   --registry humanitarian-registry.yaml --dry-run --verbose
 ```
 
-You should see all 15 servers enabled (github-official, postman + the 13) each
+You should see all 17 servers enabled (github-official, postman + the 15) each
 reporting a tool count, and no `Secret '...' not found` warnings.
 
 ## Reverting to the old profile-based setup
