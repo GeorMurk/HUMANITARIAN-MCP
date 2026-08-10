@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Humanitarian AI Tools — A Beginner's Guide to 14 Powerful MCPs</title>
+<title>Humanitarian AI Tools — A Beginner's Guide to 15 Powerful MCPs</title>
 <style>
   :root {
     --blue: #2563eb;
@@ -28,6 +28,8 @@
     --acaps-light: #ede9fe;
     --acled: #be123c;
     --acled-light: #ffe4e6;
+    --osm: #4a7c3f;
+    --osm-light: #e3f2dd;
     --wb: #1d4f91;
     --wb-light: #e4edf7;
     --gray: #374151;
@@ -160,6 +162,7 @@
   .kobo  .card-link { color: #2d7d9a; border-color: #7eccea; }
   .acaps .card-link { color: #7c3aed; border-color: #c4b5fd; }
   .acled .card-link { color: #be123c; border-color: #fda4af; }
+  .osm   .card-link { color: #4a7c3f; border-color: #a8d69a; }
   .wb    .card-link { color: #1d4f91; border-color: #a9c7e8; }
 
   .mcp-card.ifrc  { border-color: #fca5a5; background: linear-gradient(145deg, #fff5f5, white); }
@@ -174,6 +177,7 @@
   .mcp-card.kobo  { border-color: #7eccea; background: linear-gradient(145deg, #eaf6fb, white); }
   .mcp-card.acaps { border-color: #c4b5fd; background: linear-gradient(145deg, #f5f3ff, white); }
   .mcp-card.acled { border-color: #fda4af; background: linear-gradient(145deg, #fff1f2, white); }
+  .mcp-card.osm   { border-color: #a8d69a; background: linear-gradient(145deg, #f1f9ed, white); }
   .mcp-card.wb    { border-color: #a9c7e8; background: linear-gradient(145deg, #eef4fb, white); }
 
   .card-icon {
@@ -221,6 +225,7 @@
   .kobo  .tagline { color: #2d7d9a; }
   .acaps .tagline { color: #7c3aed; }
   .acled .tagline { color: #be123c; }
+  .osm   .tagline { color: #4a7c3f; }
   .wb    .tagline { color: #1d4f91; }
   .mcp-card p { font-size: 14px; color: #4b5563; }
 
@@ -258,6 +263,7 @@
   .kobo-b  { background: #d0edf5; color: #1e6080; }
   .acaps-b { background: #ede9fe; color: #5b21b6; }
   .acled-b { background: #ffe4e6; color: #9f1239; }
+  .osm-b   { background: #e3f2dd; color: #2f5a26; }
   .wb-b    { background: #e4edf7; color: #16407a; }
 
   .dive-header h2 { font-size: 26px; margin-bottom: 0; }
@@ -295,6 +301,7 @@
   .example-box.kobo  { background: #eaf6fb; border-color: #2d7d9a; }
   .example-box.acaps { background: #f5f3ff; border-color: #7c3aed; }
   .example-box.acled { background: #fff1f2; border-color: #be123c; }
+  .example-box.osm   { background: #f1f9ed; border-color: #4a7c3f; }
   .example-box.wb    { background: #eef4fb; border-color: #1d4f91; }
 
   .example-box .ex-label {
@@ -412,6 +419,7 @@
   .t-kobo  { color: #2d7d9a; border-color: #7eccea; background: #eaf6fb; }
   .t-acaps { color: #7c3aed; border-color: #c4b5fd; background: #f5f3ff; }
   .t-acled { color: #be123c; border-color: #fda4af; background: #fff1f2; }
+  .t-osm   { color: #4a7c3f; border-color: #a8d69a; background: #f1f9ed; }
   .t-wb    { color: #1d4f91; border-color: #a9c7e8; background: #eef4fb; }
 
   /* ── CALLOUT ── */
@@ -460,8 +468,8 @@
 <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
 <div class="hero">
   <div class="hero-badge"><img src="https://www.dropbox.com/scl/fo/zf8hkvg5vtq4hw1szt45c/AFToX7BwM6JvO2GNCUJ7yaA/icons/Colour/png/IFRC-icons-colour_Share-network.png?rlkey=18wk61zszq2cycrgwy9v4rutw&e=1&dl=1" alt="Share network" style="height:16px;width:auto;object-fit:contain;vertical-align:middle;margin-right:6px;"> Humanitarian AI Toolkit</div>
-  <h1>14 Powerful Data Tools<br>for Humanitarian Work</h1>
-  <p>A beginner-friendly guide to IFRC GO, Monty, HDX, UNHCR Refugee Statistics, UNHCR Resettlement, FEWS NET, IPC-CH, ReliefWeb, HOTOSM Raw Data, KoboToolbox, ACAPS, the World Bank Data Catalog, World Bank Data360, and ACLED — and how AI assistants can use them to answer real questions.</p>
+  <h1>15 Powerful Data Tools<br>for Humanitarian Work</h1>
+  <p>A beginner-friendly guide to IFRC GO, Monty, HDX, UNHCR Refugee Statistics, UNHCR Resettlement, FEWS NET, IPC-CH, ReliefWeb, HOTOSM Raw Data, KoboToolbox, ACAPS, the World Bank Data Catalog, World Bank Data360, ACLED, and OpenStreetMap — and how AI assistants can use them to answer real questions.</p>
   <div class="hero-pills">
     <span class="pill"><img src="https://go.ifrc.org/7.26.0/asset-go-logo-2020-D07sIPWn.svg" alt="IFRC GO"> IFRC GO</span>
     <span class="pill">🛰️ Monty</span>
@@ -477,6 +485,7 @@
     <span class="pill"><img src="https://github.com/worldbank.png?size=40" alt="World Bank" style="border-radius:50%"> World Bank</span>
     <span class="pill"><img src="https://github.com/worldbank.png?size=40" alt="World Bank Data360" style="border-radius:50%"> World Bank Data360</span>
     <span class="pill pill-acled"><svg class="acled-logo" viewBox="0 0 332.8 109.8" role="img" aria-label="ACLED"><use href="#acled-logo"/></svg></span>
+    <span class="pill">🗺️ OpenStreetMap</span>
   </div>
 </div>
 
@@ -676,6 +685,13 @@
         <h3>ACLED Conflict &amp; Protest Events</h3>
         <p>The leading real-time source on political violence and protest worldwide. Query individually geolocated events — battles, protests, riots, violence against civilians, explosions/remote violence — by country, region, actor, event type, date range, and fatalities; pull CAST conflict forecasts; and look up actor, country, and region reference codes.</p>
         <div class="card-links"><a class="card-link" href="https://acleddata.com" target="_blank" rel="noopener">ACLED Data ↗</a><a class="card-link" href="https://acleddata.com/acled-api-documentation" target="_blank" rel="noopener">API Docs ↗</a></div>
+      </div>
+      <div class="mcp-card osm">
+        <div class="card-icon">🗺️</div>
+        <p class="tagline">OpenStreetMap</p>
+        <h3>OpenStreetMap — The Free World Map</h3>
+        <p>Where HOTOSM wraps a humanitarian export service, this one talks to OpenStreetMap's own APIs live. Find any mapped feature by tag — hospitals, boreholes, roads, schools — anywhere on Earth; read a feature's full edit history; convert place names to coordinates and back; and check which tags mappers actually use. Read-only, and no API key required.</p>
+        <div class="card-links"><a class="card-link" href="https://www.openstreetmap.org" target="_blank" rel="noopener">OpenStreetMap ↗</a><a class="card-link" href="https://wiki.openstreetmap.org/wiki/Databases_and_data_access_APIs" target="_blank" rel="noopener">API Docs ↗</a></div>
       </div>
     </div>
   </div>
@@ -1500,6 +1516,59 @@
       </div>
     </div>
 
+    <!-- ── OpenStreetMap ── -->
+    <div class="deep-dive">
+      <div class="dive-header">
+        <span class="dive-badge osm-b">🗺️ OpenStreetMap</span>
+        <h2>Every mapped feature on Earth — queryable in plain language</h2>
+      </div>
+      <p>OpenStreetMap is the free, editable map of the world, built by millions of volunteers. This MCP connects AI assistants to OSM's own <a href="https://wiki.openstreetmap.org/wiki/Databases_and_data_access_APIs" target="_blank" rel="noopener">data access APIs</a> rather than to a third-party export service — which is what distinguishes it from the HOTOSM tool above. The <strong>Overpass API</strong> answers "find every X in area Y" for any tag combination; the <strong>main OSM API</strong> exposes the live database, including the full edit history of any feature; <strong>Nominatim</strong> turns place names into coordinates and back; and <strong>Taginfo</strong> reveals which tags mappers actually use, so a question about "clinics" can be matched to the real tagging on the ground. It is strictly read-only — it can answer questions about the map, but never change it.</p>
+
+      <div class="capabilities-grid">
+        <div class="cap-item">
+          <strong>🏥 Find Any Feature</strong>
+          Hospitals, boreholes, schools, roads, camps — by tag, inside a boundary or radius
+        </div>
+        <div class="cap-item">
+          <strong>📍 Geocoding</strong>
+          Place names to coordinates, and coordinates back to the nearest address
+        </div>
+        <div class="cap-item">
+          <strong>🕒 Edit History</strong>
+          Every version of a feature, who changed it and when, plus changesets and discussions
+        </div>
+        <div class="cap-item">
+          <strong>📝 Map Notes</strong>
+          User-reported problems with the map in an area — useful for spotting data gaps
+        </div>
+        <div class="cap-item">
+          <strong>🏷️ Tag Discovery</strong>
+          Which keys and values are genuinely in use, with global counts, so queries match reality
+        </div>
+        <div class="cap-item">
+          <strong>📦 Bulk Sources</strong>
+          Where to get Planet.osm, Geofabrik extracts and GeoParquet for offline analysis
+        </div>
+      </div>
+
+      <div class="example-box osm">
+        <div class="ex-label">💬 Example conversation</div>
+        <div class="prompt">You: "How many hospitals are mapped in Nairobi County, and where are they?"</div>
+        <div class="response">
+          <strong>AI (using OpenStreetMap MCP):</strong><br>
+          "I looked up Nairobi County to get its boundary, then counted features tagged <code>amenity=hospital</code> inside it before pulling the list — so the answer covers the administrative area, not just a rough box. I can give you the names and coordinates, split them by sub-district, or widen the search to include clinics tagged <code>healthcare=clinic</code>. Which would help most?"
+        </div>
+      </div>
+
+      <div class="example-box osm">
+        <div class="ex-label">💬 Another example</div>
+        <div class="prompt">You: "This water point looks wrong — who last edited it, and are people reporting problems nearby?"</div>
+        <div class="response">
+          <strong>AI:</strong> Reads the feature's full version history to show what changed, when, and in which changeset, then checks map notes in the surrounding area for reports other mappers have already filed — a quick way to judge how current and trustworthy a piece of map data is before relying on it.
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1808,9 +1877,9 @@
 
 <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
 <footer>
-  <p>Data sourced from <strong>IFRC GO</strong>, <strong>Monty</strong>, <strong>OCHA HDX</strong>, <strong>UNHCR</strong>, <strong>UNHCR RSQ</strong>, <strong>FEWS NET</strong>, <strong>IPC-CH</strong>, <strong>ReliefWeb</strong>, <strong>HOTOSM</strong>, <strong>KoboToolbox</strong>, <strong>ACAPS</strong>, the <strong>World Bank Data Catalog</strong>, <strong>World Bank Data360</strong>, and <strong>ACLED</strong> — all official humanitarian and development databases. MCPs connect AI assistants directly to these live sources.</p>
+  <p>Data sourced from <strong>IFRC GO</strong>, <strong>Monty</strong>, <strong>OCHA HDX</strong>, <strong>UNHCR</strong>, <strong>UNHCR RSQ</strong>, <strong>FEWS NET</strong>, <strong>IPC-CH</strong>, <strong>ReliefWeb</strong>, <strong>HOTOSM</strong>, <strong>KoboToolbox</strong>, <strong>ACAPS</strong>, the <strong>World Bank Data Catalog</strong>, <strong>World Bank Data360</strong>, <strong>ACLED</strong>, and <strong>OpenStreetMap</strong> — all official humanitarian, development and open-mapping databases. MCPs connect AI assistants directly to these live sources.</p>
   <p>Thanks for all Humanitarians for the Great work you do for the Society/Communities and for the Humanitarian
-  Organizations that provide and publish data that facilitate Humanitarian work, Thank you.<strong></p>
+  Organizations that provide and publish data that facilitate Humanitarian work, Thank you.</p>
 </footer>
 
 </body>

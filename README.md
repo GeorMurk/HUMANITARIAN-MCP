@@ -50,6 +50,7 @@ This repository contains fourteen **MCP servers** that connect LLMs/Agents to li
 | **World Bank Data Catalog MCP**  | `worldbank-mcp/`          | Query the World Bank Data Catalog (DDH) API — search 7,900+ datasets, retrieve dataset/indicator/resource metadata, pull tabular resource data with filtering, browse collections, citations, and codelist lookups |
 | **World Bank Data360 MCP**       | `worldbankdata360-mcp/`   | Query the World Bank [Data360](https://data360.worldbank.org) API — search indicators and datasets, retrieve time-series observations, indicator metadata, and available dimension/filter values across WDI, IMF, UN, OECD and more (200+ economies) |
 | **ACLED MCP**                    | `acled-mcp/`              | Query the ACLED (Armed Conflict Location & Event Data) API — political violence, protest and conflict events with rich filtering, deleted-event IDs for mirror sync, CAST conflict forecasts, and actor/country/region reference lookups |
+| **OpenStreetMap MCP**            | `osm-mcp/`                | Query OpenStreetMap directly — find features by tag with the Overpass API, read the live editing database (elements, history, changesets, notes, GPS traces, user blocks), geocode and reverse-geocode with Nominatim, discover real tags with Taginfo, and list bulk download sources. Read-only: every API v0.6 read endpoint, no write endpoints |
 
 **IFRC** stands for the _International Federation of Red Cross and Red Crescent Societies_. The **GO** (Global Operations)[IFRC GO](https://go.ifrc.org) platform is a public database tracking humanitarian operations, disaster appeals, field reports, and response activities worldwide.
 
@@ -73,6 +74,8 @@ This repository contains fourteen **MCP servers** that connect LLMs/Agents to li
 
 **World Bank Data360** is the World Bank's next-generation data platform at [data360.worldbank.org](https://data360.worldbank.org), consolidating **40× more data** than the legacy open-data portal — indicators and datasets from across the World Bank Group and partner organisations (WDI, IMF, UN, OECD, and more) covering **200+ economies** with structured metadata and time-series observations. The [Data360 API](https://data360.worldbank.org/en/api) lets you search indicators and datasets, retrieve time-series observations for any indicator/economy, read rich indicator metadata (definition, source, methodology), and discover the available dimensions and filter values (REF_AREA, FREQ, SEX, AGE, …) before pulling data. The API is fully public and requires no authentication.
 
+**OpenStreetMap** is the free, editable map of the world. Where the HOTOSM server wraps a humanitarian export service, this server talks to OSM's own data access APIs, as catalogued at [Databases and data access APIs](https://wiki.openstreetmap.org/wiki/Databases_and_data_access_APIs): the **Overpass API** for read-only tag and geometry queries (the workhorse — "every hospital in Nairobi County"), the **Main API v0.6** for the live editing database (individual nodes/ways/relations, full edit history, changesets, map notes, GPS traces), **Nominatim** for geocoding and reverse geocoding, and **Taginfo** for discovering which tag keys and values are actually in use. Every API used is public and requires no authentication.
+
 **ACLED** (the _Armed Conflict Location & Event Data_ project) is the leading source of real-time data on political violence and protest worldwide. Their [API](https://acleddata.com/acled-api-documentation) provides disaggregated, individually geolocated event records — battles, protests, riots, violence against civilians, explosions/remote violence, and strategic developments — coded by date, actors, location (down to admin levels and coordinates), and fatalities. The MCP exposes the main event endpoint with rich filtering (country, region, actor, event type, date/year ranges, fatalities), the deleted-event endpoint for keeping a local mirror in sync, the **CAST** (Conflict Alert System) monthly forecast endpoint, and reference lookups for actors, actor types, countries (ISO codes) and regions. Authentication uses an OAuth2 access token obtained automatically from your ACLED account email and password.
 
 ---
@@ -81,7 +84,8 @@ This repository contains fourteen **MCP servers** that connect LLMs/Agents to li
 
 Before you start, make sure you have:
 
-- **Node.js** v18 or later — download from [nodejs.org](https://nodejs.org)
+- **Docker Desktop** — required for the recommended [Option A — Docker](#option-a--docker-recommended) setup, which runs every server as a container. Download from [docker.com](https://www.docker.com/products/docker-desktop/)
+- **Node.js** v18 or later — needed to build the images (dependencies are vendored into each server directory) and for the development-only [Option B](#option-b--local-node-processes-development-only). Download from [nodejs.org](https://nodejs.org)
 - **npm** — comes bundled with Node.js
 - **Claude Desktop** <img src="https://github.com/anthropics.png?size=20" alt="Claude" height="14" style="vertical-align:middle"/> — the Mac/Windows app from [claude.ai](https://claude.ai), or any other MCP-compatible LLM/Agent host
 - **An IFRC GO API token** — create a free account at [go.ifrc.org](https://go.ifrc.org) and generate a token from your profile settings
@@ -93,8 +97,9 @@ Before you start, make sure you have:
 - **An ACAPS account** — register a free account at [api.acaps.org/register/](https://api.acaps.org/register/); the server uses your username (email) and password to fetch an auth token automatically
 - **An ACLED account** — register a free account at [acleddata.com/register/](https://acleddata.com/register/); the server uses your account email and password to fetch an OAuth access token automatically
 - **Nothing for the two World Bank servers** — the DDH Data Catalog API and the Data360 API are both fully public and need no credentials
+- **Nothing for the OpenStreetMap server** — Overpass, the OSM Main API, Nominatim and Taginfo are all public. Optionally set `OSM_USER_AGENT` to identify your application, as their usage policies ask, and `OSM_ACCESS_TOKEN` (read scopes only) if you want the six tools that read your own account
 
-> **Note:** The two UNHCR servers, the HOTOSM server, and the two World Bank servers require no API token for most operations — they use fully public APIs. An optional OSM OAuth access token unlocks metrics and admin endpoints on the HOTOSM server.
+> **Note:** The two UNHCR servers, the HOTOSM server, the OpenStreetMap server, and the two World Bank servers require no API token for most operations — they use fully public APIs. An optional OSM OAuth access token unlocks metrics and admin endpoints on the HOTOSM server.
 
 ---
 
@@ -186,10 +191,82 @@ These servers work with any MCP-compatible LLM or agent framework. The examples 
 
 There are two ways to wire them up:
 
-- **[Option A — Local Node processes](#option-a--local-node-processes)**: one `node` entry per server. Simplest; requires Node.js and the `npm install` step above.
-- **[Option B — Docker](#option-b--docker)**: each server runs as a container behind the Docker MCP gateway, with secrets stored in the Docker keychain instead of a `.env` file.
+- **[Option A — Docker](#option-a--docker-recommended)** *(recommended)*: each server runs as a container behind the Docker MCP gateway, with secrets stored in the Docker keychain instead of a `.env` file. One host entry covers every server.
+- **[Option B — Local Node processes](#option-b--local-node-processes-development-only)** *(development only)*: one `node` entry per server, reading credentials from `.env`. Useful while editing a server's code; not the everyday setup.
 
-### Option A — Local Node processes
+### Option A — Docker (recommended)
+
+This is the recommended setup and the one these servers run in day to day. You build one container image per server and let the **Docker MCP gateway** (Docker Desktop's MCP Toolkit) start them on demand. Your host talks to a single gateway process; the gateway launches each MCP as an ephemeral container.
+
+Secrets are pulled from the Docker Desktop keychain at run time and are never baked into images. Note that containers **cannot see your `.env` file** — the keychain is the only credential source once you are on Docker.
+
+> **Requires Docker Desktop to be running.** If it isn't, the gateway cannot start and none of these servers are available.
+
+**1. Build the images**
+
+```bash
+./build-mcps.sh
+```
+
+This builds `mcp-humanitarian/<name>:latest` for every server, using the shared root `Dockerfile` with each server's directory as the build context. To build a single server:
+
+```bash
+docker build -t mcp-humanitarian/ifrc:latest -f Dockerfile --build-arg ENTRY=server.js ifrc-mcp
+```
+
+(Most servers use `ENTRY=server.js`; `monty-mcp` uses `ENTRY=index.js`.)
+
+**2. Load your secrets into the Docker keychain**
+
+Secret names match the environment variable names in your `.env`:
+
+```bash
+for name in IFRC_API_TOKEN HDX_API_TOKEN IPC_API_KEY FEWSNET_USERNAME \
+  FEWSNET_PASSWORD RELIEFWEB_APPNAME HOTOSM_ACCESS_TOKEN KOBO_API_TOKEN \
+  ACAPS_USERNAME ACAPS_PASSWORD ACLED_USERNAME ACLED_PASSWORD; do
+  docker mcp secret rm "$name" 2>/dev/null
+  val=$(grep -m1 "^${name}=" .env); val=${val#${name}=}
+  printf '%s' "$val" | docker mcp secret set "$name"
+done
+```
+
+`monty` reuses `IFRC_API_TOKEN`; the UNHCR and World Bank servers need no secrets.
+
+**3. Point Claude Desktop at the gateway**
+
+Point your host at a single gateway entry — one entry replaces all of them:
+
+```json
+{
+  "mcpServers": {
+    "MCP_DOCKER": {
+      "command": "docker",
+      "args": [
+        "mcp", "gateway", "run",
+        "--additional-catalog", "humanitarian.yaml",
+        "--registry", "humanitarian-registry.yaml"
+      ]
+    }
+  }
+}
+```
+
+This expects a catalog at `~/.docker/mcp/catalogs/humanitarian.yaml` (mapping each server name to its image and its `secrets:`) and an enabled-server list at `~/.docker/mcp/humanitarian-registry.yaml`. Give every server a `prefix:` in the catalog — some servers expose identically named tools (e.g. `fewsnet` and `hdx` both have `get_currencies`), and the gateway refuses to start on a tool-name collision.
+
+**4. Verify before restarting your host**
+
+```bash
+docker mcp gateway run --additional-catalog humanitarian.yaml \
+  --registry humanitarian-registry.yaml --dry-run --verbose
+```
+
+Every enabled server should report a tool count with no `Secret '...' not found` warnings. Then restart Claude Desktop.
+
+> See **[DOCKER.md](DOCKER.md)** for the full reference: catalog layout, tool-name prefixes, rebuilding, and reverting to the local-process setup. Note that images are local only and are run with `--pull never`, so a `docker system prune -a` deletes them — re-run `./build-mcps.sh` to restore.
+
+### Option B — Local Node processes (development only)
+
+> **Use this only when developing a server.** Running each MCP as a bare `node` process is handy for editing code and seeing changes without a rebuild, but it bypasses the container isolation and resource limits the gateway applies, and it reads credentials from `.env` rather than the Docker keychain. For everyday use, prefer [Option A — Docker](#option-a--docker-recommended).
 
 Find your Claude Desktop configuration file:
 
@@ -256,80 +333,16 @@ Open it (create it if it doesn't exist) and add the following entries under `mcp
     "acled": {
       "command": "node",
       "args": ["/YOUR/PATH/TO/MCPs/acled-mcp/server.js"]
+    },
+    "osm": {
+      "command": "node",
+      "args": ["/YOUR/PATH/TO/MCPs/osm-mcp/server.js"]
     }
   }
 }
 ```
 
-After saving, **restart Claude Desktop** (or your MCP-compatible agent host). You should see all fourteen servers' tools available in the tools panel.
-
-### Option B — Docker
-
-Instead of running each server as a local `node` process, you can build one container image per server and let the **Docker MCP gateway** (Docker Desktop's MCP Toolkit) start them on demand. Your host talks to a single gateway process; the gateway launches each MCP as an ephemeral container. Secrets are pulled from the Docker Desktop keychain at run time and are never baked into images.
-
-> **Requires Docker Desktop to be running.** If it isn't, the gateway cannot start and none of these servers are available.
-
-**1. Build the images**
-
-```bash
-./build-mcps.sh
-```
-
-This builds `mcp-humanitarian/<name>:latest` for every server, using the shared root `Dockerfile` with each server's directory as the build context. To build a single server:
-
-```bash
-docker build -t mcp-humanitarian/ifrc:latest -f Dockerfile --build-arg ENTRY=server.js ifrc-mcp
-```
-
-(Most servers use `ENTRY=server.js`; `monty-mcp` uses `ENTRY=index.js`.)
-
-**2. Load your secrets into the Docker keychain**
-
-Secret names match the environment variable names in your `.env`:
-
-```bash
-for name in IFRC_API_TOKEN HDX_API_TOKEN IPC_API_KEY FEWSNET_USERNAME \
-  FEWSNET_PASSWORD RELIEFWEB_APPNAME HOTOSM_ACCESS_TOKEN KOBO_API_TOKEN \
-  ACAPS_USERNAME ACAPS_PASSWORD ACLED_USERNAME ACLED_PASSWORD; do
-  docker mcp secret rm "$name" 2>/dev/null
-  val=$(grep -m1 "^${name}=" .env); val=${val#${name}=}
-  printf '%s' "$val" | docker mcp secret set "$name"
-done
-```
-
-`monty` reuses `IFRC_API_TOKEN`; the UNHCR and World Bank servers need no secrets.
-
-**3. Point Claude Desktop at the gateway**
-
-Replace the per-server entries from Option A with a single gateway entry:
-
-```json
-{
-  "mcpServers": {
-    "MCP_DOCKER": {
-      "command": "docker",
-      "args": [
-        "mcp", "gateway", "run",
-        "--additional-catalog", "humanitarian.yaml",
-        "--registry", "humanitarian-registry.yaml"
-      ]
-    }
-  }
-}
-```
-
-This expects a catalog at `~/.docker/mcp/catalogs/humanitarian.yaml` (mapping each server name to its image and its `secrets:`) and an enabled-server list at `~/.docker/mcp/humanitarian-registry.yaml`. Give every server a `prefix:` in the catalog — some servers expose identically named tools (e.g. `fewsnet` and `hdx` both have `get_currencies`), and the gateway refuses to start on a tool-name collision.
-
-**4. Verify before restarting your host**
-
-```bash
-docker mcp gateway run --additional-catalog humanitarian.yaml \
-  --registry humanitarian-registry.yaml --dry-run --verbose
-```
-
-Every enabled server should report a tool count with no `Secret '...' not found` warnings. Then restart Claude Desktop.
-
-> See **[DOCKER.md](DOCKER.md)** for the full reference: catalog layout, tool-name prefixes, rebuilding, and reverting to the local-process setup. Note that images are local only and are run with `--pull never`, so a `docker system prune -a` deletes them — re-run `./build-mcps.sh` to restore.
+After saving, **restart Claude Desktop** (or your MCP-compatible agent host). You should see all fifteen servers' tools available in the tools panel.
 
 > **Other MCP hosts:** If you are connecting these servers to a different LLM or agent framework (e.g. a custom agent built with the MCP SDK, or another Claude-compatible tool), consult that framework's documentation for how to register stdio-transport MCP servers.
 
@@ -1929,6 +1942,184 @@ These **8 tools cover all 7 ACLED read endpoints** plus a raw escape hatch. The 
 
 ---
 
+## OpenStreetMap MCP Server
+
+### About
+
+This server links LLMs/Agents to OpenStreetMap's own data access APIs, following the survey at [Databases and data access APIs](https://wiki.openstreetmap.org/wiki/Databases_and_data_access_APIs). You can ask an AI assistant questions like:
+
+- _"How many hospitals are mapped in Nairobi County?"_
+- _"List the pharmacies within 500 m of these coordinates."_
+- _"What's at latitude -1.2921, longitude 36.8219?"_
+- _"Show me the full edit history of this building, and who last changed it."_
+- _"Are there any open map notes in this district?"_
+- _"Which OSM tag should I use for a borehole — and how many are tagged that way worldwide?"_
+
+**No API key is required** for 35 of the 41 tools — every endpoint used is public. Set `OSM_USER_AGENT` to identify your application as the OSM and Nominatim usage policies require. The six account-scoped tools (your own profile, preferences, traces, blocks) need an optional `OSM_ACCESS_TOKEN` with **read** scopes.
+
+### Which API does what
+
+| API | Use it for | Limits |
+| --- | --- | --- |
+| **Overpass** | Finding features by tag over any area — the default choice | Rate-limited to a few concurrent query slots; large queries take minutes |
+| **Main API v0.6** | The live editing database: single elements, versions, history, changesets, notes | Bounding box queries capped at **0.25 sq deg**; notes at 25 sq deg |
+| **Nominatim** | Place name → coordinates/OSM id, and coordinates → address | One request per second (the server throttles for you) |
+| **Taginfo** | Discovering which tag keys and values actually exist | — |
+
+> The Main API is for *editing* clients. For rendering, routing, or analysis, use Overpass — that's the guidance from the wiki page itself, and why `get_map_data` refuses oversized boxes and points you at `find_features`.
+
+### Available Tools
+
+These **41 tools** implement **every read endpoint** in the [API v0.6 specification](https://wiki.openstreetmap.org/wiki/API_v0.6), plus Overpass, Nominatim, Taginfo and a bulk-source reference. Write operations are deliberately excluded — see [What's deliberately excluded](#whats-deliberately-excluded) below.
+
+---
+
+#### Finding features (Overpass API)
+
+| Tool                | Description                                                                                     |
+| ------------------- | ----------------------------------------------------------------------------------------------- |
+| `find_features`     | **Primary tool.** Find features by tag within an area. Scope with `bbox`, `lat`+`lon`+`radius_m`, `area_name`, or `area_osm_id`. Tag values support `*` (key exists), `~regex`, `!~regex`, and `!value` (not equal). Controls: `element_types`, `out_mode`, `limit` |
+| `count_features`    | Count matches without returning them — run this first to size a query before pulling data        |
+| `overpass_query`    | Escape hatch — run raw Overpass QL for unions, recursion, diffs, and polygon clipping            |
+| `xapi_query`        | Legacy XAPI predicates via Overpass's XAPI Compatibility Layer, for porting old code             |
+| `overpass_status`   | Check the rate limit and how many query slots are free, when queries start failing with 429/504  |
+
+---
+
+#### Live database elements (Main API v0.6)
+
+| Tool                    | Description                                                                                 |
+| ----------------------- | --------------------------------------------------------------------------------------------- |
+| `get_element`           | Fetch one node/way/relation by id, optionally at a specific `version`                          |
+| `get_element_full`      | A way or relation plus every element it references (its nodes and members)                     |
+| `get_elements`          | Fetch many elements of one type in a single call                                               |
+| `get_element_history`   | Every version of an element — who changed what, when                                           |
+| `get_element_relations` | The relations an element belongs to                                                            |
+| `get_node_ways`         | The ways that use a given node                                                                 |
+| `get_map_data`          | Everything inside a small bounding box (**hard limit 0.25 sq deg** — the tool checks first)     |
+| `get_api_versions`      | API versions this instance supports — the documented first step before reading capabilities     |
+| `get_api_capabilities`  | The live server limits and database status                                                     |
+| `get_permissions`       | Permissions granted to the current connection (empty when anonymous; OAuth scopes when not)     |
+
+---
+
+#### Edit history and changesets (Main API v0.6)
+
+| Tool                        | Description                                                                             |
+| --------------------------- | ------------------------------------------------------------------------------------------ |
+| `list_changesets`           | Search changesets by area, user, time window, or open/closed state (max 100)               |
+| `get_changeset`             | One changeset's metadata and tags, optionally with its discussion thread                   |
+| `get_changeset_download`    | The actual edits in a changeset, as OsmChange XML                                          |
+| `search_changeset_comments` | Search changeset discussion comments by author or date range                               |
+| `get_user` / `get_users`    | Public mapper profiles by numeric id                                                       |
+| `get_user_block`            | Read a user block record — why a mapper was blocked, by whom, for how long                 |
+
+---
+
+#### Map notes (Main API v0.6)
+
+| Tool             | Description                                                                                        |
+| ---------------- | ---------------------------------------------------------------------------------------------------- |
+| `list_notes`     | Map notes (user-reported issues) in a bounding box (max 25 sq deg)                                    |
+| `search_notes`   | Full-text search across map notes, filterable by author, date and area                                |
+| `get_note`       | One note and its full comment thread                                                                  |
+| `get_notes_feed` | RSS feed of notes in an area — useful for monitoring new reports                                       |
+
+---
+
+#### GPS traces (Main API v0.6)
+
+| Tool                | Description                                                                                     |
+| ------------------- | ----------------------------------------------------------------------------------------------- |
+| `get_trackpoints`   | Public GPS trace points in a bounding box, as GPX XML — no authentication needed                 |
+| `get_gpx_metadata`  | Metadata for one uploaded trace (name, description, tags, visibility) — **needs a token**        |
+| `get_gpx_data`      | Download a full GPS trace file — **needs a token**                                               |
+
+---
+
+#### Your own account (all need `OSM_ACCESS_TOKEN`)
+
+| Tool                     | Description                                                                                |
+| ------------------------ | -------------------------------------------------------------------------------------------- |
+| `get_my_details`         | Your own profile — id, home location, roles, changeset/trace counts, unread messages          |
+| `get_my_preferences`     | Your stored editor preferences as key/value pairs                                             |
+| `list_my_gpx_files`      | The GPS traces you own                                                                        |
+| `list_my_active_blocks`  | Whether you're currently blocked (works even while blocked)                                   |
+
+---
+
+#### Geocoding (Nominatim)
+
+| Tool                    | Description                                                                                 |
+| ----------------------- | --------------------------------------------------------------------------------------------- |
+| `geocode_search`        | Place name or address → coordinates and OSM id. Free-form `q` or structured fields; supports `countrycodes`, `viewbox`, `layer`, `polygon_geojson`. **Run this first** to get an `area_osm_id` for `find_features` |
+| `reverse_geocode`       | Coordinates → nearest address or named place, at a chosen `zoom` detail level                  |
+| `lookup_osm_ids`        | Address details for known OSM objects, by prefixed id (`R1278890,N240109189`)                  |
+| `get_nominatim_status`  | Service health and how fresh the geocoding database is                                         |
+
+---
+
+#### Tag discovery (Taginfo)
+
+| Tool                   | Description                                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------------------------- |
+| `taginfo_search_keys`  | Find real tag keys by substring, ranked by usage — use before writing a query so the tags exist |
+| `taginfo_key_values`   | The values actually used with a key, most common first, with counts                             |
+| `taginfo_tag_stats`    | Global usage statistics for a key or a `key=value` tag, broken down by element type              |
+
+---
+
+#### Bulk data
+
+| Tool                          | Description                                                                           |
+| ----------------------------- | --------------------------------------------------------------------------------------- |
+| `list_bulk_download_sources`  | The bulk sources — Planet.osm, Geofabrik extracts, slice.openstreetmap.us, Open Planet Data — with formats, update frequency and URLs, plus which database schema suits which use case. Returns **links only**; these files are gigabytes and are meant for offline import |
+
+---
+
+#### Typical workflow
+
+1. `geocode_search` for the place → note its `osm_id` and `osm_type`
+2. `taginfo_search_keys` / `taginfo_key_values` to confirm the right tag
+3. `count_features` with `area_osm_id` to size the result
+4. `find_features` to pull the data
+
+> **Note:** `area_osm_id` is more reliable than `area_name`, which needs an exact name match. Overpass area ids are derived automatically (relation id + 3600000000).
+
+### What's deliberately excluded
+
+Every **read** endpoint in the API v0.6 spec is implemented. Every **write** endpoint is not — the omission is intentional, not an oversight:
+
+| Group | Excluded endpoints |
+| ----- | ------------------ |
+| Changesets | create, update, close, diff upload, comment, subscribe, unsubscribe |
+| Elements | create (`POST`), update (`PUT`), delete (`DELETE`) |
+| Notes | create, comment, close, reopen, subscribe, unsubscribe |
+| GPS traces | upload, update, delete |
+| Preferences | `PUT` and `DELETE` (the `GET` **is** implemented) |
+| Moderator | element redaction, hide/unhide changeset comment, hide note, create user block |
+
+These modify the live global map. Including them would let an agent alter or delete real geometry — hard to reverse, and per the [API usage policy](https://operations.osmfoundation.org/policies/api/) grounds for being blocked without notice. Automated edits also fall under the [Automated Edits code of conduct](https://wiki.openstreetmap.org/wiki/Automated_Edits_code_of_conduct). Use a real editor — [iD](https://www.openstreetmap.org/edit) or [JOSM](https://josm.openstreetmap.de/) — to make changes.
+
+The retired **XAPI** service is reachable only through `xapi_query`, which uses Overpass's compatibility layer, matching the wiki's guidance that Overpass replaced it.
+
+### Optional configuration
+
+All of these have working defaults. `OSM_ACCESS_TOKEN` is the only secret, and only six tools need it.
+
+| Variable | Default | Purpose |
+| -------- | ------- | ------- |
+| `OSM_USER_AGENT` | `osm-mcp/1.0 (…)` | Identifies your app, as the OSM and Nominatim usage policies require. Set this to something descriptive. |
+| `OSM_ACCESS_TOKEN` | _(none)_ | OAuth 2.0 bearer token unlocking the six account-scoped tools (`get_my_*`, `list_my_*`, `get_gpx_*`). **Read scopes only** — `read_prefs` and `read_gpx` suffice. Register an app at [openstreetmap.org/oauth2/applications](https://www.openstreetmap.org/oauth2/applications). Everything else works without it. |
+| `OVERPASS_API_URL` | `https://overpass-api.de/api/interpreter` | Comma-separate several endpoints to fail over to a mirror |
+| `OVERPASS_QUERY_TIMEOUT` | `60` | Server-side query timeout in seconds |
+| `OVERPASS_RETRIES` | `4` | Retry rounds for 429/5xx responses |
+| `OSM_MAX_RESPONSE_CHARS` | `120000` | Response size cap before truncation |
+| `OSM_API_BASE` | `https://api.openstreetmap.org` | Point at a different API instance |
+| `NOMINATIM_BASE_URL` | `https://nominatim.openstreetmap.org` | Point at your own Nominatim |
+
+---
+
 ## Troubleshooting
 
 ### IFRC GO Server
@@ -2072,6 +2263,34 @@ This is Cloudflare's bot challenge. The server already sends a browser User-Agen
 
 **`Empty results` when filtering events**
 ACLED region and country filters on the events endpoint use numeric codes, not names. Use `list_regions` (position = code) and `list_countries` (numeric ISO) to resolve them. Actor and location filters are partial (LIKE) matches — use `list_actors` to find exact actor labels.
+
+---
+
+### OpenStreetMap Server
+
+**`Overpass API unavailable after N rounds (… -> 429 … -> 504)`**
+The public Overpass instance rate-limits per IP (a small number of concurrent query slots) and sheds load with 504s when busy. The server already serializes requests, retries with backoff, and waits between attempts. Run `overpass_status` to see free slots, wait a moment, or set `OVERPASS_API_URL` to a mirror — it accepts a comma-separated list to fail over across.
+
+**`Bounding box is X sq deg, over the Main API limit of 0.25`**
+Working as intended. `get_map_data` reads the *live editing* database, which the OSM API caps at 0.25 square degrees. Use `find_features` instead — Overpass has no such limit and lets you filter by tag rather than downloading everything.
+
+**Overpass results look complete but are missing features**
+Check the top of the response for a `WARNING - Overpass returned a remark` line. Overpass returns HTTP 200 with a `remark` when a query hits its timeout or memory ceiling, so partial results are otherwise indistinguishable from complete ones. Raise `timeout`, narrow the area, or add tag filters.
+
+**`No elements matched`**
+Usually a wrong tag rather than an empty area. Confirm the key and value exist with `taginfo_search_keys` and `taginfo_key_values` — for example clinics are `amenity=clinic` or `healthcare=clinic` depending on the mapper.
+
+**`area_name` returns nothing**
+`area_name` needs an *exact* OSM name match and is ambiguous across the planet. Prefer `geocode_search` to get the place's `osm_id`, then pass it as `area_osm_id` with the matching `area_osm_type`.
+
+**Geocoding feels slow**
+Deliberate. Nominatim's usage policy allows one request per second and the server throttles to stay within it. For bulk geocoding, run your own Nominatim instance and point `NOMINATIM_BASE_URL` at it.
+
+**`This endpoint is tied to a specific OSM account and needs authentication`**
+Six tools read your own account (`get_my_details`, `get_my_preferences`, `list_my_gpx_files`, `list_my_active_blocks`, `get_gpx_metadata`, `get_gpx_data`). Register an OAuth 2 application at [openstreetmap.org/oauth2/applications](https://www.openstreetmap.org/oauth2/applications), grant it `read_prefs` and `read_gpx`, and put the bearer token in `.env` as `OSM_ACCESS_TOKEN`. Note that `get_gpx_metadata` needs a token even for traces marked public — the live API rejects anonymous requests there despite what the wiki says.
+
+**"Can it edit the map?"**
+No, by design. See [What's deliberately excluded](#whats-deliberately-excluded) — every write endpoint is left out so an agent can't alter or delete real geometry. Use [iD](https://www.openstreetmap.org/edit) or [JOSM](https://josm.openstreetmap.de/) to make edits.
 
 ---
 
